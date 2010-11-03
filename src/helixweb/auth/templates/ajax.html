@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+
+{% block sidebar %}
+    <ul>
+        <li><a href="/auth/test/">test</a></li>
+    </ul>
+{% endblock %}
+
+{% block title %}Helixauth ajax test{% endblock %}
+
+{% block content %}
+
+<script type="text/javascript" src="/static/js/jquery.js"></script>
+<script type="text/javascript" src="/static/js/aj.js"></script>
+
+    <input type="text" id="data" />
+    <input type="submit" value="Go" id="id_cmd_submit"/><br>
+
+    <div id="ajaxResponse"></div>
+
+{% endblock %}

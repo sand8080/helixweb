@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <title>{% block title %}Helixweb of helix project{% endblock %}</title>
+    <link rel="stylesheet" type="text/css" href="/static/css/base.css" />
+    <script type="text/javascript" src="/static/js/jquery.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.cookie.js"></script>
+</head>
+
+<body>
+
+    {% load i18n %}
+
+    <table class="center">
+        <tr>
+            <td colspan="2">
+                <div id="header">
+                    <table class="header">
+                        <tr>
+                            <td>Logogo</td>
+                            <td style="text-align:right;">Links</td>
+                            <td style="text-align:right;">
+                                {% load lang_switcher %}
+                                {% lang_switcher 'zu' %}
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div id="sidebar">
+                    {% block sidebar %}{% endblock %}
+                </div>
+            </td>
+            <td>
+                <div id="content">
+                    {% block content %}{% endblock %}
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div id="footer">
+                    <table>
+                        <tr>
+                            <td>Copy-Left</td>
+                            <td>{% trans "Contacts" %}</td>
+                        </tr>
+                    </table>
+                </div>
+            </td>
+        </tr>
+
+
+    </table>
+
+
+</body>
+</html>

@@ -1,0 +1,9 @@
+{% for l in langs %}
+
+    {% if l == current_lang %}
+        {{ l }}
+    {% else %}
+        <a href="" onclick="$.cookie('lang', {{ l }}); window.location.reload();">{{ l }}</a>
+    {% endif %}
+
+{% endfor %}
