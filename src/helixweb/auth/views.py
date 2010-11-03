@@ -30,4 +30,5 @@ def login(request):
     else:
         form = LoginForm()
     c['form'] = form
+    c['lang'] = request.COOKIES.get('lang')
     return render_to_response('login.html', c)

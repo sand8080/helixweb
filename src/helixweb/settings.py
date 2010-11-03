@@ -36,6 +36,7 @@ TIME_ZONE = 'Europe/Moscow'
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
 LANGUAGE_CODE = 'en-us'
+#LANGUAGE_CODE = 'en'
 
 SITE_ID = 1
 
@@ -73,14 +74,37 @@ TEMPLATE_LOADERS = (
 )
 
 MIDDLEWARE_CLASSES = (
+    'localeurl.middleware.LocaleURLMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
 )
 
 ROOT_URLCONF = 'helixweb.urls'
+
+_ = lambda s: s
+LANGUAGES = (
+    ('en', _(u'English')),
+    ('ru', _(u'Russian')),
+    ('de', _(u'Deutsch')),
+)
+
+import re
+LOCALE_INDEPENDENT_PATHS = (
+    re.compile('^/$'),
+    re.compile('^/static/'),
+    re.compile('^/ajax/'),
+)
+
+#TEMPLATE_CONTEXT_PROCESSORS = (
+#    'django.core.context_processors.request',
+#)
+
+#TEMPLATE_CONTEXT_PROCESSORS = (
+#    "django.core.context_processors.i18n",
+#)
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
@@ -93,6 +117,7 @@ TEMPLATE_DIRS = (
 )
 
 INSTALLED_APPS = (
+    'localeurl',
     'django.contrib.auth',
     'django.contrib.contenttypes',
 #    'django.contrib.sessions',
@@ -105,4 +130,6 @@ INSTALLED_APPS = (
     'auth',
 )
 
-SUPPORTED_LANGS = ('ru', 'en')
+#LANGUAGE_COOKIE_NAME = 'lang'
+SUPPORTED_LANGS = ('en', 'ru', 'de')
+#LANGUAGES = ('ru',)
