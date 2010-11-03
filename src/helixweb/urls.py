@@ -6,6 +6,7 @@ from django.conf.urls.defaults import *
 
 urlpatterns = patterns('',
     # Example:
+    (r'^i18n/', include('django.conf.urls.i18n')),
     (r'^auth/', include('helixweb.auth.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:

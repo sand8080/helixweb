@@ -36,6 +36,7 @@ TIME_ZONE = 'Europe/Moscow'
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
 LANGUAGE_CODE = 'en-us'
+#LANGUAGE_CODE = 'en'
 
 SITE_ID = 1
 
@@ -73,14 +74,19 @@ TEMPLATE_LOADERS = (
 )
 
 MIDDLEWARE_CLASSES = (
+    'localeurl.middleware.LocaleURLMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
 )
 
 ROOT_URLCONF = 'helixweb.urls'
+
+#TEMPLATE_CONTEXT_PROCESSORS = (
+#    "django.core.context_processors.i18n",
+#)
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
@@ -102,7 +108,10 @@ INSTALLED_APPS = (
     # 'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
+    'localeurl',
     'auth',
 )
 
-SUPPORTED_LANGS = ('ru', 'en')
+#LANGUAGE_COOKIE_NAME = 'lang'
+SUPPORTED_LANGS = ('en', 'ru',)
+#LANGUAGES = ('ru',)
