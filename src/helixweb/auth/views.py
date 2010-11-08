@@ -1,23 +1,11 @@
 from django.shortcuts import render_to_response
-from django.http import HttpResponseRedirect, HttpResponse
-from django.template import loader, RequestContext
-from django.views.decorators.csrf import csrf_protect
+from django.http import HttpResponseRedirect
+from django.template import RequestContext
 from django.core.context_processors import csrf
-import cjson
 
-from helixweb.auth import settings
 from helixweb.auth.forms import LoginForm
-from helixweb.core.client import Client
 from helixweb.core.localization import cur_lang
-
-
-def success(request):
-    return render_to_response('success.html')
-
-
-def failure(request):
-    return render_to_response('failure.html')
-
+from django.utils.translation import ugettext as _
 
 def login(request):
     c = {}
@@ -30,6 +18,6 @@ def login(request):
     else:
         form = LoginForm()
     c['form'] = form
-    c['lang'] = request.COOKIES.get('lang')
+    c['test'] = _('test')
     return render_to_response('login.html', c,
         context_instance=RequestContext(request))

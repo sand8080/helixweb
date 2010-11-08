@@ -36,7 +36,11 @@ TIME_ZONE = 'Europe/Moscow'
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
 LANGUAGE_CODE = 'en-us'
-SUPPORTED_LANGS = ('en', 'ru')
+
+SUPPORTED_LANGS = (('en', 'EN'),
+    ('ru', 'RU'),)
+
+DEFAULT_LANGUAGE_CODE = 'en'
 
 SITE_ID = 1
 

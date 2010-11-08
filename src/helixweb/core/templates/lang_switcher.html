@@ -1,10 +1,11 @@
+{% load i18n %}
 {% load localeurl_tags %}
 
 {% for l in langs %}
-    {% if l == cur_lang %}
-        {{ l }}
+    {% if l.0 == cur_lang %}
+        {{ l.1 }}
     {% else %}
-        <a href={{ path|chlocale:l }}>{{ l }}</a>
+        <a href={{ path|chlocale:l.0 }}>{{ l.1 }}</a>
     {% endif %}
-
 {% endfor %}
+

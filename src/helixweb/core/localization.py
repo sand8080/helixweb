@@ -1,4 +1,4 @@
-from helixweb.settings import SUPPORTED_LANGS, LANGUAGE_CODE
+from helixweb.settings import SUPPORTED_LANGS, LANGUAGE_CODE, DEFAULT_LANGUAGE_CODE
 
 
 def cur_lang(request):
@@ -6,5 +6,6 @@ def cur_lang(request):
     sep = '/'
     tokens = path.strip(sep).split(sep)
     c_lang = tokens[0]
-    c_lang = c_lang if c_lang in SUPPORTED_LANGS else LANGUAGE_CODE
+    langs = [l[0] for l in SUPPORTED_LANGS]
+    c_lang = c_lang if c_lang in langs else DEFAULT_LANGUAGE_CODE
     return {'cur_lang': c_lang}
