@@ -3,9 +3,9 @@
 
 {% for l in langs %}
     {% if l.0 == cur_lang %}
-        {{ l.1 }}
+        {% trans l.1 %}
     {% else %}
-        <a href={{ path|chlocale:l.0 }}>{{ l.1 }}</a>
+        <a href={{ path|chlocale:l.0 }}>{% trans l.1 %}</a>
     {% endif %}
 {% endfor %}
 

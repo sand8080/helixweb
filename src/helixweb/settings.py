@@ -37,8 +37,9 @@ TIME_ZONE = 'Europe/Moscow'
 # http://www.i18nguy.com/unicode/language-identifiers.html
 LANGUAGE_CODE = 'en-us'
 
-SUPPORTED_LANGS = (('en', 'EN'),
-    ('ru', 'RU'),)
+_ = lambda x: x
+SUPPORTED_LANGS = (('en', _('EN')),
+    ('ru', _('RU')),)
 
 DEFAULT_LANGUAGE_CODE = 'en'
 

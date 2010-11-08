@@ -1,8 +1,8 @@
 from django import template
-from django.utils.translation import ugettext as _
+from django.utils.translation import ugettext_lazy as _
 
 from helixweb.settings import SUPPORTED_LANGS
-from helixweb.core.localization import cur_lang
+from helixweb.core.localization import cur_lang as c_l
 
 register = template.Library()
 
@@ -11,8 +11,7 @@ register = template.Library()
 def lang_switcher(context):
     request = context['request']
     path = request.path
-    d = cur_lang(request)
-    print d
-    c_lang = d.get('cur_lang')
+    d = c_l(request)
+    cur_lang = _(d.get('cur_lang'))
     return {'langs': SUPPORTED_LANGS, 'path': path,
-        'cur_lang': c_lang}
+        'cur_lang': cur_lang}
