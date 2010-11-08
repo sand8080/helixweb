@@ -1,7 +1,7 @@
 *.pyc
+*.mo
 .project
 .settings
 .pydevproject
 .gitconfig
 *.log*
-
