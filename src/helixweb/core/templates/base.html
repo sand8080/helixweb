@@ -11,6 +11,7 @@
 <body>
 
     {% load i18n %}
+    {% load localeurl_tags %}
 
     <table class="center">
         <tr>
@@ -22,7 +23,7 @@
                             <td style="text-align:right;">Links</td>
                             <td style="text-align:right;">
                                 {% load lang_switcher %}
-                                {% lang_switcher 'zu' %}
+                                {% lang_switcher %}
                             </td>
                         </tr>
                     </table>

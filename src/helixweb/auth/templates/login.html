@@ -1,13 +1,4 @@
-{% extends "base.html" %}
-
-{% block sidebar %}
-    {% load localeurl_tags %}
-    lang = {{ lang }}
-    <ul>
-        <li><a href="/auth/login/">login</a></li>
-        <li>+<a href={{ "/auth/login/"|chlocale:"ru" }}>login</a></li>
-    </ul>
-{% endblock %}
+{% extends "base_auth.html" %}
 
 {% block title %}Helixauth test{% endblock %}
 

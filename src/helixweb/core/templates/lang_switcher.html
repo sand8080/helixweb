@@ -1,0 +1,10 @@
+{% load localeurl_tags %}
+
+{% for l in langs %}
+    {% if l == cur_lang %}
+        {{ l }}
+    {% else %}
+        <a href={{ path|chlocale:l }}>{{ l }}</a>
+    {% endif %}
+
+{% endfor %}

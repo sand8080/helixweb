@@ -36,7 +36,7 @@ TIME_ZONE = 'Europe/Moscow'
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
 LANGUAGE_CODE = 'en-us'
-#LANGUAGE_CODE = 'en'
+SUPPORTED_LANGS = ('en', 'ru')
 
 SITE_ID = 1
 
@@ -84,41 +84,30 @@ MIDDLEWARE_CLASSES = (
 
 ROOT_URLCONF = 'helixweb.urls'
 
-_ = lambda s: s
-LANGUAGES = (
-    ('en', _(u'English')),
-    ('ru', _(u'Russian')),
-    ('de', _(u'Deutsch')),
-)
-
 import re
 LOCALE_INDEPENDENT_PATHS = (
     re.compile('^/$'),
+    re.compile('^/favicon.ico$'),
     re.compile('^/static/'),
     re.compile('^/ajax/'),
 )
-
-#TEMPLATE_CONTEXT_PROCESSORS = (
-#    'django.core.context_processors.request',
-#)
-
-#TEMPLATE_CONTEXT_PROCESSORS = (
-#    "django.core.context_processors.i18n",
-#)
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
 
-    os.path.join(ROOT_DIR, 'templates'),
-#    os.path.join(os.path.realpath(__file__), 'templates'),
-#    os.path.join(os.path.realpath(__file__), 'auth', 'templates'),
+#    os.path.join(ROOT_DIR, 'templates'),
+)
+
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'django.core.context_processors.request',
+    'django.core.context_processors.i18n',
 )
 
 INSTALLED_APPS = (
     'localeurl',
-    'django.contrib.auth',
+#    'django.contrib.auth',
     'django.contrib.contenttypes',
 #    'django.contrib.sessions',
 #    'django.contrib.sites',
@@ -127,10 +116,6 @@ INSTALLED_APPS = (
     # 'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
-    'localeurl',
+    'core',
     'auth',
 )
-
-#LANGUAGE_COOKIE_NAME = 'lang'
-SUPPORTED_LANGS = ('en', 'ru', 'de')
-#LANGUAGES = ('ru',)
