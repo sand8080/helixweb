@@ -1,16 +1,20 @@
 {% extends "base_auth.html" %}
 
-{% block title %}Helixauth test{% endblock %}
+{% load i18n %}
+
+{% block title %}{% trans "login" %}{% endblock %}
 
 {% block content %}
 
-<p>
-    variable localization test: {{ test }}
-</p>
-
 <form action="" method="post">{% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Submit" />
+    <table>
+        {{ form.as_table }}
+        <tr>
+            <td colspan="2">
+                <input type="submit" value={% trans "login" %} />
+            </td>
+        </tr>
+    </table>
 </form>
 
 {% endblock %}

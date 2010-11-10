@@ -1,4 +1,4 @@
-from helixweb.settings import SUPPORTED_LANGS, LANGUAGE_CODE, DEFAULT_LANGUAGE_CODE
+from helixweb.settings import SUPPORTED_LANGS, DEFAULT_LANGUAGE_CODE
 
 
 def cur_lang(request):

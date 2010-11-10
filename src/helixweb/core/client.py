@@ -13,3 +13,8 @@ class Client(object):
             return cjson.decode(resp)
         except urllib2.URLError:
             return 'Service unavailable'
+
+
+#c = Client('http://localhost:10999')
+#resp = c.request({'action': 'ping'})
+#print resp

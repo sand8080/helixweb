@@ -19,11 +19,17 @@
                 <div id="header">
                     <table class="header">
                         <tr>
-                            <td>Logogo</td>
-                            <td style="text-align:right;">Links</td>
+                            <td>helixproject</td>
+                            <td style="text-align:right;"></td>
                             <td style="text-align:right;">
                                 {% load lang_switcher %}
                                 {% lang_switcher %}
+                                <br>
+                                {% if logged_in %}
+                                    <a href={{ "/auth/logout/"|chlocale:cur_lang }}>{% trans "logout" %}</a>
+                                {% else %}
+                                    <a href={{ "/auth/login/"|chlocale:cur_lang }}>{% trans "login" %}</a>
+                                {% endif %}
                             </td>
                         </tr>
                     </table>
