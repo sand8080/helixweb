@@ -1,1 +1,1 @@
-AUTH_SERVICE_URL = 'http://localhost:9999'
+settings_test.py
