@@ -12,12 +12,15 @@ def login(request):
     c.update(csrf(request))
     c.update(cur_lang(request))
     if request.method == 'POST':
-        form = LoginForm(request.POST)
+        form = LoginForm(request.POST, prefix='login')
         if form.is_valid():
-            form.request('login')
+            form.request()
+            print 'ok'
+        else:
+            print 'failure'
 #            return HttpResponseRedirect('/auth/success/')
     else:
-        form = LoginForm()
-    c['form'] = form
+        form = LoginForm(prefix='login')
+    c['login_form'] = form
     return render_to_response('login.html', c,
         context_instance=RequestContext(request))

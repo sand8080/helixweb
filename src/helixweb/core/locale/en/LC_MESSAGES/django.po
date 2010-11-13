@@ -15,16 +15,14 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
-"10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
 #: error_code.py:3
 msgid "HELIX_SERVICE_UNAVAILABLE"
-msgstr "сервис недоступен"
+msgstr "service unavailable"
 
 #: error_code.py:4
 msgid "HELIX_REQUEST_PROCESSING_ERROR"
-msgstr "запрос не обработан"
+msgstr ""
 
 #: error_code.py:5
 msgid "HELIX_UNKNOWN_ACTION_ERROR"
@@ -56,16 +54,16 @@ msgstr ""
 
 #: templates/base.html:29
 msgid "logout"
-msgstr "выход"
+msgstr ""
 
 #: templates/base.html:31
 msgid "login"
-msgstr "вход"
+msgstr ""
 
 #: templates/base.html:56
 msgid "CopyLeft"
-msgstr "копи-лефт"
+msgstr ""
 
 #: templates/base.html:57
 msgid "Contacts"
-msgstr "контакты"
+msgstr ""
