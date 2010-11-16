@@ -1,4 +1,6 @@
-ul.errorlist {color:red;}
+span.errormessage {color:red;}
+tr.errormessage {background-color:pink;}
 
 table.center {margin-left:auto;margin-right:auto;}
 table.header {width:100%}
+

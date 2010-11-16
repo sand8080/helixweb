@@ -15,8 +15,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
-"10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n% 10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
 #: error_code.py:3
 msgid "HELIX_SERVICE_UNAVAILABLE"
@@ -40,19 +39,19 @@ msgstr ""
 
 #: error_code.py:8
 msgid "HELIX_APPLICATION_ERROR"
-msgstr ""
+msgstr "ошибка приложения"
 
 #: error_code.py:9
 msgid "HELIX_VALIDATION_ERROR"
-msgstr ""
+msgstr "неверный формат запроса"
 
 #: error_code.py:10
 msgid "HELIX_FORMAT_ERROR"
-msgstr ""
+msgstr "неверный формат запроса"
 
 #: error_code.py:11
 msgid "HELIX_AUTH_ERROR"
-msgstr ""
+msgstr "ошибка авторизации"
 
 #: templates/base.html:29
 msgid "logout"
@@ -69,3 +68,4 @@ msgstr "копи-лефт"
 #: templates/base.html:57
 msgid "Contacts"
 msgstr "контакты"
+

@@ -19,5 +19,3 @@ class LoginForm(AuthForm):
     environment_name = forms.CharField(label=_('env name'), max_length=32)
     login = forms.CharField(label=_('login'))
     password = forms.CharField(label=_('password'), max_length=32)
-#    password = forms.CharField(label=_('password'), max_length=32,
-#        widget=forms.PasswordInput(render_value=False))
