@@ -31,7 +31,7 @@ class HelixwebRequestForm(forms.Form):
         super(HelixwebRequestForm, self).__init__(*args, error_class=ErrorFieldMaker, **kwargs)
         self.error_css_class = 'errormessage'
 
-    def request(self):
+    def request(self, return_resp=False):
         d = dict(self.cleaned_data)
         d.pop('c', None)
         d['action'] = self.action
@@ -40,6 +40,7 @@ class HelixwebRequestForm(forms.Form):
             d['session_id'] = self.session_id
         resp = self.c.request(d)
         self.process_errors(resp)
+        return resp if return_resp else None
 
     def process_errors(self, resp):
         s = 'status'
@@ -60,7 +61,7 @@ class HelixwebRequestForm(forms.Form):
         "Returns this form rendered as HTML <tr>s -- excluding the <table></table>."
         return self._html_output(
             normal_row = u'<tr%(html_class_attr)s><th>%(label)s</th><td>%(field)s%(errors)s%(help_text)s</td></tr>',
-            error_row = u'<tr><td colspan="2">%s</td></tr>',
+            error_row = u'<tr><td colspan="2" style="text-align:center;">%s</td></tr>',
             row_ender = u'</td></tr>',
             help_text_html = u'<br />%s',
             errors_on_separate_row = False)

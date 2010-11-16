@@ -16,6 +16,6 @@ class LoginForm(AuthForm):
         kwargs['action'] = 'login'
         super(LoginForm, self).__init__(*args, **kwargs)
 
-    environment_name = forms.CharField(label=_('env name'), max_length=32)
-    login = forms.CharField(label=_('login'))
+    environment_name = forms.CharField(label=_('environment name'), max_length=32)
+    login = forms.CharField(label=_('user login'))
     password = forms.CharField(label=_('password'), max_length=32)
