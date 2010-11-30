@@ -1,11 +1,14 @@
 {% load i18n %}
 {% load localeurl_tags %}
 
-{% for l in langs %}
-    {% if l.0 == cur_lang %}
-        {% trans l.1 %}
-    {% else %}
-        <a href={{ path|chlocale:l.0 }}>{% trans l.1 %}</a>
-    {% endif %}
-{% endfor %}
-
+<table>
+    <tr>
+        {% for l in langs %}
+            {% if l.0 == cur_lang %}
+                <td class="lang_sw lang_sel">{% trans l.1 %}</td>
+            {% else %}
+                <td class="lang_sw"><a href={{ path|chlocale:l.0 }}>{% trans l.1 %}</a></td>
+            {% endif %}
+        {% endfor %}
+    </tr>
+</table>

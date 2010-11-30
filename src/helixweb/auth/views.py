@@ -5,9 +5,29 @@ from django.http import HttpResponseRedirect
 from django.template import RequestContext
 from django.core.context_processors import csrf
 
+from helixweb.auth import settings
 from helixweb.auth.forms import LoginForm
-from helixweb.core.localization import cur_lang
+from helixweb.core.localization import cur_lang, cur_lang_value
 #from django.utils.translation import ugettext as _
+
+from helixweb.core.client import Client
+
+
+def _prepare_context(request):
+    c = {}
+    c.update(csrf(request))
+    c.update(cur_lang(request))
+    return c
+
+
+def _handle_not_logged(request):
+    if 'session_id' not in request.COOKIES:
+        return HttpResponseRedirect('/%s/auth/login/' % cur_lang_value(request))
+
+
+def _get_session_id(request):
+    return request.COOKIES.get('session_id', '')
+
 
 def login(request):
     c = {}
@@ -32,3 +52,15 @@ def login(request):
     c['login_form'] = form
     return render_to_response('login.html', c,
         context_instance=RequestContext(request))
+
+
+def services(request):
+    c = _prepare_context(request)
+    cli = Client(settings.AUTH_SERVICE_URL)
+    req = {'session_id': _get_session_id(request),
+        'action': 'get_services', 'paging_params': {}, 'filter_params': {}}
+    resp = cli.request(req)
+    print resp
+    return render_to_response('services.html', c,
+        context_instance=RequestContext(request))
+

@@ -6,12 +6,9 @@ from django.conf.urls.defaults import patterns
 
 urlpatterns = patterns('',
     # Example:
-    (r'^test/', 'auth.views.test'),
     (r'^login/', 'auth.views.login'),
-    (r'^ajax/', 'auth.views.ajax'),
-    (r'^json/', 'auth.views.json'),
-    (r'^success/', 'auth.views.success'),
-    (r'^failure/', 'auth.views.failure'),
+#    (r'^users/(?P<user_id>\d+)/$', 'auth.views.user'),
+    (r'^services/$', 'auth.views.services'),
 
     # Uncomment the admin/doc line below to enable admin documentation:
     # (r'^admin/doc/', include('django.contrib.admindocs.urls')),
