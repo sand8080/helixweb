@@ -2,6 +2,7 @@ import urllib2
 import cjson
 
 from helixweb.core import error_code #@UnresolvedImport
+from helixweb.error import UnauthorizedActivity
 
 
 class Client(object):
@@ -16,6 +17,17 @@ class Client(object):
         except urllib2.URLError:
             return {'status': 'error', 'message': 'Service unavailable',
                 'code': error_code.HELIX_SERVICE_UNAVAILABLE}
+
+    def checked_request(self, data):
+        resp = self.request(data)
+        self._check_response(resp)
+        return resp
+
+    def _check_response(self, resp):
+        unauth = ('HELIXAUTH_SESSION_NOT_FOUND')
+        if resp['status'] != 'ok' and resp['code'] in unauth:
+            raise UnauthorizedActivity
+
 
 #c = Client('http://localhost:10999')
 #resp = c.request({'action': 'ping'})

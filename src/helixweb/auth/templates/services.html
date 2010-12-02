@@ -8,5 +8,9 @@
 
 <h2>{% trans "services" %}</h2>
 
+{% if services_error %}
+    <span class="errormessage">{% trans  services_error %}</span>
+{% else %}
+{% endif %}
 
 {% endblock %}

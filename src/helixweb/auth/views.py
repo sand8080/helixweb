@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+import base64
 
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect
@@ -11,6 +12,8 @@ from helixweb.core.localization import cur_lang, cur_lang_value
 #from django.utils.translation import ugettext as _
 
 from helixweb.core.client import Client
+from helixweb.core.views import login_redirector
+from helixweb.error import UnauthorizedActivity
 
 
 def _prepare_context(request):
@@ -29,12 +32,17 @@ def _get_session_id(request):
     return request.COOKIES.get('session_id', '')
 
 
+def _get_backurl(request):
+    if 'backurl' in request.GET:
+        return base64.decodestring(request.GET['backurl'])
+    else:
+        return '/%s/auth/services/' % cur_lang_value(request)
+
+
 def login(request):
     c = {}
     c.update(csrf(request))
-    cl_dict = cur_lang(request)
-    cl = cl_dict['cur_lang']
-    c.update(cl_dict)
+    c.update(cur_lang(request))
     if request.method == 'POST':
         form = LoginForm(request.POST, prefix='login')
         if form.is_valid():
@@ -43,7 +51,8 @@ def login(request):
             s_id = resp.get('session_id', None)
             if status == 'ok' and s_id is not None:
                 # TODO: set secure cookie
-                response = HttpResponseRedirect('/%s/auth/login/' % cl)
+                b_url = _get_backurl(request)
+                response = HttpResponseRedirect(b_url)
                 expires = datetime.strftime(datetime.utcnow() + timedelta(days=365), "%a, %d-%b-%Y %H:%M:%S GMT")
                 response.set_cookie('session_id', value=s_id, expires=expires)
                 return response
@@ -54,13 +63,21 @@ def login(request):
         context_instance=RequestContext(request))
 
 
-def services(request):
-    c = _prepare_context(request)
+def _get_services(request):
     cli = Client(settings.AUTH_SERVICE_URL)
     req = {'session_id': _get_session_id(request),
         'action': 'get_services', 'paging_params': {}, 'filter_params': {}}
-    resp = cli.request(req)
-    print resp
+    resp = cli.checked_request(req)
+    if resp['status'] != 'ok':
+        return {'services_error': resp['code']}
+    else:
+        return {}
+
+
+@login_redirector
+def services(request):
+    c = _prepare_context(request)
+    c.update(_get_services(request))
     return render_to_response('services.html', c,
         context_instance=RequestContext(request))
 
