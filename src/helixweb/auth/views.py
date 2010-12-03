@@ -7,7 +7,7 @@ from django.template import RequestContext
 from django.core.context_processors import csrf
 
 from helixweb.auth import settings
-from helixweb.auth.forms import LoginForm
+from helixweb.auth.forms import LoginForm, AddServiceForm
 from helixweb.core.localization import cur_lang, cur_lang_value
 #from django.utils.translation import ugettext as _
 
@@ -77,7 +77,15 @@ def _get_services(request):
 @login_redirector
 def services(request):
     c = _prepare_context(request)
+    c.update(csrf(request))
     c.update(_get_services(request))
+    if request.method == 'POST':
+        form = AddServiceForm(request.POST, prefix='service')
+        if form.is_valid():
+            return HttpResponseRedirect('.')
+    else:
+        form = AddServiceForm(prefix='service')
+    c['service_form'] = form
     return render_to_response('services.html', c,
         context_instance=RequestContext(request))
 

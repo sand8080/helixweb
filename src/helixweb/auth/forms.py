@@ -20,3 +20,13 @@ class LoginForm(AuthForm):
     login = forms.CharField(label=_('user login'))
     password = forms.CharField(label=_('password'), max_length=32)
 
+
+class ServiceForm(AuthForm):
+    name = forms.CharField(label=_('service name'), max_length=32)
+    type = forms.CharField(label=_('service type'), max_length=32)
+
+
+class AddServiceForm(ServiceForm):
+    def __init__(self, *args, **kwargs):
+        kwargs['action'] = 'add_service'
+        super(AddServiceForm, self).__init__(*args, **kwargs)

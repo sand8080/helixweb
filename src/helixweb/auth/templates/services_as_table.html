@@ -13,7 +13,7 @@
 
     {% for srv in services %}
         <tr>
-            <td>{{ srv.name }}</td>
+            <td><a href="/auth/services/{{ srv.id }}">{{ srv.name }}</a></td>
             <td>{{ srv.type }}</td>
             <td>{{ srv.is_active }}</td>
             <td>{{ srv.is_possible_deactiate }}</td>
@@ -23,7 +23,6 @@
                 <div id="props_list_{{ srv.id }}" style="display:none;">
                     {{ srv.properties|unordered_list }}
                 </div>
-
 
                 <script type="text/javascript">
                     $('#props_{{ srv.id }}').click(function() {
