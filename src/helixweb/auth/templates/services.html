@@ -11,6 +11,11 @@
 {% if services_error %}
     <span class="errormessage">{% trans  services_error %}</span>
 {% else %}
+    {% if services %}
+        {% include "services_as_table.html" %}
+    {% else %}
+        {% trans "no services" %}
+    {% endif %}
 {% endif %}
 
 {% endblock %}

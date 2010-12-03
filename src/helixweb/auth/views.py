@@ -13,7 +13,6 @@ from helixweb.core.localization import cur_lang, cur_lang_value
 
 from helixweb.core.client import Client
 from helixweb.core.views import login_redirector
-from helixweb.error import UnauthorizedActivity
 
 
 def _prepare_context(request):
@@ -65,13 +64,14 @@ def login(request):
 
 def _get_services(request):
     cli = Client(settings.AUTH_SERVICE_URL)
-    req = {'session_id': _get_session_id(request),
-        'action': 'get_services', 'paging_params': {}, 'filter_params': {}}
+    sess_id = _get_session_id(request)
+    req = {'session_id': sess_id, 'action': 'get_services',
+        'paging_params': {}, 'filter_params': {}}
     resp = cli.checked_request(req)
     if resp['status'] != 'ok':
         return {'services_error': resp['code']}
     else:
-        return {}
+        return {'services': resp['services']}
 
 
 @login_redirector

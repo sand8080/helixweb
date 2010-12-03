@@ -1,0 +1,42 @@
+{% load i18n %}
+
+{% load coreutils %}
+
+<table>
+    <tr class="objects_fields">
+        <th>{% trans "service name" %}</th>
+        <th>{% trans "type" %}</th>
+        <th>{% trans "is active" %}</th>
+        <th>{% trans "is possible to disable" %}</th>
+        <th>{% trans "functions" %}</th>
+    </tr>
+
+    {% for srv in services %}
+        <tr>
+            <td>{{ srv.name }}</td>
+            <td>{{ srv.type }}</td>
+            <td>{{ srv.is_active }}</td>
+            <td>{{ srv.is_possible_deactiate }}</td>
+            <td>
+
+                <a href="#" id="props_{{ srv.id }}">[+]</a>
+                <div id="props_list_{{ srv.id }}" style="display:none;">
+                    {{ srv.properties|unordered_list }}
+                </div>
+
+
+                <script type="text/javascript">
+                    $('#props_{{ srv.id }}').click(function() {
+                        $('#props_list_{{ srv.id }}').slideToggle('slow');
+                        if (this.innerHTML == '[+]') {
+                            this.innerHTML = '[-]'
+                        } else {
+                            this.innerHTML = '[+]'
+                        }
+                    });
+                </script>
+
+            </td>
+        </tr>
+    {% endfor %}
+</table>

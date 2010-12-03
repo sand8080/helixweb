@@ -24,7 +24,8 @@ class Client(object):
         return resp
 
     def _check_response(self, resp):
-        unauth = ('HELIXAUTH_SESSION_NOT_FOUND')
+        unauth = ('HELIXAUTH_SESSION_NOT_FOUND', 'HELIXAUTH_SESSION_EXPIRED',
+            'HELIXAUTH_USER_AUTH_ERROR')
         if resp['status'] != 'ok' and resp['code'] in unauth:
             raise UnauthorizedActivity
 
