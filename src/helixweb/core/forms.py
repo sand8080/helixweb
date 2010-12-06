@@ -27,20 +27,23 @@ class HelixwebRequestForm(forms.Form):
         self.action = kwargs.pop('action')
         self.session_id = kwargs.pop('session_id', None)
         self.c = Client(url)
-#        super(HelixwebRequestForm, self).__init__(*args, **kwargs)
         super(HelixwebRequestForm, self).__init__(*args, error_class=ErrorFieldMaker, **kwargs)
         self.error_css_class = 'errormessage'
 
-    def request(self, return_resp=False):
+    def request(self):
+        d = self._get_cleaned_data()
+        resp = self.c.request(d)
+        self.process_errors(resp)
+        return resp
+
+    def _get_cleaned_data(self):
         d = dict(self.cleaned_data)
         d.pop('c', None)
         d['action'] = self.action
         d['custom_actor_info'] = __package__
         if self.session_id not in d and self.session_id is not None:
             d['session_id'] = self.session_id
-        resp = self.c.request(d)
-        self.process_errors(resp)
-        return resp if return_resp else None
+        return d
 
     def process_errors(self, resp):
         s = 'status'
@@ -55,7 +58,7 @@ class HelixwebRequestForm(forms.Form):
             for f in fields:
                 self._errors[f] = self.error_class()
                 self._errors[f].append('')
-            print filter(lambda x: x != NON_FIELD_ERRORS, self._errors.keys())
+#            print filter(lambda x: x != NON_FIELD_ERRORS, self._errors.keys())
 
     def as_table(self):
         "Returns this form rendered as HTML <tr>s -- excluding the <table></table>."

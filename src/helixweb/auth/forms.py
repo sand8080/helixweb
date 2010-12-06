@@ -27,6 +27,18 @@ class ServiceForm(AuthForm):
     properties = forms.CharField(label=_('service functions'),
         widget=forms.Textarea(attrs={'cols': 20, 'rows': 10}))
 
+    def _get_cleaned_data(self):
+        d = super(ServiceForm, self)._get_cleaned_data()
+        d['properties'] = self._prepare_properties(d.get('properties', ''))
+        return d
+
+    def _prepare_properties(self, s):
+        def clean_prop(p):
+            res = p.replace('\r', '')
+            return res.strip()
+        props = map(clean_prop, s.split('\n'))
+        props = filter(len, props)
+        return props
 
 class AddServiceForm(ServiceForm):
     def __init__(self, *args, **kwargs):

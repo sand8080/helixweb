@@ -45,7 +45,7 @@ def login(request):
     if request.method == 'POST':
         form = LoginForm(request.POST, prefix='login')
         if form.is_valid():
-            resp = form.request(return_resp=True)
+            resp = form.request()
             status = resp.get('status', None)
             s_id = resp.get('session_id', None)
             if status == 'ok' and s_id is not None:
@@ -80,19 +80,12 @@ def services(request):
     c.update(csrf(request))
     c.update(_get_services(request))
     if request.method == 'POST':
-        form = AddServiceForm(request.POST, prefix='service')
+        form = AddServiceForm(request.POST, prefix='service',
+            session_id=_get_session_id(request))
         if form.is_valid():
-#            resp = form.request(return_resp=True)
-#            status = resp.get('status', None)
-#            s_id = resp.get('session_id', None)
-#            if status == 'ok' and s_id is not None:
-#                # TODO: set secure cookie
-#                b_url = _get_backurl(request)
-#                response = HttpResponseRedirect(b_url)
-#                expires = datetime.strftime(datetime.utcnow() + timedelta(days=365), "%a, %d-%b-%Y %H:%M:%S GMT")
-#                response.set_cookie('session_id', value=s_id, expires=expires)
-#                return response
-            return HttpResponseRedirect('.')
+            resp = form.request()
+            if resp.get('status', None) == 'ok':
+                return HttpResponseRedirect('.')
     else:
         form = AddServiceForm(prefix='service')
     c['service_form'] = form
