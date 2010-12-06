@@ -1,6 +1,7 @@
 {% load i18n %}
 
-{% load coreutils %}
+<script type="text/javascript" src="/static/js/utils.js"></script>
+
 
 <table>
     <tr class="objects_fields">
@@ -25,14 +26,7 @@
                 </div>
 
                 <script type="text/javascript">
-                    $('#props_{{ srv.id }}').click(function() {
-                        $('#props_list_{{ srv.id }}').slideToggle('slow');
-                        if (this.innerHTML == '[+]') {
-                            this.innerHTML = '[-]'
-                        } else {
-                            this.innerHTML = '[+]'
-                        }
-                    });
+                    slider('props_{{ srv.id }}', 'props_list_{{ srv.id }}')
                 </script>
 
             </td>
