@@ -12,7 +12,7 @@
     </tr>
 
     {% for srv in services %}
-        <tr>
+        <tr class="objects_data">
             <td><a href="/auth/services/{{ srv.id }}">{{ srv.name }}</a></td>
             <td>{{ srv.type }}</td>
             <td>{{ srv.is_active }}</td>

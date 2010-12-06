@@ -9,5 +9,8 @@ table.lang_sw td {border-color:#BABABA;border-width:1px;border-style:solid;paddi
 td.lang_sel {background:#FAFAC8;}
 
 tr.objects_fields {background:#EFF3FF;}
+tr.objects_data {vertical-align:text-top;}
 
 table.add_object th {text-align:left;}
+
+.control {background:#EDE8E8;text-align:right;}
