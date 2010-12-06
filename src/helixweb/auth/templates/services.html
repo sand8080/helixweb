@@ -6,19 +6,30 @@
 
 {% block content %}
 
+<script type="text/javascript" src="/static/js/utils.js"></script>
+
 <h2>{% trans "services" %}</h2>
 
-<table class="add_object">
-    <tr>
-        <th colspan="2" align="left">{% trans "create service" %}</th>
-    </tr>
-    {{ service_form.as_table }}
-    <tr class="add_object_">
-        <td colspan="2" class="control">
-            <input type="submit" value={% trans "save" %} />
-        </td>
-    </tr>
-</table>
+<a href="" id="add_service">[+] {% trans "create service" %}</a>
+
+<form action="" method="post">{% csrf_token %}
+    <div id="new_service_data" style="display:none;">
+        <table class="add_object">
+            {{ service_form.as_table }}
+            <tr>
+                <td colspan="2" class="control">
+                    <input type="submit" value={% trans "create" %} />
+                </td>
+            </tr>
+        </table>
+
+    </div>
+
+</form>
+
+<script type="text/javascript">
+    slider_mem('add_service', 'new_service_data')
+</script>
 
 <br>
 

@@ -1,3 +1,5 @@
+/*table.main {width:75%;}*/
+
 span.errormessage {color:red;}
 tr.errormessage {background-color:pink;}
 
@@ -11,6 +13,7 @@ td.lang_sel {background:#FAFAC8;}
 tr.objects_fields {background:#EFF3FF;}
 tr.objects_data {vertical-align:text-top;}
 
-table.add_object th {text-align:left;}
+table.add_object th {text-align:left;vertical-align:text-top;}
+
 
 .control {background:#EDE8E8;text-align:right;}

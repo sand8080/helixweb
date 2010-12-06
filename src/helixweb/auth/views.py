@@ -82,10 +82,19 @@ def services(request):
     if request.method == 'POST':
         form = AddServiceForm(request.POST, prefix='service')
         if form.is_valid():
+#            resp = form.request(return_resp=True)
+#            status = resp.get('status', None)
+#            s_id = resp.get('session_id', None)
+#            if status == 'ok' and s_id is not None:
+#                # TODO: set secure cookie
+#                b_url = _get_backurl(request)
+#                response = HttpResponseRedirect(b_url)
+#                expires = datetime.strftime(datetime.utcnow() + timedelta(days=365), "%a, %d-%b-%Y %H:%M:%S GMT")
+#                response.set_cookie('session_id', value=s_id, expires=expires)
+#                return response
             return HttpResponseRedirect('.')
     else:
         form = AddServiceForm(prefix='service')
     c['service_form'] = form
     return render_to_response('services.html', c,
         context_instance=RequestContext(request))
-

@@ -24,6 +24,8 @@ class LoginForm(AuthForm):
 class ServiceForm(AuthForm):
     name = forms.CharField(label=_('service name'), max_length=32)
     type = forms.CharField(label=_('service type'), max_length=32)
+    properties = forms.CharField(label=_('service functions'),
+        widget=forms.Textarea(attrs={'cols': 20, 'rows': 10}))
 
 
 class AddServiceForm(ServiceForm):
