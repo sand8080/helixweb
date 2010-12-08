@@ -79,15 +79,16 @@ def services(request):
     c = _prepare_context(request)
     c.update(csrf(request))
     c.update(_get_services(request))
+    add_form_prefix = 'add_service'
     if request.method == 'POST':
-        form = AddServiceForm(request.POST, prefix='service',
+        form = AddServiceForm(request.POST, prefix=add_form_prefix,
             session_id=_get_session_id(request))
         if form.is_valid():
             resp = form.request()
             if resp.get('status', None) == 'ok':
                 return HttpResponseRedirect('.')
     else:
-        form = AddServiceForm(prefix='service')
+        form = AddServiceForm(prefix=add_form_prefix)
     c['service_form'] = form
     return render_to_response('services.html', c,
         context_instance=RequestContext(request))

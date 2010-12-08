@@ -10,25 +10,30 @@
 
 <h2>{% trans "services" %}</h2>
 
-<a href="" id="add_service">[+] {% trans "create service" %}</a>
+<div class="slider_area">
+    <a href="" id="add_service_slider">[-] {% trans "create service" %}</a>
 
-<form action="" method="post">{% csrf_token %}
-    <div id="new_service_data" style="display:none;">
-        <table class="add_object">
-            {{ service_form.as_table }}
-            <tr>
-                <td colspan="2" class="control">
-                    <input type="submit" value={% trans "create" %} />
-                </td>
-            </tr>
-        </table>
+    <form action="" method="post">{% csrf_token %}
+        <div id="add_service_data" style="display:block;">
+            <table class="add_object">
+                {{ service_form.as_table }}
+                <tr>
+                    <td colspan="2" class="control">
+                        <input type="submit" value={% trans "create" %} />
+                    </td>
+                </tr>
+            </table>
 
-    </div>
+        </div>
 
-</form>
+    </form>
+</div>
 
 <script type="text/javascript">
-    slider_mem('add_service', 'new_service_data')
+    slider_mem('add_service_slider', 'add_service_data')
+    $('#id_add_service-name').keyup(function() {
+        $('#id_add_service-type').val($('#id_add_service-name').val())
+    })
 </script>
 
 <br>
