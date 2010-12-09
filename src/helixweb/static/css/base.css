@@ -4,6 +4,7 @@ span.errormessage {color:red;}
 tr.errormessage {background-color:pink;}
 
 table.center {margin-left:auto;margin-right:auto;}
+table.wide {width:100%;}
 table.header {width:100%;background:#EDE8E8;padding:10px;}
 
 table.lang_sw {margin:auto 0px auto auto;}

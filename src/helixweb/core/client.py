@@ -9,7 +9,7 @@ class Client(object):
     def __init__(self, url):
         self.url = url
 
-    def request(self, data):
+    def notchecked_request(self, data):
         try:
             f = urllib2.urlopen(self.url, cjson.encode(data))
             resp = f.read()
@@ -18,8 +18,8 @@ class Client(object):
             return {'status': 'error', 'message': 'Service unavailable',
                 'code': error_code.HELIX_SERVICE_UNAVAILABLE}
 
-    def checked_request(self, data):
-        resp = self.request(data)
+    def request(self, data):
+        resp = self.notchecked_request(data)
         self._check_response(resp)
         return resp
 

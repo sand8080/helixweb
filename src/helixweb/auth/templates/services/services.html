@@ -1,0 +1,23 @@
+{% extends "base_auth.html" %}
+
+{% load i18n %}
+
+{% block title %}{% trans "user data" %}{% endblock %}
+
+{% block content %}
+
+<script type="text/javascript" src="/static/js/utils.js"></script>
+
+<h2>{% trans "services" %}</h2>
+
+{% include "services/filter.html" %}
+
+<br>
+
+{% include "services/list.html" %}
+
+<br>
+
+{% include "services/add.html" %}
+
+{% endblock %}

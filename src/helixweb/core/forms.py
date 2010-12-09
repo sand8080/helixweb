@@ -31,8 +31,14 @@ class HelixwebRequestForm(forms.Form):
         self.error_css_class = 'errormessage'
 
     def request(self):
+        return self._do_request(self.c.request)
+
+    def notchecked_request(self):
+        return self._do_request(self.c.notchecked_request)
+
+    def _do_request(self, client_method):
         d = self._get_cleaned_data()
-        resp = self.c.request(d)
+        resp = client_method(d)
         self.process_errors(resp)
         return resp
 
