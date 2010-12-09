@@ -1,11 +1,46 @@
+{% extends "base_auth.html" %}
+
 {% load i18n %}
 
+{% block title %}{% trans "services list" %}{% endblock %}
+
+{% block content %}
+
+<script type="text/javascript" src="/static/js/utils.js"></script>
+
+<h2>{% trans "services" %}</h2>
+
+<form action="." method="get">
+    <table class="filter_object center">
+
+        {{ filter_service_form.as_table }}
+
+        <tr>
+            <td colspan="2" class="control">
+                <input type="submit" value={% trans "filter" %} />
+            </td>
+
+        </tr>
+    </table>
+</form>
+
+<br>
+
+<p>
+    {% load localeurl_tags %}
+    {% trans "total" %}: {{ services|length }} <a href="{{ "/auth/services/add/"|chlocale:cur_lang }}">{% trans "add service" %}</a>
+</p>
+
 {% if services_error %}
+
     <span class="errormessage">{% trans services_error %}</span>
+
 {% else %}
+
+
     {% if services %}
 
-        <table>
+        <table class="objects_list">
             <tr class="objects_fields">
                 <th>{% trans "service name" %}</th>
                 <th>{% trans "type" %}</th>
@@ -37,8 +72,13 @@
         </table>
 
     {% else %}
+
         <table>
             <tr><th>{% trans "no services" %}</th></tr>
         </table>
+
     {% endif %}
+
 {% endif %}
+
+{% endblock %}

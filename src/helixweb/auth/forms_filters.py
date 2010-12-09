@@ -10,7 +10,7 @@ class FilterAuthForm(FilterForm, AuthForm):
 
 
 class FilterServiceForm(FilterAuthForm):
-    service_type = forms.CharField(label=_('service type'), max_length=32,
+    type = forms.CharField(label=_('service type'), max_length=32,
         required=False)
     is_active = forms.BooleanField(label=_('is active'), required=False)
 
@@ -20,7 +20,7 @@ class FilterServiceForm(FilterAuthForm):
 
     def _get_cleaned_data(self):
         d = super(FilterServiceForm, self)._get_cleaned_data()
-        s_t = d['filter_params'].pop('service_type').strip()
+        s_t = d['filter_params'].pop('type').strip()
         if len(s_t):
-            d['filter_params']['services_types'] = [s_t]
+            d['filter_params']['type'] = s_t
         return d

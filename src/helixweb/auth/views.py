@@ -100,5 +100,5 @@ def services(request):
     c['add_service_form'] = add_form
     c['filter_service_form'] = filter_form
 
-    return render_to_response('services/services.html', c,
+    return render_to_response('services/list.html', c,
         context_instance=RequestContext(request))

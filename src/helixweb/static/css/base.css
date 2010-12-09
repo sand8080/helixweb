@@ -20,3 +20,6 @@ tr.objects_data {vertical-align:text-top;}
 .control {background:#EDE8E8;text-align:right;}
 
 div.slider_area {border:1px solid #BABABA;padding:4px;}
+
+table.filter_object {border:1px solid #BABABA;}
+table.objects_list {border:1px solid #BABABA;}
