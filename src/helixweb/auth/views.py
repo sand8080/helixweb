@@ -8,12 +8,11 @@ from django.core.context_processors import csrf
 
 from helixweb.core.localization import cur_lang, cur_lang_value
 #from django.utils.translation import ugettext as _
-from helixweb.core.client import Client
 from helixweb.core.views import login_redirector
 
-from helixweb.auth import settings
 from helixweb.auth.forms import LoginForm, AddServiceForm
 from helixweb.auth.forms_filters import FilterServiceForm
+from helixweb.core.pager import Pager
 
 
 def _prepare_context(request):
@@ -81,14 +80,10 @@ def add_service(request):
         if add_form.is_valid():
             resp = add_form.request()
             if resp.get('status', None) == 'ok':
-                print '####', request.POST
                 if request.POST.get('stay_here', '0') == '1':
-                    print 'Stay here'
                     return HttpResponseRedirect('.')
                 else:
-                    print 'Go to services'
                     return HttpResponseRedirect('..')
-
     else:
         add_form = AddServiceForm(prefix=add_fp)
 
@@ -115,6 +110,9 @@ def services(request):
     if filter_form.is_valid():
         resp = filter_form.request()
         c.update(_process_response(resp, 'services', 'services_error'))
+#        c['pager'] = pager
+#        print '### pager', pager
+#        c['services_total'] = pager.total
 
     c['filter_service_form'] = filter_form
 

@@ -1,0 +1,28 @@
+{% if pager %}
+
+{% load i18n %}
+
+{% load localeurl_tags %}
+
+{% load addurlparameter %}
+
+cur page: {{ pager.cur_page }}
+
+<table>
+    <tr>
+        <td>{% trans "Page" %}: </td>
+        <td style="text-align:right;">
+            {% trans "Show" %}:
+            {% for v in pager.on_page_ranges %}
+                {% if pager.on_page == v %}
+                    {{ v }}&nbsp;
+                {% else %}
+                    <a href="" onclick="$.cookie('pager_on_page', {{ v }}, {expires: 3650})">
+                        {{ v }}</a>&nbsp;
+                {% endif %}
+            {% endfor %}
+        </td>
+    </tr>
+</table>
+
+{% endif %}

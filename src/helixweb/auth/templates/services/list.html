@@ -28,7 +28,9 @@
 
 <p>
     {% load localeurl_tags %}
-    {% trans "total" %}: {{ services|length }} <a href="{{ "/auth/services/add/"|chlocale:cur_lang }}">{% trans "add service" %}</a>
+    <div style="text-align:left;">
+        {% trans "total services" %}: {{ services_total }} <a href="{{ "/auth/services/add/"|chlocale:cur_lang }}">{% trans "add service" %}</a>
+    </div>
 </p>
 
 {% if services_error %}
@@ -39,6 +41,8 @@
 
 
     {% if services %}
+
+        {% include "pager.html" %}
 
         <table class="objects_list">
             <tr class="objects_fields">
@@ -70,6 +74,8 @@
                 </tr>
             {% endfor %}
         </table>
+
+        {% include "pager.html" %}
 
     {% else %}
 
