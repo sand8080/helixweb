@@ -71,33 +71,51 @@ def _process_response(resp, f_name, f_err_name):
 
 
 @login_redirector
-def services(request):
+def add_service(request):
     c = _prepare_context(request)
     c.update(csrf(request))
-
     add_fp = 'add_service'
-    filter_fp = 'filter_services'
-
-    add_form = AddServiceForm(prefix=add_fp)
-    filter_form = FilterServiceForm({'%s-is_active' % filter_fp: True},
-        prefix=filter_fp, session_id=_get_session_id(request))
-
     if request.method == 'POST':
         add_form = AddServiceForm(request.POST, prefix=add_fp,
             session_id=_get_session_id(request))
         if add_form.is_valid():
             resp = add_form.request()
             if resp.get('status', None) == 'ok':
-                return HttpResponseRedirect('.')
-    elif request.method == 'GET' and len(request.GET):
+                print '####', request.POST
+                if request.POST.get('stay_here', '0') == '1':
+                    print 'Stay here'
+                    return HttpResponseRedirect('.')
+                else:
+                    print 'Go to services'
+                    return HttpResponseRedirect('..')
+
+    else:
+        add_form = AddServiceForm(prefix=add_fp)
+
+    c['add_service_form'] = add_form
+
+    return render_to_response('services/add.html', c,
+        context_instance=RequestContext(request))
+
+
+@login_redirector
+def services(request):
+    c = _prepare_context(request)
+    c.update(csrf(request))
+
+    filter_fp = 'filter_services'
+
+    if request.method == 'GET' and len(request.GET):
         filter_form = FilterServiceForm(request.GET, prefix=filter_fp,
             session_id=_get_session_id(request))
+    else:
+        filter_form = FilterServiceForm({'%s-is_active' % filter_fp: True},
+            prefix=filter_fp, session_id=_get_session_id(request))
 
     if filter_form.is_valid():
         resp = filter_form.request()
         c.update(_process_response(resp, 'services', 'services_error'))
 
-    c['add_service_form'] = add_form
     c['filter_service_form'] = filter_form
 
     return render_to_response('services/list.html', c,

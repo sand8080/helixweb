@@ -1,27 +1,43 @@
+{% extends "base_auth.html" %}
+
 {% load i18n %}
 
-<div class="slider_area">
-    <a href="" id="add_service_slider">[-] {% trans "create service" %}</a>
+{% block title %}{% trans "add service" %}{% endblock %}
 
-    <form action="" method="post">{% csrf_token %}
-        <div id="add_service_data" style="display:block;">
-            <table class="add_object center">
-                {{ add_service_form.as_table }}
-                <tr>
-                    <td colspan="2" class="control">
-                        <input type="submit" value={% trans "create" %} />
-                    </td>
-                </tr>
-            </table>
+{% block content %}
 
-        </div>
+<h3>
+    <a href="/auth/services/">{% trans "services" %}</a>
+    &rarr;
+    {% trans "new service" %}
+</h2>
 
-    </form>
-</div>
+<form action="" method="post">{% csrf_token %}
+    <div id="add_service_data" style="display:block;">
+        <table class="add_object center">
+            {{ add_service_form.as_table }}
+            <tr>
+                <td colspan="2" class="control">
+                    <input type="submit" style="font-weight:bold;" value="{% trans 'create' %}" />
+                    <input type="hidden" id="stay_here" name="stay_here" value=0 />
+                    <input type="submit" value="{% trans 'create and add another' %}"
+                        onclick="var f = this.form; f.stay_here.value=1; f.submit()" />
+                </td>
+            </tr>
+        </table>
 
+    </div>
+
+</form>
+
+{% comment %}
+<a href="" id="add_service_slider">[-] {% trans "create service" %}</a>
 <script type="text/javascript">
     slider_mem('add_service_slider', 'add_service_data')
     $('#id_add_service-name').keyup(function() {
         $('#id_add_service-type').val($('#id_add_service-name').val())
     })
 </script>
+{% endcomment %}
+
+{% endblock %}
