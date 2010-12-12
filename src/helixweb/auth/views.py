@@ -43,7 +43,7 @@ def login(request):
     c.update(csrf(request))
     c.update(cur_lang(request))
     if request.method == 'POST':
-        form = LoginForm(request.POST, prefix='login')
+        form = LoginForm(request.POST, prefix='login', request=request)
         if form.is_valid():
             resp = form.notchecked_request()
             status = resp.get('status', None)
@@ -56,7 +56,7 @@ def login(request):
                 response.set_cookie('session_id', value=s_id, expires=expires)
                 return response
     else:
-        form = LoginForm(prefix='login')
+        form = LoginForm(prefix='login', request=request)
     c['login_form'] = form
     return render_to_response('login.html', c,
         context_instance=RequestContext(request))
@@ -74,9 +74,10 @@ def add_service(request):
     c = _prepare_context(request)
     c.update(csrf(request))
     add_fp = 'add_service'
+
     if request.method == 'POST':
         add_form = AddServiceForm(request.POST, prefix=add_fp,
-            session_id=_get_session_id(request))
+            request=request)
         if add_form.is_valid():
             resp = add_form.request()
             if resp.get('status', None) == 'ok':
@@ -85,7 +86,7 @@ def add_service(request):
                 else:
                     return HttpResponseRedirect('..')
     else:
-        add_form = AddServiceForm(prefix=add_fp)
+        add_form = AddServiceForm(prefix=add_fp, request=request)
 
     c['add_service_form'] = add_form
 
@@ -98,23 +99,22 @@ def services(request):
     c = _prepare_context(request)
     c.update(csrf(request))
 
-    filter_fp = 'filter_services'
-
+    f_prefix = 'filter_services'
     if request.method == 'GET' and len(request.GET):
-        filter_form = FilterServiceForm(request.GET, prefix=filter_fp,
-            session_id=_get_session_id(request))
+        form = FilterServiceForm(request.GET, prefix=f_prefix, request=request)
     else:
-        filter_form = FilterServiceForm({'%s-is_active' % filter_fp: True},
-            prefix=filter_fp, session_id=_get_session_id(request))
+        # setting default is_active value to True
+        form = FilterServiceForm({'%s-is_active' % f_prefix: True},
+            prefix=f_prefix, request=request)
 
-    if filter_form.is_valid():
-        resp = filter_form.request()
+    if form.is_valid():
+        resp = form.request()
         c.update(_process_response(resp, 'services', 'services_error'))
-#        c['pager'] = pager
-#        print '### pager', pager
+        c['pager'] = form.pager
+        print '### pager', form.pager
 #        c['services_total'] = pager.total
 
-    c['filter_service_form'] = filter_form
+    c['filter_service_form'] = form
 
     return render_to_response('services/list.html', c,
         context_instance=RequestContext(request))

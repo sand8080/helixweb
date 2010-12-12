@@ -28,8 +28,3 @@ class Client(object):
             'HELIXAUTH_USER_AUTH_ERROR')
         if resp['status'] != 'ok' and resp['code'] in unauth:
             raise UnauthorizedActivity
-
-
-#c = Client('http://localhost:10999')
-#resp = c.request({'action': 'ping'})
-#print resp

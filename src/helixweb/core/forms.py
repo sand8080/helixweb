@@ -25,7 +25,8 @@ class HelixwebRequestForm(forms.Form):
     def __init__(self, *args, **kwargs):
         url = kwargs.pop('service_url')
         self.action = kwargs.pop('action')
-        self.session_id = kwargs.pop('session_id', None)
+        request = kwargs.pop('request')
+        self.session_id = request.COOKIES.get('session_id', None)
         self.c = Client(url)
         super(HelixwebRequestForm, self).__init__(*args, error_class=ErrorFieldMaker, **kwargs)
         self.error_css_class = 'errormessage'

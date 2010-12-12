@@ -14,6 +14,8 @@ class AuthForm(HelixwebRequestForm):
 class LoginForm(AuthForm):
     def __init__(self, *args, **kwargs):
         kwargs['action'] = 'login'
+        request = kwargs['request']
+        request.COOKIES['session_id'] = None
         super(LoginForm, self).__init__(*args, **kwargs)
 
     environment_name = forms.CharField(label=_('environment name'), max_length=32)
