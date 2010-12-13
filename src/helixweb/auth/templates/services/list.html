@@ -28,7 +28,7 @@
     <p>
         {% load localeurl_tags %}
         <div style="text-align:left;">
-            {% trans "total services" %}: {{ services_total }} <a href="{{ "/auth/services/add/"|chlocale:cur_lang }}">{% trans "add service" %}</a>
+            {% trans "total services" %}: {{ pager.total }} <a href="{{ "/auth/services/add/"|chlocale:cur_lang }}">{% trans "add service" %}</a>
         </div>
     </p>
 

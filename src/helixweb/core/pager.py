@@ -27,7 +27,17 @@ class Pager(object):
 
     @property
     def pages_range(self):
-        p_num = 2
+        p_num = 3
         pages = range(self.page - p_num, self.page + p_num + 1)
-        pages = filter(lambda x: x > 0 and x * self.on_page <= self.total, pages)
-        return [(p, (p - 1) * self.on_page) for p in pages]
+        pages = filter(lambda x: x > 0 and (x - 1) * self.on_page < self.total, pages)
+        res = [(p, (p - 1) * self.on_page) for p in pages]
+
+        # adding ... in list head and tail
+        cur_page_idx = pages.index(self.page)
+        if len(pages) - cur_page_idx >= p_num:
+            (_, p_offset) = res[-1]
+            res[-1] = ('...', p_offset)
+        if cur_page_idx >= p_num:
+            (_, p_offset) = res[0]
+            res[0] = ('...', p_offset)
+        return res
