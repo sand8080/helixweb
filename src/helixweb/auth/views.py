@@ -100,6 +100,8 @@ def services(request):
     c.update(csrf(request))
 
     f_prefix = 'filter_services'
+    print '### request get:', request.GET
+
     if request.method == 'GET' and len(request.GET):
         form = FilterServiceForm(request.GET, prefix=f_prefix, request=request)
     else:

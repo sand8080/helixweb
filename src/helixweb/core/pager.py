@@ -2,25 +2,32 @@ class Pager(object):
 
     on_page_ranges = (1, 2, 3, 20, 50, 100, 250)
 
-    def __init__(self, page, total, on_page):
-        if on_page in self.on_page_ranges:
-            self.on_page = on_page
-        else:
-            self.on_page = self.on_page_ranges[0]
-        self.page = page if page > 0 else 1
-        self.total = total
+    def __init__(self, offset, total, on_page):
+        on_page = self._get_int_val(on_page)
+        self.on_page = on_page if on_page in self.on_page_ranges else self.on_page_ranges[0]
+        self.offset = self._get_int_val(offset)
+        self.total = self._get_int_val(total)
+
+    def _get_int_val(self, val):
+        try:
+            val = int(val)
+        except (ValueError, TypeError):
+            val = 0
+        return val
 
     def update_total(self, helix_resp):
-        if 'total' in helix_resp:
-            self.total = helix_resp['total']
+        self.total = helix_resp.get('total', 0)
 
     def __repr__(self):
         return '%s' % self.__dict__
 
     @property
-    def offset(self):
-        return self.on_page * (self.page - 1)
+    def page(self):
+        return int(self.offset / self.on_page) + 1
 
     @property
     def pages_range(self):
-        pass
+        p_num = 2
+        pages = range(self.page - p_num, self.page + p_num + 1)
+        pages = filter(lambda x: x > 0 and x * self.on_page <= self.total, pages)
+        return [(p, (p - 1) * self.on_page) for p in pages]

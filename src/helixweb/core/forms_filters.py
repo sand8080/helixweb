@@ -7,13 +7,10 @@ class FilterForm(object):
         super(FilterForm, self).__init__(*args, **kwargs)
 
     def _get_pager(self, request):
-        try:
-            on_page = int(request.COOKIES.get('pager_on_page', 0))
-        except ValueError:
-            on_page = 0
+        on_page = request.COOKIES.get('pager_on_page', 0)
         total = request.GET.get('pager_total', None)
-        page = request.GET.get('pager_page', 1)
-        return Pager(page, total, on_page)
+        offset = request.GET.get('pager_offset', 0)
+        return Pager(offset, total, on_page)
 
     def _get_cleaned_data(self):
         f_params = dict(self.cleaned_data)

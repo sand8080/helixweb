@@ -1,16 +1,28 @@
 {% if pager %}
 
 {% load i18n %}
-
 {% load localeurl_tags %}
+{% load paging %}
 
-{% load addurlparameter %}
-
-cur page: {{ pager.page }}
+<input type="hidden" id="pager_offset" />
 
 <table>
     <tr>
-        <td>{% trans "Page" %}: </td>
+        <td>
+            {% load paging %}
+            {% trans "Page" %}:
+
+            {% for p_info in pager.pages_range %}
+
+                {% if p_info.0 == pager.page %}
+                    {{ p_info.0 }}&nbsp;
+                {% else %}
+                    <a href="{% nextpageurl %}{{ p_info.1 }}{% endnextpageurl %}">
+                        {{ p_info.0 }}</a>&nbsp;
+                {% endif %}
+            {% endfor %}
+        </td>
+
         <td style="text-align:right;">
             {% trans "Show" %}:
             {% for v in pager.on_page_ranges %}
