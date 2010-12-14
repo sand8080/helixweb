@@ -5,8 +5,12 @@ class Pager(object):
     def __init__(self, offset, total, on_page):
         on_page = self._get_int_val(on_page)
         self.on_page = on_page if on_page in self.on_page_ranges else self.on_page_ranges[0]
-        self.offset = self._get_int_val(offset)
+
+        self.offset = self._align_offset(self._get_int_val(offset))
         self.total = self._get_int_val(total)
+
+    def _align_offset(self, offset):
+        return int(offset / self.on_page) * self.on_page
 
     def _get_int_val(self, val):
         try:
