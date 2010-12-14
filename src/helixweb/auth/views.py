@@ -12,7 +12,6 @@ from helixweb.core.views import login_redirector
 
 from helixweb.auth.forms import LoginForm, AddServiceForm
 from helixweb.auth.forms_filters import FilterServiceForm
-from helixweb.core.pager import Pager
 
 
 def _prepare_context(request):
@@ -100,7 +99,6 @@ def services(request):
     c.update(csrf(request))
 
     f_prefix = 'filter_services'
-    print '### request get:', request.GET
 
     if request.method == 'GET' and len(request.GET):
         form = FilterServiceForm(request.GET, prefix=f_prefix, request=request)
@@ -113,7 +111,6 @@ def services(request):
         resp = form.request()
         c.update(_process_response(resp, 'services', 'services_error'))
         c['pager'] = form.pager
-        print '### pager', form.pager
 #        c['services_total'] = pager.total
 
     c['filter_service_form'] = form
