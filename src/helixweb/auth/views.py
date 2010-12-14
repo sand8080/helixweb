@@ -111,9 +111,9 @@ def services(request):
         resp = form.request()
         c.update(_process_response(resp, 'services', 'services_error'))
         c['pager'] = form.pager
-#        c['services_total'] = pager.total
 
     c['filter_service_form'] = form
+    c['rights'] = form.get_rights()
 
     return render_to_response('services/list.html', c,
         context_instance=RequestContext(request))

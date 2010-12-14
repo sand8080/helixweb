@@ -1,6 +1,7 @@
 {% extends "base_auth.html" %}
 
 {% load i18n %}
+{% load localeurl_tags %}
 
 {% block title %}{% trans "services list" %}{% endblock %}
 
@@ -19,25 +20,21 @@
             <td colspan="2" class="control">
                 <input type="submit" value={% trans "filter" %} />
             </td>
-
         </tr>
     </table>
 
     <br>
 
-    <p>
-        {% load localeurl_tags %}
-        <div style="text-align:left;">
-            {% trans "total services" %}: {{ pager.total }} <a href="{{ "/auth/services/add/"|chlocale:cur_lang }}">{% trans "add service" %}</a>
-        </div>
-    </p>
+    <div style="text-align:left;">
+        {% trans "total services" %}: {{ pager.total }}
+        <a href="{{ "/auth/services/add/"|chlocale:cur_lang }}">{% trans "add service" %}</a>
+    </div>
 
     {% if services_error %}
 
         <span class="errormessage">{% trans services_error %}</span>
 
     {% else %}
-
 
         {% if services %}
 
