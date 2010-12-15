@@ -6,17 +6,21 @@
 
 {% block content %}
 
-<h3>
-    <a href="/auth/services/">{% trans "services" %}</a>
-    &rarr;
-    {% trans "new service" %}
-</h2>
 
 <form action="" method="post">{% csrf_token %}
 
-    <div id="add_service_data" style="display:block;">
+    <div class="bordered" id="add_service_data" style="display:block;">
 
         <table class="add_object center">
+            <tr>
+                <td colspan="2">
+                    <h2>
+                        <a href="/auth/get_services/">{% trans "services" %}</a>
+                        &rarr;
+                        {% trans "add service" %}
+                    </h2>
+                </td>
+            </tr>
 
             {{ add_service_form.as_table }}
 

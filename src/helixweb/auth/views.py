@@ -85,7 +85,7 @@ def add_service(request):
                 if request.POST.get('stay_here', '0') == '1':
                     return HttpResponseRedirect('.')
                 else:
-                    return HttpResponseRedirect('..')
+                    return HttpResponseRedirect('../get_services/')
     else:
         add_form = AddServiceForm(prefix=add_fp, request=request)
 

@@ -11,12 +11,13 @@ table.header {width:100%;background:#EDE8E8;padding:10px;}
 table.lang_sw {margin:auto 0px auto auto;}
 table.lang_sw td {border:1px solid #BABABA;padding:3px;}
 
-table.add_object th {text-align:left;vertical-align:text-top;}
+table.add_object td {vertical-align:top;}
+table.add_object th {vertical-align:top;text-align:right;}
 
 td.lang_sel {background:#FAFAC8;}
 
 tr.objects_fields {background:#EFF3FF;}
-tr.objects_data {vertical-align:text-top;}
+tr.objects_data {vertical-align:text-top;text-align:center;}
 
 .control {background:#EDE8E8;text-align:right;}
 .bordered {border:1px solid #BABABA;}

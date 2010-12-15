@@ -25,7 +25,10 @@ class UrlNode(Node):
     def _get_action_name(self):
         chunks = self.url.split('/')
         srv_types = filter(lambda x: len(x), chunks)
-        return srv_types[-1]
+        try:
+            return srv_types[1]
+        except IndexError:
+            return ''
 
     def _is_url_allowed(self, rights):
         srv_type = self._get_service_type()
@@ -47,7 +50,7 @@ class UrlNode(Node):
                 if lang_url == request.path:
                     return '<span class="current_item">%s</span>' % rended
                 else:
-                    return '<a href="/%(lang_url)s">%(descr)s</a>' % \
+                    return '<a href="%(lang_url)s">%(descr)s</a>' % \
                         {'lang_url': lang_url, 'descr': rended}
             elif self.always_show_text:
                 return '%s' % rended

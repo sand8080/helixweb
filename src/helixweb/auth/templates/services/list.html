@@ -1,7 +1,6 @@
 {% extends "base_auth.html" %}
 
 {% load i18n %}
-{% load localeurl_tags %}
 
 {% block title %}{% trans "services list" %}{% endblock %}
 
@@ -35,15 +34,10 @@
 
     {% load urlutils %}
 
-    Url:
-    {% allowedurl /auth/services/add/ True %}
-        {% trans "add service" %}
-    {% endallowedurl %}
-
 
     <div style="text-align:left;">
-        {% trans "total services" %}: {{ pager.total }}
-        <a href="{{ "/auth/services/add/"|chlocale:cur_lang }}">{% trans "add service" %}</a>
+        {% trans "total services" %}: {{ pager.total }} &rarr;
+        {% allowedurl /auth/add_service/ %}{% trans "add service" %}{% endallowedurl %}
     </div>
 
     {% if services_error %}
@@ -61,16 +55,24 @@
                     <th>{% trans "service name" %}</th>
                     <th>{% trans "type" %}</th>
                     <th>{% trans "is active" %}</th>
-                    <th>{% trans "is possible to disable" %}</th>
                     <th>{% trans "functions" %}</th>
                 </tr>
 
                 {% for srv in services %}
                     <tr class="objects_data">
-                        <td><a href="/auth/services/{{ srv.id }}">{{ srv.name }}</a></td>
+                        <td>
+                            {% allowedurl /auth/modify_service/ True %}
+                                {{ srv.name }}
+                            {% endallowedurl %}
+                        </td>
                         <td>{{ srv.type }}</td>
-                        <td>{{ srv.is_active }}</td>
-                        <td>{{ srv.is_possible_deactiate }}</td>
+                        <td>
+                            {% if srv.is_active %}
+                                +
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
                         <td>
 
                             <a href="#" id="props_{{ srv.id }}">[+]</a>
