@@ -73,9 +73,9 @@
                                 -
                             {% endif %}
                         </td>
-                        <td>
+                        <td class="func_list">
 
-                            <a href="#" id="props_{{ srv.id }}">[+]</a>
+                            <a href="#" id="props_{{ srv.id }}">[+] {% trans "list" %}</a>
                             <div id="props_list_{{ srv.id }}" style="display:none;">
                                 {{ srv.properties|unordered_list }}
                             </div>
