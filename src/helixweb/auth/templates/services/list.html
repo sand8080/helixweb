@@ -9,19 +9,27 @@
 
 <script type="text/javascript" src="/static/js/utils.js"></script>
 
-<h3>{% trans "services" %}</h3>
-
 <form action="" method="get">
-    <table class="filter_object center wide">
+    <div class="bordered">
+        <table class="filter_object center">
 
-        {{ filter_service_form.as_table }}
+            <tr>
+                <th>
+                    <h2>{% trans "services" %}</h2>
+                </th>
+                <td></td>
+            </tr>
 
-        <tr>
-            <td colspan="2" class="control">
-                <input type="submit" value={% trans "filter" %} />
-            </td>
-        </tr>
-    </table>
+            {{ filter_service_form.as_table }}
+
+            <tr>
+                <td colspan="2" class="control">
+                    <input type="submit" value={% trans "filter" %} />
+                </td>
+            </tr>
+        </table>
+        <br>
+    </div>
 
     <br>
 

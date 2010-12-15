@@ -40,10 +40,15 @@ class UrlNode(Node):
         rended = self.nodelist.render(context).strip()
         try:
             rights = resolve_variable('rights', context)
-            cur_lang = resolve_variable('cur_lang', context)
             if self._is_url_allowed(rights):
-                return '<a href="/%(cur_lang)s/%(url)s">%(descr)s</a>' % \
-                    {'cur_lang': cur_lang, 'url': self.url, 'descr': rended}
+                request = resolve_variable('request', context)
+                cur_lang = resolve_variable('cur_lang', context)
+                lang_url = '/%s%s' % (cur_lang, self.url)
+                if lang_url == request.path:
+                    return '<span class="current_item">%s</span>' % rended
+                else:
+                    return '<a href="/%(lang_url)s">%(descr)s</a>' % \
+                        {'lang_url': lang_url, 'descr': rended}
             elif self.always_show_text:
                 return '%s' % rended
             else:

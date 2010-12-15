@@ -1,11 +1,18 @@
 {% extends "base.html" %}
 
-
 {% block sidebar %}
 
-<ul>
-    <li>Auth service</li>
-    <li>functions</li>
-</ul>
+{% load urlutils %}
+{% load i18n %}
+
+<table class="left_menu bordered wide"  height="100%">
+    <tr>
+        <td>
+            {% allowedurl /auth/get_services/ %}
+                {% trans "services" %}
+            {% endallowedurl %}
+        </td>
+    </tr>
+</table>
 
 {% endblock %}

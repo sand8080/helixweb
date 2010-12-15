@@ -4,11 +4,13 @@
 
 {% block title %}{% trans "login" %}{% endblock %}
 
+{% block sidebar %}{% endblock %}
+
 {% block content %}
 
 <form action="" method="post">{% csrf_token %}
-    <div style="display:block;" id="login_block">
-        <table>
+    <div style="display:block;padding-left:17%;" id="login_block">
+        <table class="bordered">
             <tr>
                 <td>{% trans "login" %}</td>
                 <td><a href="#" onclick="$('#login_block').hide();  $('#reg_env_block').show(); return false">

@@ -1,4 +1,5 @@
-table.main tr {vertical-align:text-top;}
+table.main {width:75%;}
+table.main tr {vertical-align:top;}
 
 span.errormessage {color:red;}
 tr.errormessage {background-color:pink;}
@@ -18,8 +19,19 @@ tr.objects_fields {background:#EFF3FF;}
 tr.objects_data {vertical-align:text-top;}
 
 .control {background:#EDE8E8;text-align:right;}
+.bordered {border:1px solid #BABABA;}
 
 div.slider_area {border:1px solid #BABABA;padding:4px;}
 
-table.filter_object {border:1px solid #BABABA;}
+/* table.filter_object {border:1px solid #BABABA;} */
+table.filter_object td {vertical-align:top;}
+table.filter_object th {vertical-align:top;text-align:right;}
+table.filter_object h2 {color:#3b64b5;}
+
 table.objects_list {border:1px solid #BABABA;}
+
+table.left_menu td {padding:10px 10px 10px 30px;}
+.current_item {color:#3b64b5;}
+/*
+table.left_menu {width:75%;}
+*/

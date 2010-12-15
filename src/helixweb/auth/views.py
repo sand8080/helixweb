@@ -36,7 +36,7 @@ def _get_backurl(request):
     if 'backurl' in request.GET:
         return base64.decodestring(request.GET['backurl'])
     else:
-        return '/%s/auth/services/' % cur_lang_value(request)
+        return '/%s/auth/get_services/' % cur_lang_value(request)
 
 
 def login(request):
