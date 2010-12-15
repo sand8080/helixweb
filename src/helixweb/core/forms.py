@@ -75,13 +75,3 @@ class HelixwebRequestForm(forms.Form):
             row_ender = u'</td></tr>',
             help_text_html = u'<br />%s',
             errors_on_separate_row = False)
-
-    def get_rights(self):
-        resp = self.c.request({'action': 'get_user_rights',
-            'session_id': self.session_id})
-        if resp['status'] == 'ok':
-            return resp['rights']
-        else:
-            return []
-
-

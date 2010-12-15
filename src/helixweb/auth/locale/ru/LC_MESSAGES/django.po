@@ -8,46 +8,130 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-11-13 18:10+0300\n"
+"POT-Creation-Date: 2010-12-15 12:39+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n% 10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n% "
+"10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
-#: error_code.py:5
+#: error_code.py:4
 msgid "HELIXAUTH_ERROR"
 msgstr "ошибка авторизации"
 
-#: error_code.py:6
+#: error_code.py:5
 msgid "HELIXAUTH_OBJECT_NOT_FOUND"
 msgstr "объект не найден"
 
-#: error_code.py:7
+#: error_code.py:6
 msgid "HELIXAUTH_OBJECT_ALREADY_EXISTS"
 msgstr "объект уже создан"
 
-#: forms.py:72
-msgid "env name"
+#: error_code.py:9
+msgid "HELIXAUTH_SESSION_NOT_FOUND"
+msgstr "сессия не найдена"
+
+#: error_code.py:10
+msgid "HELIXAUTH_SESSION_EXPIRED"
+msgstr "сессия просрочена"
+
+#: error_code.py:13
+msgid "HELIXAUTH_ENVIRONMENT_NOT_FOUND"
+msgstr "окружение объект не найдено"
+
+#: error_code.py:16
+msgid "HELIXAUTH_USER_INACTIVE"
+msgstr "пользователь отключен"
+
+#: error_code.py:17
+msgid "HELIXAUTH_USER_AUTH_ERROR"
+msgstr "ошибка авторизации"
+
+#: forms.py:21
+msgid "environment name"
 msgstr "область видимости"
 
-#: forms.py:73
-#: templates/login.html:5
-#: templates/login.html.py:13
-#: templates/login.html:21
+#: forms.py:22
+msgid "user login"
+msgstr "логин пользователя"
+
+#: forms.py:23
+msgid "password"
+msgstr "пароль"
+
+#: forms.py:27 templates/services/list.html:53
+msgid "service name"
+msgstr "название сервиса"
+
+#: forms.py:28 forms_filters.py:13
+msgid "service type"
+msgstr "тип сервиса"
+
+#: forms.py:29
+msgid "service functions"
+msgstr ""
+
+#: forms.py:31 forms_filters.py:15 templates/services/list.html:55
+msgid "is active"
+msgstr ""
+
+#: templates/login.html:5 templates/login.html.py:13 templates/login.html:21
 #: templates/login.html.py:31
 msgid "login"
 msgstr "вход"
 
-#: forms.py:74
-msgid "password"
-msgstr "пароль"
-
-#: templates/login.html:15
-#: templates/login.html.py:33
-#: templates/login.html:38
+#: templates/login.html:15 templates/login.html.py:33 templates/login.html:38
 msgid "create environment"
 msgstr "создать окружение"
 
+#: templates/services/add.html:5 templates/services/list.html:32
+#: templates/services/list.html.py:38
+msgid "add service"
+msgstr "создать сервис"
+
+#: templates/services/add.html:10 templates/services/list.html:12
+msgid "services"
+msgstr "сервисы"
+
+#: templates/services/add.html:12
+msgid "new service"
+msgstr "новый сервис"
+
+#: templates/services/add.html:25
+msgid "create"
+msgstr ""
+
+#: templates/services/add.html:27
+msgid "create and add another"
+msgstr ""
+
+#: templates/services/list.html:6
+msgid "services list"
+msgstr ""
+
+#: templates/services/list.html:21
+msgid "filter"
+msgstr ""
+
+#: templates/services/list.html:37
+msgid "total services"
+msgstr ""
+
+#: templates/services/list.html:54
+msgid "type"
+msgstr ""
+
+#: templates/services/list.html:56
+msgid "is possible to disable"
+msgstr ""
+
+#: templates/services/list.html:57
+msgid "functions"
+msgstr ""
+
+#: templates/services/list.html:87
+msgid "no services"
+msgstr ""

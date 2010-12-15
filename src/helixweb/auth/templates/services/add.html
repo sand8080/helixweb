@@ -13,9 +13,13 @@
 </h2>
 
 <form action="" method="post">{% csrf_token %}
+
     <div id="add_service_data" style="display:block;">
+
         <table class="add_object center">
+
             {{ add_service_form.as_table }}
+
             <tr>
                 <td colspan="2" class="control">
                     <input type="submit" style="font-weight:bold;" value="{% trans 'create' %}" />
@@ -30,14 +34,10 @@
 
 </form>
 
-{% comment %}
-<a href="" id="add_service_slider">[-] {% trans "create service" %}</a>
 <script type="text/javascript">
-    slider_mem('add_service_slider', 'add_service_data')
     $('#id_add_service-name').keyup(function() {
         $('#id_add_service-type').val($('#id_add_service-name').val())
     })
 </script>
-{% endcomment %}
 
 {% endblock %}

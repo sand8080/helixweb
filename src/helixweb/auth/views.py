@@ -12,10 +12,12 @@ from helixweb.core.views import login_redirector
 
 from helixweb.auth.forms import LoginForm, AddServiceForm
 from helixweb.auth.forms_filters import FilterServiceForm
+from helixweb.auth.security import get_rights
 
 
 def _prepare_context(request):
     c = {}
+    c['rights'] = get_rights(request.COOKIES.get('session_id', ''))
     c.update(csrf(request))
     c.update(cur_lang(request))
     return c
@@ -113,7 +115,6 @@ def services(request):
         c['pager'] = form.pager
 
     c['filter_service_form'] = form
-    c['rights'] = form.get_rights()
 
     return render_to_response('services/list.html', c,
         context_instance=RequestContext(request))
