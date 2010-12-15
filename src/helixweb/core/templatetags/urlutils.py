@@ -5,9 +5,10 @@ register = Library()
 
 
 class UrlNode(Node):
-    def __init__(self, url, nodelist):
+    def __init__(self, nodelist, url, always_show_text=None):
         self.url = url.strip('"\'')
         self.nodelist = nodelist
+        self.always_show_text = always_show_text == 'True'
 
     def _get_service_type(self):
         chunks = self.url.split('/')
@@ -43,8 +44,10 @@ class UrlNode(Node):
             if self._is_url_allowed(rights):
                 return '<a href="/%(cur_lang)s/%(url)s">%(descr)s</a>' % \
                     {'cur_lang': cur_lang, 'url': self.url, 'descr': rended}
+            elif self.always_show_text:
+                return '%s' % rended
             else:
-                return '<b style="color:red;">not allowed %s</b>' % rended
+                return ''
         except VariableDoesNotExist:
             return ''
 
@@ -52,9 +55,10 @@ class UrlNode(Node):
 @register.tag
 def allowedurl(parser, token):
     bits = token.split_contents()
-    if len(bits) != 2:
-        raise TemplateSyntaxError('%s tag requires exactly one argument'
+    if len(bits) not in (2, 3):
+        raise TemplateSyntaxError('%s tag requires exactly one or two arguments'
             % bits[0])
     nodelist = parser.parse(('endallowedurl',))
     parser.delete_first_token()
-    return UrlNode(bits[1], nodelist)
+    always_show_text = bits[2] if len(bits) > 2 else None
+    return UrlNode(nodelist, bits[1], always_show_text)
