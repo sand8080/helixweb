@@ -5,9 +5,9 @@ from django.http import HttpResponseRedirect
 
 
 def login_redirector(func):
-    def decorated(request):
+    def decorated(request, *args, **kwargs):
         try:
-            return func(request)
+            return func(request, *args, **kwargs)
         except UnauthorizedActivity:
             b_url = base64.encodestring(request.get_full_path())
             return HttpResponseRedirect('/auth/login/?backurl=%s' % b_url)

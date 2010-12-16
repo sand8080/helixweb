@@ -28,8 +28,7 @@ class ServiceForm(AuthForm):
     type = forms.CharField(label=_('service type'), max_length=32)
     properties = forms.CharField(label=_('service functions'),
         widget=forms.Textarea(attrs={'cols': 20, 'rows': 10}))
-    is_active = forms.BooleanField(label=_('is active'), initial=True,
-        required=False)
+    is_active = forms.BooleanField(label=_('is active'), initial=True)
 
     def _get_cleaned_data(self):
         d = super(ServiceForm, self)._get_cleaned_data()
@@ -49,3 +48,9 @@ class AddServiceForm(ServiceForm):
     def __init__(self, *args, **kwargs):
         kwargs['action'] = 'add_service'
         super(AddServiceForm, self).__init__(*args, **kwargs)
+
+
+class ModifyServiceForm(ServiceForm):
+    def __init__(self, *args, **kwargs):
+        kwargs['action'] = 'modify_service'
+        super(ModifyServiceForm, self).__init__(*args, **kwargs)

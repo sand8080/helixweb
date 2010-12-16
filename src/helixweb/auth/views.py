@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 import base64
 
 from django.shortcuts import render_to_response
-from django.http import HttpResponseRedirect, QueryDict
+from django.http import HttpResponseRedirect
 from django.template import RequestContext
 from django.core.context_processors import csrf
 
@@ -10,7 +10,7 @@ from helixweb.core.localization import cur_lang, cur_lang_value
 #from django.utils.translation import ugettext as _
 from helixweb.core.views import login_redirector
 
-from helixweb.auth.forms import LoginForm, AddServiceForm
+from helixweb.auth.forms import LoginForm, AddServiceForm, ModifyServiceForm
 from helixweb.auth.forms_filters import FilterServiceForm
 from helixweb.auth.security import get_rights
 
@@ -74,24 +74,37 @@ def _process_response(resp, f_name, f_err_name):
 def add_service(request):
     c = _prepare_context(request)
     c.update(csrf(request))
-    add_fp = 'add_service'
+    f_prefix = 'add_service'
 
     if request.method == 'POST':
-        add_form = AddServiceForm(request.POST, prefix=add_fp,
+        form = AddServiceForm(request.POST, prefix=f_prefix,
             request=request)
-        if add_form.is_valid():
-            resp = add_form.request()
-            if resp.get('status', None) == 'ok':
+        if form.is_valid():
+            resp = form.request()
+            if resp['status'] == 'ok':
                 if request.POST.get('stay_here', '0') == '1':
                     return HttpResponseRedirect('.')
                 else:
                     return HttpResponseRedirect('../get_services/')
     else:
-        add_form = AddServiceForm(prefix=add_fp, request=request)
-
-    c['add_service_form'] = add_form
-
+        form = AddServiceForm(prefix=f_prefix, request=request)
+    c['add_service_form'] = form
     return render_to_response('services/add.html', c,
+        context_instance=RequestContext(request))
+
+
+@login_redirector
+def modify_service(request, srv_id):
+    c = _prepare_context(request)
+    c.update(csrf(request))
+    f_prefix = 'modify_service'
+
+    if request.method == 'POST':
+        pass
+    else:
+        form = ModifyServiceForm(prefix=f_prefix, request=request)
+    c['modify_service_form'] = form
+    return render_to_response('services/modify.html', c,
         context_instance=RequestContext(request))
 
 
@@ -99,7 +112,6 @@ def add_service(request):
 def services(request):
     c = _prepare_context(request)
     c.update(csrf(request))
-
     f_prefix = 'filter_services'
 
     if len(request.GET) == 0 or (len(request.GET) == 1 and 'pager_offset' in request.GET):

@@ -1,0 +1,41 @@
+{% extends "base_auth.html" %}
+
+{% load i18n %}
+
+{% block title %}{% trans "modify service" %}{% endblock %}
+
+{% block content %}
+
+
+<form action="" method="post">{% csrf_token %}
+
+    <div class="bordered" id="add_service_data" style="display:block;">
+
+        <table class="add_object center">
+            <tr>
+                <td colspan="2">
+                    <h2>
+                        <a href="/auth/get_services/">{% trans "services" %}</a>
+                        &rarr;
+                        {% trans "modify service" %}
+                    </h2>
+                </td>
+            </tr>
+
+            {{ modify_service_form.as_table }}
+
+            <tr class="control">
+                <td style="text-align:left;">
+                    <input type="submit" style="font-weight:bold;" value="{% trans "save service" %}" />
+                </td>
+                <td style="text-align:right;">
+                    <input type="submit" value="{% trans "delete service" %}" />
+                </td>
+            </tr>
+        </table>
+
+    </div>
+
+</form>
+
+{% endblock %}
