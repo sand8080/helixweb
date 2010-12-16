@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 import base64
 
 from django.shortcuts import render_to_response
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, QueryDict
 from django.template import RequestContext
 from django.core.context_processors import csrf
 
@@ -102,12 +102,12 @@ def services(request):
 
     f_prefix = 'filter_services'
 
-    if request.method == 'GET' and len(request.GET):
-        form = FilterServiceForm(request.GET, prefix=f_prefix, request=request)
-    else:
+    if len(request.GET) == 0 or (len(request.GET) == 1 and 'pager_offset' in request.GET):
         # setting default is_active value to True
         form = FilterServiceForm({'%s-is_active' % f_prefix: True},
             prefix=f_prefix, request=request)
+    else:
+        form = FilterServiceForm(request.GET, prefix=f_prefix, request=request)
 
     if form.is_valid():
         resp = form.request()
