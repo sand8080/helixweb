@@ -8,39 +8,126 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-11-13 18:10+0300\n"
+"POT-Creation-Date: 2010-12-16 20:56+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: error_code.py:5
+#: error_code.py:4
 msgid "HELIXAUTH_ERROR"
 msgstr "authorization error"
 
-#: error_code.py:6
+#: error_code.py:5
 msgid "HELIXAUTH_OBJECT_NOT_FOUND"
 msgstr "object not found"
 
-#: error_code.py:7
+#: error_code.py:6
 msgid "HELIXAUTH_OBJECT_ALREADY_EXISTS"
 msgstr ""
 
-#: forms.py:72
-msgid "env name"
+#: error_code.py:9
+msgid "HELIXAUTH_SESSION_NOT_FOUND"
+msgstr "session not found"
+
+#: error_code.py:10
+msgid "HELIXAUTH_SESSION_EXPIRED"
+msgstr "session expired"
+
+#: error_code.py:13
+msgid "HELIXAUTH_ENVIRONMENT_NOT_FOUND"
+msgstr "environment not found"
+
+#: error_code.py:16
+msgid "HELIXAUTH_USER_INACTIVE"
+msgstr "user inactive"
+
+#: error_code.py:17
+msgid "HELIXAUTH_USER_AUTH_ERROR"
+msgstr "authorization error"
+
+#: forms.py:21
+msgid "environment name"
 msgstr ""
 
-#: forms.py:73 templates/login.html:5 templates/login.html.py:13
-#: templates/login.html:21 templates/login.html.py:31
-msgid "login"
+#: forms.py:22
+msgid "user login"
 msgstr ""
 
-#: forms.py:74
+#: forms.py:23
 msgid "password"
 msgstr ""
 
-#: templates/login.html:15 templates/login.html.py:33 templates/login.html:38
+#: forms.py:27 templates/services/list.html:67
+msgid "service name"
+msgstr ""
+
+#: forms.py:28 forms_filters.py:13
+msgid "service type"
+msgstr ""
+
+#: forms.py:29
+msgid "service functions"
+msgstr ""
+
+#: forms.py:31 forms_filters.py:15 templates/services/list.html:69
+msgid "is active"
+msgstr ""
+
+#: templates/base_auth.html:13 templates/services/add.html:18
+#: templates/services/list.html:17
+msgid "services"
+msgstr ""
+
+#: templates/login.html:5 templates/login.html.py:15 templates/login.html:23
+#: templates/login.html.py:33
+msgid "login"
+msgstr ""
+
+#: templates/login.html:17 templates/login.html.py:35 templates/login.html:40
 msgid "create environment"
+msgstr ""
+
+#: templates/services/add.html:5 templates/services/add.html.py:20
+#: templates/services/list.html:41
+msgid "add service"
+msgstr ""
+
+#: templates/services/add.html:29
+msgid "create"
+msgstr ""
+
+#: templates/services/add.html:31
+msgid "create and add another"
+msgstr ""
+
+#: templates/services/list.html:5
+msgid "services list"
+msgstr ""
+
+#: templates/services/list.html:26
+msgid "filter"
+msgstr ""
+
+#: templates/services/list.html:38
+msgid "total services"
+msgstr ""
+
+#: templates/services/list.html:68
+msgid "type"
+msgstr ""
+
+#: templates/services/list.html:70
+msgid "functions"
+msgstr ""
+
+#: templates/services/list.html:91
+msgid "list"
+msgstr ""
+
+#: templates/services/list.html:113
+msgid "no services"
 msgstr ""
