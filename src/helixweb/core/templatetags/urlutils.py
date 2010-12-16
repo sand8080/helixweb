@@ -5,15 +5,9 @@ register = Library()
 
 
 class UrlNode(Node):
-    def __init__(self, nodelist, url, always_show_text=None):
-        self.url = url.strip('"\'')
+    def __init__(self, nodelist, always_show_text=None):
         self.nodelist = nodelist
         self.always_show_text = always_show_text == 'True'
-
-    def _get_service_type(self):
-        chunks = self.url.split('/')
-        srv_types = filter(lambda x: len(x), chunks)
-        return srv_types[0]
 
     def _get_service_rights(self, rights, srv_type):
         r = filter(lambda x: x.get('service_type', '') == srv_type, rights)
@@ -22,38 +16,53 @@ class UrlNode(Node):
         else:
             return None
 
-    def _get_action_name(self):
-        chunks = self.url.split('/')
+    def _get_action_name(self, url):
+        chunks = url.split('/')
         srv_types = filter(lambda x: len(x), chunks)
         try:
             return srv_types[1]
         except IndexError:
             return ''
 
-    def _is_url_allowed(self, rights):
-        srv_type = self._get_service_type()
-        action = self._get_action_name()
+    def _get_service_type(self, url):
+        chunks = url.split('/')
+        srv_types = filter(lambda x: len(x), chunks)
+        return srv_types[0]
+
+    def _is_url_allowed(self, url, rights):
+        srv_type = self._get_service_type(url)
+        action = self._get_action_name(url)
         r = self._get_service_rights(rights, srv_type)
         if r:
             return action in r.get('properties', [])
         else:
             return False
 
+    def _get_url_params(self, rended):
+        l = rended.split(None, 1)
+        try:
+            return l[0], l[1]
+        except IndexError:
+            raise TemplateSyntaxError('allowedurl tag value should contain ' +
+                'space separated url and url description')
+
     def render(self, context):
         rended = self.nodelist.render(context).strip()
+        url, descr = self._get_url_params(rended)
+
         try:
             rights = resolve_variable('rights', context)
-            if self._is_url_allowed(rights):
+            if self._is_url_allowed(url, rights):
                 request = resolve_variable('request', context)
                 cur_lang = resolve_variable('cur_lang', context)
-                lang_url = '/%s%s' % (cur_lang, self.url)
+                lang_url = '/%s%s' % (cur_lang, url)
                 if lang_url == request.path:
-                    return '<span class="current_item">%s</span>' % rended
+                    return '<span class="current_item">%s</span>' % descr
                 else:
                     return '<a href="%(lang_url)s">%(descr)s</a>' % \
-                        {'lang_url': lang_url, 'descr': rended}
+                        {'lang_url': lang_url, 'descr': descr}
             elif self.always_show_text:
-                return '%s' % rended
+                return '%s' % descr
             else:
                 return ''
         except VariableDoesNotExist:
@@ -63,10 +72,13 @@ class UrlNode(Node):
 @register.tag
 def allowedurl(parser, token):
     bits = token.split_contents()
-    if len(bits) not in (2, 3):
-        raise TemplateSyntaxError('%s tag requires exactly one or two arguments'
+    if len(bits) > 2:
+        raise TemplateSyntaxError('%s tag requires one or no arguments'
             % bits[0])
     nodelist = parser.parse(('endallowedurl',))
     parser.delete_first_token()
-    always_show_text = bits[2] if len(bits) > 2 else None
-    return UrlNode(nodelist, bits[1], always_show_text)
+    try:
+        always_show_text = bits[1]
+    except IndexError:
+        always_show_text = None
+    return UrlNode(nodelist, always_show_text)

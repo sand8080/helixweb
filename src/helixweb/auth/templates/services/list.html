@@ -34,23 +34,35 @@
 
     {% load urlutils %}
 
-
-    <div style="text-align:left;">
-        {% trans "total services" %}: {{ pager.total }} &rarr;
-        {% allowedurl /auth/add_service/ %}{% trans "add service" %}{% endallowedurl %}
+    <div>
+        {% trans "total services" %}: {{ pager.total }} &nbsp;
+        {% allowedurl %}
+            /auth/add_service/
+            {% trans "add service" %}
+        {% endallowedurl %}
     </div>
 
-    {% if services_error %}
+    <br>
 
-        <span class="errormessage">{% trans services_error %}</span>
+    <table class="center wide bordered">
 
-    {% else %}
+        {% if services_error %}
 
-        {% if services %}
+            <tr>
+                <td>
+                    <span class="errormessage">{% trans services_error %}</span>
+                </td>
+            </tr>
 
-            {% include "pager.html" %}
+        {% else %}
 
-            <table class="objects_list wide">
+            {% if services %}
+
+                <tr>
+                    <td colspan="4">
+                        {% include "pager.html" %}
+                    </td>
+                </tr>
                 <tr class="objects_fields">
                     <th>{% trans "service name" %}</th>
                     <th>{% trans "type" %}</th>
@@ -61,8 +73,9 @@
                 {% for srv in services %}
                     <tr class="objects_data">
                         <td>
-                            {% allowedurl /auth/modify_service/ True %}
-                                {{ srv.name }}
+                            {% allowedurl True %}
+                                /auth/modify_service/{{ srv.id }}/
+                                {% trans srv.name %}
                             {% endallowedurl %}
                         </td>
                         <td>{{ srv.type }}</td>
@@ -86,21 +99,24 @@
 
                         </td>
                     </tr>
+
                 {% endfor %}
-            </table>
 
-            {% include "pager.html" %}
+                <tr>
+                    <td colspan="4">
+                        {% include "pager.html" %}
+                    </td>
+                </tr>
 
-        {% else %}
+            {% else %}
 
-            <table>
                 <tr><th>{% trans "no services" %}</th></tr>
-            </table>
+
+            {% endif %}
 
         {% endif %}
 
-
-    {% endif %}
+    </table>
 
 </form>
 

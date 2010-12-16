@@ -5,10 +5,11 @@
 {% load urlutils %}
 {% load i18n %}
 
-<table class="left_menu bordered wide"  height="100%">
+<table class="left_menu bordered wide">
     <tr>
         <td>
-            {% allowedurl /auth/get_services/ %}
+            {% allowedurl True %}
+                /auth/get_services/
                 {% trans "services" %}
             {% endallowedurl %}
         </td>
