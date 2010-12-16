@@ -7,7 +7,9 @@
             {% if l.0 == cur_lang %}
                 <td class="lang_sel">{% trans l.1 %}</td>
             {% else %}
-                <td><a href={{ path|chlocale:l.0 }}>{% trans l.1 %}</a></td>
+                <td><a href="{{ path|chlocale:l.0 }}{% if url_params %}?{{ url_params }}{% endif %}">
+                    {% trans l.1 %}</a>
+                </td>
             {% endif %}
         {% endfor %}
     </tr>
