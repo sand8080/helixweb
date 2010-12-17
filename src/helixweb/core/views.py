@@ -14,3 +14,8 @@ def login_redirector(func):
     return decorated
 
 
+def process_helix_response(resp, f_name, f_err_name):
+    if resp['status'] != 'ok':
+        return {f_err_name: resp['code']}
+    else:
+        return {f_name: resp[f_name]}

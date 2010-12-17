@@ -2,18 +2,11 @@ from django import forms
 from django.utils.translation import ugettext_lazy as _
 
 from helixweb.core.forms import HelixwebRequestForm
-from helixweb.auth import settings
 
 
-class AuthForm(HelixwebRequestForm):
+class LoginForm(HelixwebRequestForm):
     def __init__(self, *args, **kwargs):
-        kwargs['service_url'] = settings.AUTH_SERVICE_URL
-        super(AuthForm, self).__init__(*args, **kwargs)
-
-
-class LoginForm(AuthForm):
-    def __init__(self, *args, **kwargs):
-        kwargs['action'] = 'login'
+        self.action = 'login'
         request = kwargs['request']
         request.COOKIES['session_id'] = None
         super(LoginForm, self).__init__(*args, **kwargs)
@@ -23,18 +16,7 @@ class LoginForm(AuthForm):
     password = forms.CharField(label=_('password'), max_length=32)
 
 
-class ServiceForm(AuthForm):
-    name = forms.CharField(label=_('service name'), max_length=32)
-    type = forms.CharField(label=_('service type'), max_length=32)
-    properties = forms.CharField(label=_('service functions'),
-        widget=forms.Textarea(attrs={'cols': 20, 'rows': 10}))
-    is_active = forms.BooleanField(label=_('is active'), initial=True)
-
-    def _get_cleaned_data(self):
-        d = super(ServiceForm, self)._get_cleaned_data()
-        d['properties'] = self._prepare_properties(d.get('properties', ''))
-        return d
-
+class ServiceForm(HelixwebRequestForm):
     def _prepare_properties(self, s):
         def clean_prop(p):
             res = p.replace('\r', '')
@@ -45,12 +27,54 @@ class ServiceForm(AuthForm):
 
 
 class AddServiceForm(ServiceForm):
+    name = forms.CharField(label=_('service name'), max_length=32)
+    type = forms.CharField(label=_('service type'), max_length=32)
+    properties = forms.CharField(label=_('service functions'),
+        widget=forms.Textarea(attrs={'cols': 20, 'rows': 10}))
+    is_active = forms.BooleanField(label=_('is active'), initial=True)
+
     def __init__(self, *args, **kwargs):
-        kwargs['action'] = 'add_service'
+        self.action = 'add_service'
         super(AddServiceForm, self).__init__(*args, **kwargs)
+
+    def as_helix_request(self):
+        d = super(AddServiceForm, self).as_helix_request()
+        d['properties'] = self._prepare_properties(d.get('properties', ''))
+        return d
 
 
 class ModifyServiceForm(ServiceForm):
+    service_id = forms.IntegerField(widget=forms.widgets.HiddenInput)
+    new_name = forms.CharField(label=_('service name'), max_length=32,
+        required=False)
+    new_type = forms.CharField(label=_('service type'), max_length=32,
+        required=False)
+    new_properties = forms.CharField(label=_('service functions'),
+        widget=forms.Textarea(attrs={'cols': 20, 'rows': 10}), required=False)
+    new_is_active = forms.BooleanField(label=_('is active'), initial=True,
+        required=False)
+    action = 'modify_service'
+
     def __init__(self, *args, **kwargs):
-        kwargs['action'] = 'modify_service'
         super(ModifyServiceForm, self).__init__(*args, **kwargs)
+
+    def as_helix_request(self):
+        d = super(ModifyServiceForm, self).as_helix_request()
+        d['new_properties'] = self._prepare_properties(d.get('new_properties', ''))
+        return d
+
+    @staticmethod
+    def from_get_services_helix_resp(helix_resp, request):
+        srv_d = helix_resp.get('services', [{'service_id': 0}])[0]
+        d = {}
+        for k in srv_d.keys():
+            if k not in ('id', ):
+                d['new_%s' % k] = srv_d[k]
+        d['service_id'] = srv_d['id']
+        d['new_properties'] = '\n'.join(d['new_properties'])
+        return ModifyServiceForm(d, request=request)
+
+    @staticmethod
+    def get_by_id_req(srv_id, request):
+        return {'action': 'get_services', 'session_id': request.COOKIES.get('session_id', ''),
+            'filter_params': {'services_ids': [int(srv_id)]}, 'paging_params':{}}

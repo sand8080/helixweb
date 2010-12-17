@@ -3,7 +3,6 @@ from django.forms.forms import NON_FIELD_ERRORS
 from django.utils.translation import ugettext_lazy as _
 from django.forms.util import ErrorList
 
-from helixweb.core.client import Client
 from django.utils.encoding import force_unicode
 
 
@@ -23,43 +22,27 @@ class ErrorFieldMaker(ErrorList):
 
 class HelixwebRequestForm(forms.Form):
     def __init__(self, *args, **kwargs):
-        url = kwargs.pop('service_url')
-        self.action = kwargs.pop('action')
         request = kwargs.pop('request')
         self.session_id = request.COOKIES.get('session_id', None)
-        self.c = Client(url)
         super(HelixwebRequestForm, self).__init__(*args, error_class=ErrorFieldMaker, **kwargs)
         self.error_css_class = 'errormessage'
 
-    def request(self):
-        return self._do_request(self.c.request)
-
-    def notchecked_request(self):
-        return self._do_request(self.c.notchecked_request)
-
-    def _do_request(self, client_method):
-        d = self._get_cleaned_data()
-        resp = client_method(d)
-        self.process_errors(resp)
-        return resp
-
-    def _get_cleaned_data(self):
+    def as_helix_request(self):
         d = dict(self.cleaned_data)
-        d.pop('c', None)
         d['action'] = self.action
         d['custom_actor_info'] = __package__
         if self.session_id not in d and self.session_id is not None:
             d['session_id'] = self.session_id
         return d
 
-    def process_errors(self, resp):
+    def handle_errors(self, resp):
         s = 'status'
         if s in resp and resp[s] == 'ok':
             return
         else:
             code = _(resp.get('code', None))
             fields = resp.get('fields', [])
-            if not NON_FIELD_ERRORS in self._errors:
+            if NON_FIELD_ERRORS not in self._errors:
                 self._errors[NON_FIELD_ERRORS] = self.error_class()
             self._errors[NON_FIELD_ERRORS].append(code)
             for f in fields:

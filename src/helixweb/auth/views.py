@@ -8,11 +8,16 @@ from django.core.context_processors import csrf
 
 from helixweb.core.localization import cur_lang, cur_lang_value
 #from django.utils.translation import ugettext as _
-from helixweb.core.views import login_redirector
+from helixweb.core.views import login_redirector, process_helix_response
+from helixweb.core.client import Client
 
 from helixweb.auth.forms import LoginForm, AddServiceForm, ModifyServiceForm
 from helixweb.auth.forms_filters import FilterServiceForm
 from helixweb.auth.security import get_rights
+from helixweb.auth import settings
+
+
+helix_cli = Client(settings.AUTH_SERVICE_URL)
 
 
 def _prepare_context(request):
@@ -44,9 +49,10 @@ def login(request):
     c.update(csrf(request))
     c.update(cur_lang(request))
     if request.method == 'POST':
-        form = LoginForm(request.POST, prefix='login', request=request)
+        form = LoginForm(request.POST, request=request)
         if form.is_valid():
-            resp = form.notchecked_request()
+            resp = helix_cli.notchecked_request(form.as_helix_request())
+            form.handle_errors(resp)
             status = resp.get('status', None)
             s_id = resp.get('session_id', None)
             if status == 'ok' and s_id is not None:
@@ -57,17 +63,10 @@ def login(request):
                 response.set_cookie('session_id', value=s_id, expires=expires)
                 return response
     else:
-        form = LoginForm(prefix='login', request=request)
+        form = LoginForm(request=request)
     c['login_form'] = form
     return render_to_response('login.html', c,
         context_instance=RequestContext(request))
-
-
-def _process_response(resp, f_name, f_err_name):
-    if resp['status'] != 'ok':
-        return {f_err_name: resp['code']}
-    else:
-        return {f_name: resp[f_name]}
 
 
 @login_redirector
@@ -80,7 +79,8 @@ def add_service(request):
         form = AddServiceForm(request.POST, prefix=f_prefix,
             request=request)
         if form.is_valid():
-            resp = form.request()
+            resp = helix_cli.request(form.as_helix_request())
+            form.handle_errors(resp)
             if resp['status'] == 'ok':
                 if request.POST.get('stay_here', '0') == '1':
                     return HttpResponseRedirect('.')
@@ -97,12 +97,14 @@ def add_service(request):
 def modify_service(request, srv_id):
     c = _prepare_context(request)
     c.update(csrf(request))
-    f_prefix = 'modify_service'
 
     if request.method == 'POST':
         pass
     else:
-        form = ModifyServiceForm(prefix=f_prefix, request=request)
+        resp = helix_cli.request(ModifyServiceForm.get_by_id_req(srv_id, request))
+        form = ModifyServiceForm.from_get_services_helix_resp(resp, request)
+        if form.is_valid():
+            form.handle_errors(resp)
     c['modify_service_form'] = form
     return render_to_response('services/modify.html', c,
         context_instance=RequestContext(request))
@@ -112,18 +114,17 @@ def modify_service(request, srv_id):
 def services(request):
     c = _prepare_context(request)
     c.update(csrf(request))
-    f_prefix = 'filter_services'
 
     if len(request.GET) == 0 or (len(request.GET) == 1 and 'pager_offset' in request.GET):
         # setting default is_active value to True
-        form = FilterServiceForm({'%s-is_active' % f_prefix: True},
-            prefix=f_prefix, request=request)
+        form = FilterServiceForm({'is_active': True}, request=request)
     else:
-        form = FilterServiceForm(request.GET, prefix=f_prefix, request=request)
+        form = FilterServiceForm(request.GET, request=request)
 
     if form.is_valid():
-        resp = form.request()
-        c.update(_process_response(resp, 'services', 'services_error'))
+        resp = helix_cli.request(form.as_helix_request())
+        form.update_total(resp)
+        c.update(process_helix_response(resp, 'services', 'services_error'))
         c['pager'] = form.pager
 
     c['filter_service_form'] = form

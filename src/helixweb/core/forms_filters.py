@@ -12,9 +12,9 @@ class FilterForm(object):
         offset = request.GET.get('pager_offset', 0)
         return Pager(offset, total, on_page)
 
-    def _get_cleaned_data(self):
+    def as_helix_request(self):
         f_params = dict(self.cleaned_data)
-        d = super(FilterForm, self)._get_cleaned_data()
+        d = super(FilterForm, self).as_helix_request()
         for k in f_params.keys():
             del d[k]
         d['filter_params'] = f_params
@@ -22,7 +22,5 @@ class FilterForm(object):
             'offset': self.pager.offset}
         return d
 
-    def request(self):
-        resp = super(FilterForm, self).request()
-        self.pager.update_total(resp)
-        return resp
+    def update_total(self, helix_resp):
+        self.pager.update_total(helix_resp)
