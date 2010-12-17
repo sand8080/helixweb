@@ -73,11 +73,8 @@ def login(request):
 def add_service(request):
     c = _prepare_context(request)
     c.update(csrf(request))
-    f_prefix = 'add_service'
-
     if request.method == 'POST':
-        form = AddServiceForm(request.POST, prefix=f_prefix,
-            request=request)
+        form = AddServiceForm(request.POST, request=request)
         if form.is_valid():
             resp = helix_cli.request(form.as_helix_request())
             form.handle_errors(resp)
@@ -87,7 +84,7 @@ def add_service(request):
                 else:
                     return HttpResponseRedirect('../get_services/')
     else:
-        form = AddServiceForm(prefix=f_prefix, request=request)
+        form = AddServiceForm(request=request)
     c['add_service_form'] = form
     return render_to_response('services/add.html', c,
         context_instance=RequestContext(request))
@@ -99,7 +96,10 @@ def modify_service(request, srv_id):
     c.update(csrf(request))
 
     if request.method == 'POST':
-        pass
+        form = ModifyServiceForm(request.POST, request=request)
+        if form.is_valid():
+            resp = helix_cli.request(form.as_helix_request())
+            form.handle_errors(resp)
     else:
         resp = helix_cli.request(ModifyServiceForm.get_by_id_req(srv_id, request))
         form = ModifyServiceForm.from_get_services_helix_resp(resp, request)
@@ -117,7 +117,7 @@ def services(request):
 
     if len(request.GET) == 0 or (len(request.GET) == 1 and 'pager_offset' in request.GET):
         # setting default is_active value to True
-        form = FilterServiceForm({'is_active': True}, request=request)
+        form = FilterServiceForm({'is_active': 'all'}, request=request)
     else:
         form = FilterServiceForm(request.GET, request=request)
 
