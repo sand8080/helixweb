@@ -74,3 +74,10 @@ class ModifyServiceForm(ServiceForm):
     def get_by_id_req(srv_id, request):
         return {'action': 'get_services', 'session_id': request.COOKIES.get('session_id', ''),
             'filter_params': {'services_ids': [int(srv_id)]}, 'paging_params':{}}
+
+class ModifyEnvironmentForm(HelixwebRequestForm):
+    new_name = forms.CharField(label=_('environment name'), max_length=32)
+    action = 'modify_environment'
+
+    def __init__(self, *args, **kwargs):
+        super(ModifyEnvironmentForm, self).__init__(*args, **kwargs)

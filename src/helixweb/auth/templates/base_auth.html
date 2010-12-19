@@ -9,6 +9,14 @@
     <tr>
         <td>
             {% allowedurl True %}
+                /auth/modify_environment/
+                {% trans "environment" %}
+            {% endallowedurl %}
+        </td>
+    </tr>
+    <tr>
+        <td>
+            {% allowedurl True %}
                 /auth/get_services/
                 {% trans "services" %}
             {% endallowedurl %}

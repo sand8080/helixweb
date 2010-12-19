@@ -135,3 +135,30 @@ def services(request):
 
     return render_to_response('services/list.html', c,
         context_instance=RequestContext(request))
+
+
+@login_redirector
+def modify_environment(request):
+    c = _prepare_context(request)
+    c.update(csrf(request))
+
+    if request.method == 'POST':
+        pass
+#        form = ModifyServiceForm(request.POST, request=request)
+#        if form.is_valid():
+#            resp = helix_cli.request(form.as_helix_request())
+#            form.handle_errors(resp)
+#            if resp['status'] == 'ok':
+#                if request.POST.get('stay_here', '0') != '1':
+#                    return HttpResponseRedirect('../../get_services/')
+
+    else:
+        pass
+#        resp = helix_cli.request(ModifyEnvironmentForm.get_req(request))
+#        form = ModifyEnvironmentForm.from_get_services_helix_resp(resp, request)
+#        if form.is_valid():
+#            form.handle_errors(resp)
+#    c['modify_environment'] = form
+
+    return render_to_response('environment/modify.html', c,
+        context_instance=RequestContext(request))
