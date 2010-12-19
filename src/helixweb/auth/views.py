@@ -100,6 +100,10 @@ def modify_service(request, srv_id):
         if form.is_valid():
             resp = helix_cli.request(form.as_helix_request())
             form.handle_errors(resp)
+            if resp['status'] == 'ok':
+                if request.POST.get('stay_here', '0') != '1':
+                    return HttpResponseRedirect('../../get_services/')
+
     else:
         resp = helix_cli.request(ModifyServiceForm.get_by_id_req(srv_id, request))
         form = ModifyServiceForm.from_get_services_helix_resp(resp, request)

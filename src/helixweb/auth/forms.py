@@ -45,14 +45,10 @@ class AddServiceForm(ServiceForm):
 
 class ModifyServiceForm(ServiceForm):
     service_id = forms.IntegerField(widget=forms.widgets.HiddenInput)
-    new_name = forms.CharField(label=_('service name'), max_length=32,
-        required=False)
-#    new_type = forms.CharField(label=_('service type'), max_length=32,
-#        required=False)
+    new_name = forms.CharField(label=_('service name'), max_length=32)
     new_properties = forms.CharField(label=_('service functions'),
         widget=forms.Textarea(attrs={'cols': 20, 'rows': 10}), required=False)
-    new_is_active = forms.BooleanField(label=_('is active'), initial=True,
-        required=False)
+    new_is_active = forms.BooleanField(label=_('is active'))
     action = 'modify_service'
 
     def __init__(self, *args, **kwargs):
