@@ -1,7 +1,7 @@
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
-from helixweb.core.forms import HelixwebRequestForm
+from helixweb.core.forms import HelixwebRequestForm, _get_session_id
 
 
 class LoginForm(HelixwebRequestForm):
@@ -72,8 +72,9 @@ class ModifyServiceForm(ServiceForm):
 
     @staticmethod
     def get_by_id_req(srv_id, request):
-        return {'action': 'get_services', 'session_id': request.COOKIES.get('session_id', ''),
+        return {'action': 'get_services', 'session_id': _get_session_id(request),
             'filter_params': {'services_ids': [int(srv_id)]}, 'paging_params':{}}
+
 
 class ModifyEnvironmentForm(HelixwebRequestForm):
     new_name = forms.CharField(label=_('environment name'), max_length=32)
@@ -81,3 +82,16 @@ class ModifyEnvironmentForm(HelixwebRequestForm):
 
     def __init__(self, *args, **kwargs):
         super(ModifyEnvironmentForm, self).__init__(*args, **kwargs)
+
+    @staticmethod
+    def get_req(request):
+        return {'action': 'get_environment',
+            'session_id': _get_session_id(request)}
+
+    @staticmethod
+    def from_get_helix_resp(helix_resp, request):
+        env_d = helix_resp.get('environment', {})
+        d = {}
+        for k in env_d.keys():
+            d['new_%s' % k] = env_d[k]
+        return ModifyEnvironmentForm(d, request=request)

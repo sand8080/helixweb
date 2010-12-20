@@ -6,6 +6,10 @@ from django.forms.util import ErrorList
 from django.utils.encoding import force_unicode
 
 
+def _get_session_id(request):
+    return request.COOKIES.get('session_id', '')
+
+
 class ErrorFieldMaker(ErrorList):
     """
     A collection of errors that knows how to display itself in various formats.
@@ -23,7 +27,7 @@ class ErrorFieldMaker(ErrorList):
 class HelixwebRequestForm(forms.Form):
     def __init__(self, *args, **kwargs):
         request = kwargs.pop('request')
-        self.session_id = request.COOKIES.get('session_id', None)
+        self.session_id = _get_session_id(request)
         super(HelixwebRequestForm, self).__init__(*args, error_class=ErrorFieldMaker, **kwargs)
         self.error_css_class = 'errormessage'
 

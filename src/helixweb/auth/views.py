@@ -10,8 +10,10 @@ from helixweb.core.localization import cur_lang, cur_lang_value
 #from django.utils.translation import ugettext as _
 from helixweb.core.views import login_redirector, process_helix_response
 from helixweb.core.client import Client
+from helixweb.core.forms import _get_session_id
 
-from helixweb.auth.forms import LoginForm, AddServiceForm, ModifyServiceForm
+from helixweb.auth.forms import LoginForm, AddServiceForm, ModifyServiceForm,\
+    ModifyEnvironmentForm
 from helixweb.auth.forms_filters import FilterServiceForm
 from helixweb.auth.security import get_rights
 from helixweb.auth import settings
@@ -22,19 +24,10 @@ helix_cli = Client(settings.AUTH_SERVICE_URL)
 
 def _prepare_context(request):
     c = {}
-    c['rights'] = get_rights(request.COOKIES.get('session_id', ''))
+    c['rights'] = get_rights(_get_session_id(request))
     c.update(csrf(request))
     c.update(cur_lang(request))
     return c
-
-
-def _handle_not_logged(request):
-    if 'session_id' not in request.COOKIES:
-        return HttpResponseRedirect('/%s/auth/login/' % cur_lang_value(request))
-
-
-def _get_session_id(request):
-    return request.COOKIES.get('session_id', '')
 
 
 def _get_backurl(request):
@@ -143,22 +136,16 @@ def modify_environment(request):
     c.update(csrf(request))
 
     if request.method == 'POST':
-        pass
-#        form = ModifyServiceForm(request.POST, request=request)
-#        if form.is_valid():
-#            resp = helix_cli.request(form.as_helix_request())
-#            form.handle_errors(resp)
-#            if resp['status'] == 'ok':
-#                if request.POST.get('stay_here', '0') != '1':
-#                    return HttpResponseRedirect('../../get_services/')
-
+        form = ModifyEnvironmentForm(request.POST, request=request)
+        if form.is_valid():
+            resp = helix_cli.request(form.as_helix_request())
+            form.handle_errors(resp)
     else:
-        pass
-#        resp = helix_cli.request(ModifyEnvironmentForm.get_req(request))
-#        form = ModifyEnvironmentForm.from_get_services_helix_resp(resp, request)
-#        if form.is_valid():
-#            form.handle_errors(resp)
-#    c['modify_environment'] = form
+        resp = helix_cli.request(ModifyEnvironmentForm.get_req(request))
+        form = ModifyEnvironmentForm.from_get_helix_resp(resp, request)
+        if form.is_valid():
+            form.handle_errors(resp)
+    c['modify_environment_form'] = form
 
     return render_to_response('environment/modify.html', c,
         context_instance=RequestContext(request))
