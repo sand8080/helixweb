@@ -31,7 +31,8 @@ class AddServiceForm(ServiceForm):
     type = forms.CharField(label=_('service type'), max_length=32)
     properties = forms.CharField(label=_('service functions'),
         widget=forms.Textarea(attrs={'cols': 20, 'rows': 10}))
-    is_active = forms.BooleanField(label=_('is active'), initial=True)
+    is_active = forms.BooleanField(label=_('is active'), initial=True,
+        required=False)
 
     def __init__(self, *args, **kwargs):
         self.action = 'add_service'
@@ -44,11 +45,11 @@ class AddServiceForm(ServiceForm):
 
 
 class ModifyServiceForm(ServiceForm):
-    service_id = forms.IntegerField(widget=forms.widgets.HiddenInput)
+    id = forms.IntegerField(widget=forms.widgets.HiddenInput)
     new_name = forms.CharField(label=_('service name'), max_length=32)
     new_properties = forms.CharField(label=_('service functions'),
         widget=forms.Textarea(attrs={'cols': 20, 'rows': 10}), required=False)
-    new_is_active = forms.BooleanField(label=_('is active'))
+    new_is_active = forms.BooleanField(label=_('is active'), required=False)
     action = 'modify_service'
 
     def __init__(self, *args, **kwargs):
@@ -66,14 +67,15 @@ class ModifyServiceForm(ServiceForm):
         for k in srv_d.keys():
             if k not in ('id', ):
                 d['new_%s' % k] = srv_d[k]
-        d['service_id'] = srv_d['id']
+            else:
+                d[k] = srv_d[k]
         d['new_properties'] = '\n'.join(d['new_properties'])
         return ModifyServiceForm(d, request=request)
 
     @staticmethod
     def get_by_id_req(srv_id, request):
         return {'action': 'get_services', 'session_id': _get_session_id(request),
-            'filter_params': {'services_ids': [int(srv_id)]}, 'paging_params':{}}
+            'filter_params': {'ids': [int(srv_id)]}, 'paging_params':{}}
 
 
 class ModifyEnvironmentForm(HelixwebRequestForm):
