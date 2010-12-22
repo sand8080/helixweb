@@ -23,16 +23,34 @@
                 </td>
             </tr>
 
-            {{ add_group_form.as_table }}
+            {% if services_error %}
 
-            <tr>
-                <td colspan="2" class="control">
-                    <input type="submit" style="font-weight:bold;" value="{% trans 'create' %}" />
-                    <input type="hidden" id="stay_here" name="stay_here" value=0 />
-                    <input type="submit" value="{% trans 'create and add another' %}"
-                        onclick="var f = this.form; f.stay_here.value=1; f.submit()" />
-                </td>
-            </tr>
+                <tr>
+                    <td colspan="2">
+                        <span class="errormessage">{% trans services_error %}</span>
+                    </td>
+                </tr>
+
+            {% else %}
+
+                {{ add_group_form.as_table }}
+
+                {% for srv in services %}
+                    <tr>
+                        <td colspan="2">{{ srv.id }} {{ srv.name }}: {{ srv.properties }}</td>
+                    </tr>
+                {% endfor %}
+                <tr>
+                    <td colspan="2" class="control">
+                        <input type="submit" style="font-weight:bold;" value="{% trans 'create' %}" />
+                        <input type="hidden" id="stay_here" name="stay_here" value=0 />
+                        <input type="submit" value="{% trans 'create and add another' %}"
+                            onclick="var f = this.form; f.stay_here.value=1; f.submit()" />
+                    </td>
+                </tr>
+
+            {% endif %}
+
         </table>
         <br>
     </div>

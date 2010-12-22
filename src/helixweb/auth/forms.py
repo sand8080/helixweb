@@ -108,3 +108,7 @@ class AddGroupForm(HelixwebRequestForm):
         self.action = 'add_group'
         super(AddGroupForm, self).__init__(*args, **kwargs)
 
+    @staticmethod
+    def get_services_req(request):
+        return {'action': 'get_services', 'session_id': _get_session_id(request),
+            'filter_params': {}, 'paging_params': {}}

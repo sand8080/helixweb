@@ -5,6 +5,7 @@ from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect
 from django.template import RequestContext
 from django.core.context_processors import csrf
+from django import forms
 
 from helixweb.core.localization import cur_lang, cur_lang_value
 #from django.utils.translation import ugettext as _
@@ -181,16 +182,21 @@ def add_group(request):
     c.update(csrf(request))
     if request.method == 'POST':
         form = AddGroupForm(request.POST, request=request)
-        if form.is_valid():
-            resp = helix_cli.request(form.as_helix_request())
-            form.handle_errors(resp)
-            if resp['status'] == 'ok':
-                if request.POST.get('stay_here', '0') == '1':
-                    return HttpResponseRedirect('.')
-                else:
-                    return HttpResponseRedirect('../get_groups/')
+#        if form.is_valid():
+#            resp = helix_cli.request(form.as_helix_request())
+#            form.handle_errors(resp)
+#            if resp['status'] == 'ok':
+#                if request.POST.get('stay_here', '0') == '1':
+#                    return HttpResponseRedirect('.')
+#                else:
+#                    return HttpResponseRedirect('../get_groups/')
     else:
         form = AddGroupForm(request=request)
+        # adding services info
+        resp = helix_cli.request(form.get_services_req(request))
+        c.update(process_helix_response(resp, 'services', 'services_error'))
+
     c['add_group_form'] = form
+    print '### form: ', form
     return render_to_response('group/add.html', c,
         context_instance=RequestContext(request))
