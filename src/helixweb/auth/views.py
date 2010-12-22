@@ -13,8 +13,8 @@ from helixweb.core.client import Client
 from helixweb.core.forms import _get_session_id
 
 from helixweb.auth.forms import LoginForm, AddServiceForm, ModifyServiceForm,\
-    ModifyEnvironmentForm
-from helixweb.auth.forms_filters import FilterServiceForm
+    ModifyEnvironmentForm, AddGroupForm
+from helixweb.auth.forms_filters import FilterServiceForm, FilterGroupForm
 from helixweb.auth.security import get_rights
 from helixweb.auth import settings
 
@@ -148,4 +148,49 @@ def modify_environment(request):
     c['modify_environment_form'] = form
 
     return render_to_response('environment/modify.html', c,
+        context_instance=RequestContext(request))
+
+
+@login_redirector
+def groups(request):
+    c = _prepare_context(request)
+    c.update(csrf(request))
+
+    if len(request.GET) == 0 or (len(request.GET) == 1 and 'pager_offset' in request.GET):
+        # setting default is_active value to True
+        form = FilterGroupForm({'is_active': 'all'}, request=request)
+    else:
+        form = FilterGroupForm(request.GET, request=request)
+
+    if form.is_valid():
+        resp = helix_cli.request(form.as_helix_request())
+#        print '#### resp', resp
+        form.update_total(resp)
+        c.update(process_helix_response(resp, 'groups', 'groups_error'))
+        c['pager'] = form.pager
+
+    c['filter_group_form'] = form
+
+    return render_to_response('group/list.html', c,
+        context_instance=RequestContext(request))
+
+
+@login_redirector
+def add_group(request):
+    c = _prepare_context(request)
+    c.update(csrf(request))
+    if request.method == 'POST':
+        form = AddGroupForm(request.POST, request=request)
+        if form.is_valid():
+            resp = helix_cli.request(form.as_helix_request())
+            form.handle_errors(resp)
+            if resp['status'] == 'ok':
+                if request.POST.get('stay_here', '0') == '1':
+                    return HttpResponseRedirect('.')
+                else:
+                    return HttpResponseRedirect('../get_groups/')
+    else:
+        form = AddGroupForm(request=request)
+    c['add_group_form'] = form
+    return render_to_response('group/add.html', c,
         context_instance=RequestContext(request))

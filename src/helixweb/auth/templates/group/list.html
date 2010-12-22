@@ -2,7 +2,7 @@
 
 {% load i18n %}
 
-{% block title %}{% trans "services list" %}{% endblock %}
+{% block title %}{% trans "groups list" %}{% endblock %}
 
 {% block content %}
 
@@ -14,12 +14,12 @@
 
             <tr>
                 <th>
-                    <h2 class="menu_linked">{% trans "services" %}</h2>
+                    <h2 class="menu_linked">{% trans "groups" %}</h2>
                 </th>
                 <td></td>
             </tr>
 
-            {{ filter_service_form.as_table }}
+            {{ filter_group_form.as_table }}
 
             <tr>
                 <td colspan="2" class="control">
@@ -35,10 +35,10 @@
     {% load urlutils %}
 
     <div>
-        {% trans "total services" %}: {{ pager.total }} &nbsp;
+        {% trans "total groups" %}: {{ pager.total }} &nbsp;
         {% allowedurl %}
-            /auth/add_service/
-            {% trans "add service" %}
+            /auth/add_group/
+            {% trans "add group" %}
         {% endallowedurl %}
     </div>
 
@@ -46,23 +46,25 @@
 
     <table class="center wide bordered">
 
-        {% if services_error %}
+        {% if groups_error %}
 
             <tr>
                 <td>
-                    <span class="errormessage">{% trans services_error %}</span>
+                    <span class="errormessage">{% trans groups_error %}</span>
                 </td>
             </tr>
 
         {% else %}
 
-            {% if services %}
+            {% if groups %}
 
                 <tr>
                     <td colspan="4">
                         {% include "pager.html" %}
                     </td>
                 </tr>
+
+                {% comment %}
                 <tr class="objects_fields">
                     <th>{% trans "service name" %}</th>
                     <th>{% trans "type" %}</th>
@@ -102,6 +104,8 @@
 
                 {% endfor %}
 
+                {% endcomment %}
+
                 <tr>
                     <td colspan="4">
                         {% include "pager.html" %}
@@ -110,7 +114,7 @@
 
             {% else %}
 
-                <tr><th>{% trans "no services found" %}</th></tr>
+                <tr><th>{% trans "no groups found" %}</th></tr>
 
             {% endif %}
 

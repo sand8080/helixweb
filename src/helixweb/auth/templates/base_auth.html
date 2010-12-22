@@ -9,18 +9,41 @@
     <tr><td>&nbsp;</td></tr>
     <tr>
         <td>
-            {% allowedurl True %}
+            {% allowedurl %}
                 /auth/modify_environment/
                 {% trans "environment" %}
             {% endallowedurl %}
+            <br>
         </td>
     </tr>
     <tr>
         <td>
-            {% allowedurl True %}
+            {% allowedurl %}
                 /auth/get_services/
+                <br>
                 {% trans "services" %}
             {% endallowedurl %}
+            {% allowedurl %}
+                /auth/add_service/
+                <br>
+                {% trans "add service" %}
+            {% endallowedurl %}
+            <br>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            {% allowedurl %}
+                /auth/get_groups/
+                <br>
+                {% trans "groups" %}
+            {% endallowedurl %}
+            {% allowedurl %}
+                /auth/add_group/
+                <br>
+                {% trans "add group" %}
+            {% endallowedurl %}
+            <br>
         </td>
     </tr>
     <tr><td>&nbsp;</td></tr>

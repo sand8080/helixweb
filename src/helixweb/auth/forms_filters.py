@@ -31,3 +31,27 @@ class FilterServiceForm(FilterAuthForm):
             val = bool(int(d['filter_params']['is_active']))
             d['filter_params']['is_active'] = val
         return d
+
+
+class FilterGroupForm(FilterAuthForm):
+    name = forms.CharField(label=_('group name'), max_length=32,
+        required=False)
+    is_active = forms.ChoiceField(label=_('is active'), required=False, widget=forms.widgets.RadioSelect(),
+        choices=(('all', _('all')), ('1', _('active')), ('0', _('inactive'))),
+        initial='all')
+
+    def __init__(self, *args, **kwargs):
+        self.action = 'get_groups'
+        super(FilterGroupForm, self).__init__(*args, **kwargs)
+
+    def as_helix_request(self):
+        d = super(FilterGroupForm, self).as_helix_request()
+        s_t = d['filter_params'].pop('name').strip()
+        if len(s_t):
+            d['filter_params']['name'] = s_t
+        if d['filter_params']['is_active'] == 'all':
+            d['filter_params'].pop('is_active')
+        else:
+            val = bool(int(d['filter_params']['is_active']))
+            d['filter_params']['is_active'] = val
+        return d

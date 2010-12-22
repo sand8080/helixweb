@@ -97,3 +97,14 @@ class ModifyEnvironmentForm(HelixwebRequestForm):
         for k in env_d.keys():
             d['new_%s' % k] = env_d[k]
         return ModifyEnvironmentForm(d, request=request)
+
+
+class AddGroupForm(HelixwebRequestForm):
+    name = forms.CharField(label=_('group name'), max_length=32)
+    is_active = forms.BooleanField(label=_('is active'), initial=True,
+        required=False)
+
+    def __init__(self, *args, **kwargs):
+        self.action = 'add_group'
+        super(AddGroupForm, self).__init__(*args, **kwargs)
+
