@@ -10,10 +10,10 @@
 
 <form action="" method="post">{% csrf_token %}
     <div style="display:block;padding-left:17%;" id="login_block">
-        <table class="bordered">
-            <tr>
+        <table class="bordered" style="padding:20px 10px 20px 10px;">
+            <tr class="menu_linked login_tab">
                 <td>{% trans "login" %}</td>
-                <td><a href="#" onclick="$('#login_block').hide();  $('#reg_env_block').show(); return false">
+                <td><a href="" onclick="$('#login_block').hide();  $('#reg_env_block').show(); return false">
                     {% trans "create environment" %}</a>
                 </td>
             </tr>
@@ -26,10 +26,10 @@
         </table>
     </div>
 
-    <div style="display:none;" id="reg_env_block">
-        <table>
-            <tr>
-                <td><a href="#" onclick="$('#reg_env_block').hide();  $('#login_block').show(); return false">
+    <div style="display:none;padding-left:17%;" id="reg_env_block">
+        <table class="bordered">
+            <tr class="menu_linked login_tab">
+                <td><a href="" onclick="$('#reg_env_block').hide();  $('#login_block').show(); return false">
                     {% trans "login" %}</a>
                 </td>
                 <td>{% trans "create environment" %}</td>

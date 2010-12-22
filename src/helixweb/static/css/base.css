@@ -1,6 +1,8 @@
 table.main {width:75%;}
 table.main tr {vertical-align:top;}
 
+table.login {padding:20px 10px 20px 10px;}
+tr.login_tab {text-align:center;font-weight:bold;}
 span.errormessage {color:red;}
 tr.errormessage {background-color:pink;}
 
@@ -21,23 +23,19 @@ tr.objects_data {vertical-align:text-top;text-align:center;}
 
 .control {background:#EDE8E8;text-align:right;}
 .bordered {border:1px solid #BABABA;}
+.func_list {text-align:left;width:35%;}
 
 div.slider_area {border:1px solid #BABABA;padding:4px;}
 
-/* table.filter_object {border:1px solid #BABABA;} */
 table.filter_object td {vertical-align:top;}
 table.filter_object th {vertical-align:middle;text-align:right;}
-table.filter_object h2 {color:#3b64b5;}
 table.filter_object li {list-style-type:none;list-style-position:outside;}
 
-/*
-table.objects_list {border:1px solid #BABABA;}
-*/
-.func_list {text-align:left;width:35%;}
+.menu_linked {color:#2c9e1f;}
 
-table.left_menu td {padding-left:30px;}
-.current_item {color:#3b64b5;}
+table.left_menu td {padding-left:30px;font-weight:bold;}
 
-/*
-table.left_menu {width:75%;}
-*/
+.current_item {color:#2c9e1f;}
+
+a:link {color:#2f46c6;}
+a:visited {color:#2f46c6;}
