@@ -181,7 +181,9 @@ def add_group(request):
     c = _prepare_context(request)
     c.update(csrf(request))
     if request.method == 'POST':
-        form = AddGroupForm(request.POST, request=request)
+        services = []
+        form = AddGroupForm(services, request.POST, request=request)
+#        print '### form', form
 #        if form.is_valid():
 #            resp = helix_cli.request(form.as_helix_request())
 #            form.handle_errors(resp)
@@ -191,12 +193,12 @@ def add_group(request):
 #                else:
 #                    return HttpResponseRedirect('../get_groups/')
     else:
-        form = AddGroupForm(request=request)
+        resp = helix_cli.request(AddGroupForm.get_services_req(request))
+        services = resp.get('services', [])
+        form = AddGroupForm(services, request=request)
         # adding services info
-        resp = helix_cli.request(form.get_services_req(request))
         c.update(process_helix_response(resp, 'services', 'services_error'))
 
     c['add_group_form'] = form
-    print '### form: ', form
     return render_to_response('group/add.html', c,
         context_instance=RequestContext(request))

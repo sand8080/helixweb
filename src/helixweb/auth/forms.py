@@ -2,6 +2,7 @@ from django import forms
 from django.utils.translation import ugettext_lazy as _
 
 from helixweb.core.forms import HelixwebRequestForm, _get_session_id
+from helixweb.auth.widgets import ServicesWidget, ServicesSelectMultiple
 
 
 class LoginForm(HelixwebRequestForm):
@@ -100,13 +101,15 @@ class ModifyEnvironmentForm(HelixwebRequestForm):
 
 
 class AddGroupForm(HelixwebRequestForm):
-    name = forms.CharField(label=_('group name'), max_length=32)
     is_active = forms.BooleanField(label=_('is active'), initial=True,
         required=False)
+    name = forms.CharField(label=_('group name'), max_length=32)
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, services, *args, **kwargs):
         self.action = 'add_group'
         super(AddGroupForm, self).__init__(*args, **kwargs)
+        self.fields['rights'] = forms.ChoiceField(label=_('group rights'),
+            widget=ServicesSelectMultiple(services=services))
 
     @staticmethod
     def get_services_req(request):

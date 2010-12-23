@@ -35,11 +35,6 @@
 
                 {{ add_group_form.as_table }}
 
-                {% for srv in services %}
-                    <tr>
-                        <td colspan="2">{{ srv.id }} {{ srv.name }}: {{ srv.properties }}</td>
-                    </tr>
-                {% endfor %}
                 <tr>
                     <td colspan="2" class="control">
                         <input type="submit" style="font-weight:bold;" value="{% trans 'create' %}" />

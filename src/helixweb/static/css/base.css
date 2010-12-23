@@ -25,17 +25,21 @@ tr.objects_data {vertical-align:text-top;text-align:center;}
 .bordered {border:1px solid #BABABA;}
 .func_list {text-align:left;width:35%;}
 
+.menu_linked {color:#2c9e1f;}
+.current_item {color:#2c9e1f;}
+
+a:link {color:#2f46c6;}
+a:visited {color:#2f46c6;}
+
 div.slider_area {border:1px solid #BABABA;padding:4px;}
 
 table.filter_object td {vertical-align:top;}
 table.filter_object th {vertical-align:middle;text-align:right;}
 table.filter_object li {list-style-type:none;list-style-position:outside;}
 
-.menu_linked {color:#2c9e1f;}
-
 table.left_menu td {padding-left:30px;font-weight:bold;}
 
-.current_item {color:#2c9e1f;}
 
-a:link {color:#2f46c6;}
-a:visited {color:#2f46c6;}
+table.services_list th {text-align:left;}
+
+
