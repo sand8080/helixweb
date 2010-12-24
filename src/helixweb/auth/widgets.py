@@ -1,16 +1,15 @@
 from django.utils.translation import ugettext_lazy as _
-from django.forms.widgets import SelectMultiple, CheckboxInput, Widget
-from django.utils.encoding import force_unicode
+from django.forms.widgets import CheckboxInput, Widget
 from django.utils.safestring import mark_safe
-from django.forms.util import flatatt
 
 
 class ServicesSelectMultiple(Widget):
+    COLUMNS = 3
+
     def __init__(self, *args, **kwargs):
         self.services = kwargs.pop('services', [])
         vars = args[0] if len(args) else {}
         self.sel_props = self._sel_props(vars, self.services)
-        print '### SEL PROPS ALL: ', self.sel_props
         super(ServicesSelectMultiple, self).__init__(*args, **kwargs)
 
     def _sel_props(self, vars, services):
@@ -23,10 +22,10 @@ class ServicesSelectMultiple(Widget):
     def render(self, name, value, services=None, attrs=None):
         value = [] if value is None else value
         output = []
-        # Normalize to strings
+        output.append(u'<table class="services_properties bordered wide center">')
         for srv in self.services:
-            output.append(u'<table class="service_properties bordered wide">')
-            output.append(u'<tr><th colspan="2">%s</th></tr>' % srv.get('name'))
+            output.append(u'<tr><th colspan="%s">%s</th></tr>' %
+                (self.COLUMNS, srv.get('name')))
 
             js_cb_all = u'''<script type="text/javascript">
                 $("#%(id)s_all").click(function() {
@@ -41,18 +40,44 @@ class ServicesSelectMultiple(Widget):
             attrs = {'id': id_all}
             cb = CheckboxInput(attrs)
             rendered_cb = cb.render(id_all, id_all in self.sel_props)
-            output.append(u'<tr><td colspan="2" style="text-align:right;">%s %s %s</td></tr>' %
-                (_('select all'), rendered_cb, js_cb_all))
+            output.append(u'<tr><td style="text-align:right; colspan="%s">%s %s %s</td></tr>' %
+                (self.COLUMNS, _('select all'), rendered_cb, js_cb_all))
 
-            for p in srv['properties']:
-                id = '%s_%s' % (srv['id'], p)
-                attrs = {'id': id}
-                label_for = u' for="%s"' % id
-                cb = CheckboxInput(attrs)
-                rendered_cb = cb.render(id, id in self.sel_props)
-                output.append(u'<tr><td><label%s>%s</label></td><td style="text-align:right;">%s</td></tr>' %
-                    (label_for, p, rendered_cb))
-
-            output.append(u'<tr><td colspan="2"><br></td></tr>')
-            output.append(u'</table>')
+            props = srv['properties']
+            props_idx = self._props_indexes(len(props), self.COLUMNS)
+            rows = len(props_idx) / self.COLUMNS
+            for r_idx in range(rows):
+                output.append(u'<tr>')
+                for c_idx in range(self.COLUMNS):
+                    p_idx = props_idx[r_idx + c_idx * rows]
+                    if p_idx != None:
+                        p = props[p_idx]
+                        id = '%s_%s' % (srv['id'], p)
+                        attrs = {'id': id}
+                        label_for = u' for="%s"' % id
+                        cb = CheckboxInput(attrs)
+                        rendered_cb = cb.render(id, id in self.sel_props)
+                        output.append(u'<td><label%s>%s</label> %s</td>' %
+                            (label_for, p, rendered_cb))
+                    else:
+                        output.append(u'<td></td>')
+                output.append(u'</tr>')
+        output.append(u'</table><br>')
         return mark_safe(u'\n'.join(output))
+
+    def _elems_in_cols(self, total, col_num):
+        result = [total / col_num] * col_num
+        for i in range(total % col_num):
+            result[i] += 1
+        return result
+
+    def _props_indexes(self, total, col_num):
+        el_in_cols = self._elems_in_cols(total, col_num)
+        rows = max(el_in_cols)
+        result = [None] * (rows * col_num)
+        prop_idx = 0
+        for col_num, el_num in enumerate(el_in_cols):
+            for i in range(el_num):
+                result[col_num * rows + i] = prop_idx
+                prop_idx += 1
+        return result
