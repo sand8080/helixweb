@@ -39,7 +39,6 @@ table.filter_object li {list-style-type:none;list-style-position:outside;}
 
 table.left_menu td {padding-left:30px;font-weight:bold;}
 
-
-table.services_list th {text-align:left;}
+table.service_properties th {text-align:left;background:#EDE8E8;}
 
 
