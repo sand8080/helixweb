@@ -12,6 +12,16 @@ class ServicesSelectMultiple(Widget):
         self.sel_props = self._sel_props(vars, self.services)
         super(ServicesSelectMultiple, self).__init__(*args, **kwargs)
 
+    def as_helix_request(self):
+        result = []
+        for s in self.services:
+            s_id = u'%s_' % s.get('id')
+            s_props = filter(lambda x: x.startswith(s_id), self.sel_props)
+            skip = len(s_id)
+            props = [p[skip:] for p in s_props]
+            result.append({'service_id': s.get('id'), 'properties': props})
+        return result
+
     def _sel_props(self, vars, services):
         sel_props = []
         for s in services:
@@ -19,7 +29,7 @@ class ServicesSelectMultiple(Widget):
             sel_props += filter(lambda x: x.startswith(s_id), vars.keys())
         return sel_props
 
-    def render(self, name, value, services=None, attrs=None):
+    def render(self, name, value, attrs=None):
         value = [] if value is None else value
         output = []
         output.append(u'<table class="services_properties bordered wide center">')

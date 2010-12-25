@@ -117,3 +117,10 @@ class AddGroupForm(HelixwebRequestForm):
     def get_services_req(request):
         return {'action': 'get_services', 'session_id': _get_session_id(request),
             'filter_params': {}, 'paging_params': {}}
+
+    def as_helix_request(self):
+        d = super(AddGroupForm, self).as_helix_request()
+        d['rights'] = self.fields['rights'].widget.as_helix_request()
+        print '###', d
+        return d
+

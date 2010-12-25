@@ -164,7 +164,6 @@ def groups(request):
 
     if form.is_valid():
         resp = helix_cli.request(form.as_helix_request())
-#        print '#### resp', resp
         form.update_total(resp)
         c.update(process_helix_response(resp, 'groups', 'groups_error'))
         c['pager'] = form.pager
@@ -185,15 +184,15 @@ def add_group(request):
 
     if request.method == 'POST':
         form = AddGroupForm(request.POST, services=services, request=request)
-#        print '### form', form
-#        if form.is_valid():
-#            resp = helix_cli.request(form.as_helix_request())
-#            form.handle_errors(resp)
-#            if resp['status'] == 'ok':
-#                if request.POST.get('stay_here', '0') == '1':
-#                    return HttpResponseRedirect('.')
-#                else:
-#                    return HttpResponseRedirect('../get_groups/')
+        if form.is_valid():
+#            print '### add grp req:', form.as_helix_request()
+            resp = helix_cli.request(form.as_helix_request())
+            form.handle_errors(resp)
+            if resp['status'] == 'ok':
+                if request.POST.get('stay_here', '0') != '1':
+                    return HttpResponseRedirect('../get_groups/')
+                else:
+                    return HttpResponseRedirect('')
     else:
         form = AddGroupForm(services=services, request=request)
 
