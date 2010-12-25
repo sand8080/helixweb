@@ -25,7 +25,7 @@ class ServicesSelectMultiple(Widget):
         output.append(u'<table class="services_properties bordered wide center">')
         for srv in self.services:
             output.append(u'<tr><th colspan="%s">%s</th></tr>' %
-                (self.COLUMNS, srv.get('name')))
+                (self.COLUMNS * 2, srv.get('name')))
 
             js_cb_all = u'''<script type="text/javascript">
                 $("#%(id)s_all").click(function() {
@@ -40,8 +40,8 @@ class ServicesSelectMultiple(Widget):
             attrs = {'id': id_all}
             cb = CheckboxInput(attrs)
             rendered_cb = cb.render(id_all, id_all in self.sel_props)
-            output.append(u'<tr><td style="text-align:right; colspan="%s">%s %s %s</td></tr>' %
-                (self.COLUMNS, _('select all'), rendered_cb, js_cb_all))
+            output.append(u'<tr><td style="text-align:right;" colspan="%s">%s %s %s</td></tr>' %
+                (self.COLUMNS * 2, _('select all'), rendered_cb, js_cb_all))
 
             props = srv['properties']
             props_idx = self._props_indexes(len(props), self.COLUMNS)
@@ -57,10 +57,10 @@ class ServicesSelectMultiple(Widget):
                         label_for = u' for="%s"' % id
                         cb = CheckboxInput(attrs)
                         rendered_cb = cb.render(id, id in self.sel_props)
-                        output.append(u'<td><label%s>%s</label> %s</td>' %
+                        output.append(u'<td><label%s>%s</label></td><td>%s</td>' %
                             (label_for, p, rendered_cb))
                     else:
-                        output.append(u'<td></td>')
+                        output.append(u'<td colspan="2"></td>')
                 output.append(u'</tr>')
         output.append(u'</table><br>')
         return mark_safe(u'\n'.join(output))
