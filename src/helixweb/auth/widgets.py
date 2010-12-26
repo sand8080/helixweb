@@ -49,9 +49,10 @@ class ServicesSelectMultiple(Widget):
             id_all = '%s_all' % srv['id']
             attrs = {'id': id_all}
             cb = CheckboxInput(attrs)
+            alignment = '&nbsp; &nbsp; &nbsp; &nbsp;'
             rendered_cb = cb.render(id_all, id_all in self.sel_props)
-            output.append(u'<tr><td style="text-align:right;" colspan="%s">%s %s %s</td></tr>' %
-                (self.COLUMNS * 2, _('select all'), rendered_cb, js_cb_all))
+            output.append(u'<tr><td style="text-align:right;" colspan="%s">%s %s %s%s</td></tr>' %
+                (self.COLUMNS * 2, _('select all'), rendered_cb, alignment, js_cb_all))
 
             props = srv['properties']
             props_idx = self._props_indexes(len(props), self.COLUMNS)
@@ -67,8 +68,8 @@ class ServicesSelectMultiple(Widget):
                         label_for = u' for="%s"' % id
                         cb = CheckboxInput(attrs)
                         rendered_cb = cb.render(id, id in self.sel_props)
-                        output.append(u'<td><label%s>%s</label></td><td>%s</td>' %
-                            (label_for, p, rendered_cb))
+                        output.append(u'<td><label%s>%s</label></td><td>%s %s</td>' %
+                            (label_for, p, rendered_cb, alignment))
                     else:
                         output.append(u'<td colspan="2"></td>')
                 output.append(u'</tr>')
