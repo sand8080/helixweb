@@ -64,39 +64,42 @@
                     </td>
                 </tr>
 
-                {% comment %}
                 <tr class="objects_fields">
-                    <th>{% trans "service name" %}</th>
-                    <th>{% trans "type" %}</th>
+                    <th>{% trans "name" %}</th>
                     <th>{% trans "is active" %}</th>
-                    <th>{% trans "functions" %}</th>
+                    <th>{% trans "rights" %}</th>
                 </tr>
 
-                {% for srv in services %}
+                {% for grp in groups %}
                     <tr class="objects_data">
                         <td>
                             {% allowedurl True %}
-                                /auth/modify_service/{{ srv.id }}/
-                                {% trans srv.name %}
+                                /auth/modify_group/{{ grp.id }}/
+                                {% trans grp.name %}
                             {% endallowedurl %}
+                            <br>
+                            <span style="font-size:small;">
+                            {% allowedurl%}
+                                /auth/delete_group/{{ grp.id }}/
+                                {% trans "delete group" %}
+                            {% endallowedurl %}
+                            </span>
                         </td>
-                        <td>{{ srv.type }}</td>
                         <td>
-                            {% if srv.is_active %}
+                            {% if grp.is_active %}
                                 +
                             {% else %}
                                 -
                             {% endif %}
                         </td>
-                        <td class="func_list">
-
-                            <a href="#" id="props_{{ srv.id }}">[+] {% trans "list" %}</a>
-                            <div id="props_list_{{ srv.id }}" style="display:none;">
-                                {{ srv.properties|unordered_list }}
+                        <td width="70%">
+                            <a href="#" id="rights_{{ grp.id }}">[+] {% trans "list" %}</a>
+                            <div id="rights_list_{{ grp.id }}" style="display:none;">
+                                services with rights of {{ grp.name }}
                             </div>
 
                             <script type="text/javascript">
-                                slider('props_{{ srv.id }}', 'props_list_{{ srv.id }}')
+                                slider('rights_{{ grp.id }}', 'rights_list_{{ grp.id }}')
                             </script>
 
                         </td>
@@ -104,7 +107,6 @@
 
                 {% endfor %}
 
-                {% endcomment %}
 
                 <tr>
                     <td colspan="4">
