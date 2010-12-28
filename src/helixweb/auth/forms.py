@@ -100,7 +100,19 @@ class ModifyEnvironmentForm(HelixwebRequestForm):
         return ModifyEnvironmentForm(d, request=request)
 
 
-class AddGroupForm(HelixwebRequestForm):
+class GroupForm(HelixwebRequestForm):
+    @staticmethod
+    def get_by_id_req(id, request):
+        return {'action': 'get_groups', 'session_id': _get_session_id(request),
+            'filter_params': {'ids': [int(id)]}, 'paging_params':{}}
+
+    @staticmethod
+    def get_services_req(request):
+        return {'action': 'get_services', 'session_id': _get_session_id(request),
+            'filter_params': {}, 'paging_params': {}}
+
+
+class AddGroupForm(GroupForm):
     name = forms.CharField(label=_('group name'), max_length=32)
     is_active = forms.BooleanField(label=_('is active'), initial=True,
         required=False)
@@ -113,14 +125,22 @@ class AddGroupForm(HelixwebRequestForm):
         self.fields['rights'] = forms.ChoiceField(label=_('group rights'),
             widget=ServicesSelectMultiple(vars, services=services), required=False)
 
-    @staticmethod
-    def get_services_req(request):
-        return {'action': 'get_services', 'session_id': _get_session_id(request),
-            'filter_params': {}, 'paging_params': {}}
-
     def as_helix_request(self):
         d = super(AddGroupForm, self).as_helix_request()
         d['rights'] = self.fields['rights'].widget.as_helix_request()
-        print '###', d
         return d
 
+
+class DeleteGroupForm(GroupForm):
+    id = forms.HiddenInput()
+    name = forms.CharField(label=_('group name'), max_length=32)
+
+    def __init__(self, *args, **kwargs):
+        self.action = 'delete_group'
+        super(DeleteGroupForm, self).__init__(*args, **kwargs)
+
+    def as_helix_request(self):
+        d = super(DeleteGroupForm, self).as_helix_request()
+        d.pop('name')
+        d['id'] = self.id
+        return d

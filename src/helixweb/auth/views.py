@@ -13,7 +13,7 @@ from helixweb.core.client import Client
 from helixweb.core.forms import _get_session_id
 
 from helixweb.auth.forms import LoginForm, AddServiceForm, ModifyServiceForm,\
-    ModifyEnvironmentForm, AddGroupForm
+    ModifyEnvironmentForm, AddGroupForm, DeleteGroupForm
 from helixweb.auth.forms_filters import FilterServiceForm, FilterGroupForm
 from helixweb.auth.security import get_rights
 from helixweb.auth import settings
@@ -198,4 +198,26 @@ def add_group(request):
 
     c['add_group_form'] = form
     return render_to_response('group/add.html', c,
+        context_instance=RequestContext(request))
+
+
+@login_redirector
+def delete_group(request, id):
+    c = _prepare_context(request)
+    c.update(csrf(request))
+    if request.method == 'POST':
+        form = DeleteGroupForm(request.POST, request=request)
+        if form.is_valid():
+            print '### as request:', form.as_helix_request()
+#            resp = helix_cli.request(form.as_helix_request())
+#            form.handle_errors(resp)
+    else:
+        resp = helix_cli.request(DeleteGroupForm.get_by_id_req(id, request))
+        groups = resp.get('groups', [{}])
+        d_grp = groups[0]
+        form = DeleteGroupForm(d_grp, request=request)
+        if form.is_valid():
+            form.handle_errors(resp)
+    c['form'] = form
+    return render_to_response('group/delete.html', c,
         context_instance=RequestContext(request))
