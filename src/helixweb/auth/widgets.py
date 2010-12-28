@@ -1,5 +1,6 @@
 from django.utils.translation import ugettext_lazy as _
 from django.forms.widgets import CheckboxInput, Widget
+from django.forms import TextInput
 from django.utils.safestring import mark_safe
 
 
@@ -92,3 +93,14 @@ class ServicesSelectMultiple(Widget):
                 result[col_num * rows + i] = prop_idx
                 prop_idx += 1
         return result
+
+
+class ConstInput(TextInput):
+    def __init__(self, *args, **kwargs):
+        super(ConstInput, self).__init__(*args, **kwargs)
+
+    def render(self, *args, **kwargs):
+        name = args[0]
+        value = args[1]
+        s_input = u'<input type="hidden" name="%s" value="%s">' % (name, value)
+        return mark_safe(u'%s%s' % (s_input, value))

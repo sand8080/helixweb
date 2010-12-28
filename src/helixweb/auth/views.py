@@ -89,6 +89,7 @@ def modify_service(request, srv_id):
     c.update(csrf(request))
 
     if request.method == 'POST':
+        print '### POST', request.POST
         form = ModifyServiceForm(request.POST, request=request)
         if form.is_valid():
             resp = helix_cli.request(form.as_helix_request())
