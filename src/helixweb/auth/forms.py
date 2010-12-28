@@ -2,7 +2,8 @@ from django import forms
 from django.utils.translation import ugettext_lazy as _
 
 from helixweb.core.forms import HelixwebRequestForm, _get_session_id
-from helixweb.auth.widgets import ServicesSelectMultiple
+from helixweb.auth.widgets import ServicesSelectMultiple, ConstInput
+from django.forms.widgets import TextInput
 
 
 class LoginForm(HelixwebRequestForm):
@@ -48,6 +49,7 @@ class AddServiceForm(ServiceForm):
 class ModifyServiceForm(ServiceForm):
     id = forms.IntegerField(widget=forms.widgets.HiddenInput)
     new_name = forms.CharField(label=_('service name'), max_length=32)
+    type = forms.CharField(label=_('service type'), widget=ConstInput)
     new_properties = forms.CharField(label=_('service functions'),
         widget=forms.Textarea(attrs={'cols': 20, 'rows': 10}), required=False)
     new_is_active = forms.BooleanField(label=_('is active'), required=False)
@@ -59,6 +61,7 @@ class ModifyServiceForm(ServiceForm):
     def as_helix_request(self):
         d = super(ModifyServiceForm, self).as_helix_request()
         d['new_properties'] = self._prepare_properties(d.get('new_properties', ''))
+        d.pop('type')
         return d
 
     @staticmethod
@@ -71,6 +74,7 @@ class ModifyServiceForm(ServiceForm):
             else:
                 d[k] = srv_d[k]
         d['new_properties'] = '\n'.join(d['new_properties'])
+        d['type'] = srv_d.get('type')
         return ModifyServiceForm(d, request=request)
 
     @staticmethod
@@ -133,7 +137,8 @@ class AddGroupForm(GroupForm):
 
 class DeleteGroupForm(GroupForm):
     id = forms.HiddenInput()
-    name = forms.CharField(label=_('group name'), max_length=32)
+    name = forms.CharField(label=_('group name'), max_length=32,
+        widget=ConstInput)
 
     def __init__(self, *args, **kwargs):
         self.action = 'delete_group'

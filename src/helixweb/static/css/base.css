@@ -13,8 +13,8 @@ table.header {width:100%;background:#EDE8E8;padding:10px;}
 table.lang_sw {margin:auto 0px auto auto;}
 table.lang_sw td {border:1px solid #BABABA;padding:3px;}
 
-table.add_object td {vertical-align:top;}
-table.add_object th {vertical-align:top;text-align:right;}
+table.object_form td {vertical-align:top;}
+table.object_form th {vertical-align:top;text-align:right;}
 
 td.lang_sel {background:#FAFAC8;}
 
@@ -23,7 +23,7 @@ tr.objects_data {vertical-align:text-top;text-align:center;}
 
 .control {background:#EDE8E8;text-align:right;}
 .bordered {border:1px solid #BABABA;}
-.func_list {text-align:left;width:35%;}
+.func_list {text-align:left;width:45%;}
 
 .menu_linked {color:#2c9e1f;}
 .current_item {color:#2c9e1f;}
