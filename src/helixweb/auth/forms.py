@@ -136,7 +136,7 @@ class AddGroupForm(GroupForm):
 
 
 class DeleteGroupForm(GroupForm):
-    id = forms.HiddenInput()
+    id = forms.IntegerField(widget=forms.widgets.HiddenInput)
     name = forms.CharField(label=_('group name'), max_length=32,
         widget=ConstInput)
 
@@ -147,5 +147,4 @@ class DeleteGroupForm(GroupForm):
     def as_helix_request(self):
         d = super(DeleteGroupForm, self).as_helix_request()
         d.pop('name')
-        d['id'] = self.id
         return d

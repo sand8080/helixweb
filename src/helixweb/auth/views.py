@@ -89,7 +89,6 @@ def modify_service(request, srv_id):
     c.update(csrf(request))
 
     if request.method == 'POST':
-        print '### POST', request.POST
         form = ModifyServiceForm(request.POST, request=request)
         if form.is_valid():
             resp = helix_cli.request(form.as_helix_request())
@@ -209,16 +208,18 @@ def delete_group(request, id):
     if request.method == 'POST':
         form = DeleteGroupForm(request.POST, request=request)
         if form.is_valid():
-            print '### as request:', form.as_helix_request()
-#            resp = helix_cli.request(form.as_helix_request())
-#            form.handle_errors(resp)
+            resp = helix_cli.request(form.as_helix_request())
+            form.handle_errors(resp)
+            if resp['status'] == 'ok':
+                return HttpResponseRedirect('/auth/get_groups/')
     else:
         resp = helix_cli.request(DeleteGroupForm.get_by_id_req(id, request))
         groups = resp.get('groups', [{}])
-        d_grp = groups[0]
+        d_grp = groups[0] if len(groups) else {}
         form = DeleteGroupForm(d_grp, request=request)
         if form.is_valid():
             form.handle_errors(resp)
+
     c['form'] = form
     return render_to_response('group/delete.html', c,
         context_instance=RequestContext(request))

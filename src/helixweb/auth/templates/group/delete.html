@@ -6,6 +6,7 @@
 
 {% block content %}
 
+{% load urlutils %}
 
 <form action="" method="post">{% csrf_token %}
 
@@ -16,7 +17,10 @@
                 <td colspan="2">
 
                     <h2>
-                        <a href="../get_groups/">{% trans "groups" %}</a>
+                        {% allowedurl True %}
+                            /auth/get_groups/
+                            {% trans "groups" %}
+                        {% endallowedurl %}
                         &rarr;
                         <span class="menu_linked">{% trans "delete group" %}</span>
                     </h2>
