@@ -13,7 +13,7 @@ from helixweb.core.client import Client
 from helixweb.core.forms import _get_session_id
 
 from helixweb.auth.forms import LoginForm, AddServiceForm, ModifyServiceForm,\
-    ModifyEnvironmentForm, AddGroupForm, DeleteGroupForm
+    ModifyEnvironmentForm, AddGroupForm, DeleteGroupForm, ModifyGroupForm
 from helixweb.auth.forms_filters import FilterServiceForm, FilterGroupForm
 from helixweb.auth.security import get_rights
 from helixweb.auth import settings
@@ -84,10 +84,9 @@ def add_service(request):
 
 
 @login_redirector
-def modify_service(request, srv_id):
+def modify_service(request, id):
     c = _prepare_context(request)
     c.update(csrf(request))
-
     if request.method == 'POST':
         form = ModifyServiceForm(request.POST, request=request)
         if form.is_valid():
@@ -96,13 +95,12 @@ def modify_service(request, srv_id):
             if resp['status'] == 'ok':
                 if request.POST.get('stay_here', '0') != '1':
                     return HttpResponseRedirect('../../get_services/')
-
     else:
-        resp = helix_cli.request(ModifyServiceForm.get_by_id_req(srv_id, request))
+        resp = helix_cli.request(ModifyServiceForm.get_by_id_req(id, request))
         form = ModifyServiceForm.from_get_services_helix_resp(resp, request)
         if form.is_valid():
             form.handle_errors(resp)
-    c['modify_service_form'] = form
+    c['form'] = form
     return render_to_response('services/modify.html', c,
         context_instance=RequestContext(request))
 
@@ -193,7 +191,6 @@ def add_group(request):
         form = AddGroupForm(request.POST, services=services, request=request)
         if form.is_valid():
             resp = helix_cli.request(form.as_helix_request())
-            print '### resp'
             form.handle_errors(resp)
             if resp['status'] == 'ok':
                 if request.POST.get('stay_here', '0') != '1':
@@ -229,4 +226,31 @@ def delete_group(request, id):
 
     c['form'] = form
     return render_to_response('group/delete.html', c,
+        context_instance=RequestContext(request))
+
+
+@login_redirector
+def modify_group(request, id):
+    c = _prepare_context(request)
+    c.update(csrf(request))
+    resp = helix_cli.request(ModifyGroupForm.get_services_req(request))
+    services = resp.get('services', [])
+    c.update(process_helix_response(resp, 'services', 'services_error'))
+
+    if request.method == 'POST':
+        form = ModifyGroupForm(request.POST, services=services, request=request)
+        if form.is_valid():
+            resp = helix_cli.request(form.as_helix_request())
+            form.handle_errors(resp)
+            if resp['status'] == 'ok':
+                if request.POST.get('stay_here', '0') != '1':
+                    return HttpResponseRedirect('/auth/get_groups/')
+    else:
+        resp = helix_cli.request(ModifyGroupForm.get_by_id_req(id, request))
+        print '### resp:', resp
+        form = ModifyGroupForm.from_get_groups_helix_resp(resp, request, services)
+        if form.is_valid():
+            form.handle_errors(resp)
+    c['form'] = form
+    return render_to_response('group/modify.html', c,
         context_instance=RequestContext(request))

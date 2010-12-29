@@ -2,7 +2,7 @@
 
 {% load i18n %}
 
-{% block title %}{% trans "modify service" %}{% endblock %}
+{% block title %}{% trans "modify group" %}{% endblock %}
 
 {% block content %}
 
@@ -12,16 +12,16 @@
 
     <div class="bordered">
 
-        <table class="object_form center" >
+        <table class="object_form center">
             <tr>
                 <td colspan="2">
                     <h2>
                         {% allowedurl True %}
-                            /auth/get_services/
-                            {% trans "services" %}
+                            /auth/get_groups/
+                            {% trans "groups" %}
                         {% endallowedurl %}
                         &rarr;
-                        <span class="menu_linked">{% trans "modify service" %}</span>
+                        <span class="menu_linked">{% trans "modify group" %}</span>
                     </h2>
                 </td>
             </tr>

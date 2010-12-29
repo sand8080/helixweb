@@ -114,14 +114,13 @@ class AddGroupForm(GroupForm):
     name = forms.CharField(label=_('group name'), max_length=32)
     is_active = forms.BooleanField(label=_('is active'), initial=True,
         required=False)
+    action = 'add_group'
 
     def __init__(self, *args, **kwargs):
-        self.action = 'add_group'
         services = kwargs.pop('services', [])
         super(AddGroupForm, self).__init__(*args, **kwargs)
-        vars = args[0] if len(args) else {}
-        self.fields['rights'] = forms.ChoiceField(label=_('group rights'),
-            widget=ServicesSelectMultiple(vars, services=services), required=False)
+        self.fields['rights'] = forms.CharField(label=_('group rights'),
+            widget=ServicesSelectMultiple(*args, services=services), required=False)
 
     def as_helix_request(self):
         d = super(AddGroupForm, self).as_helix_request()
@@ -133,12 +132,44 @@ class DeleteGroupForm(GroupForm):
     id = forms.IntegerField(widget=forms.widgets.HiddenInput)
     name = forms.CharField(label=_('group name'), max_length=32,
         widget=ConstInput)
+    action = 'delete_group'
 
     def __init__(self, *args, **kwargs):
-        self.action = 'delete_group'
         super(DeleteGroupForm, self).__init__(*args, **kwargs)
 
     def as_helix_request(self):
         d = super(DeleteGroupForm, self).as_helix_request()
         d.pop('name')
         return d
+
+
+class ModifyGroupForm(GroupForm):
+    id = forms.IntegerField(widget=forms.widgets.HiddenInput)
+    new_name = forms.CharField(label=_('group name'), max_length=32)
+    new_is_active = forms.BooleanField(label=_('is active'), required=False)
+    action = 'modify_group'
+
+    def __init__(self, *args, **kwargs):
+        services = kwargs.pop('services', [])
+        super(ModifyGroupForm, self).__init__(*args, **kwargs)
+        self.fields['new_rights'] = forms.CharField(label=_('group rights'),
+            widget=ServicesSelectMultiple(*args, services=services), required=False)
+
+#    def as_helix_request(self):
+#        d = super(ModifyGroupForm, self).as_helix_request()
+#        d['new_properties'] = self._prepare_properties(d.get('new_properties', ''))
+#        d.pop('type')
+#        return d
+
+    @staticmethod
+    def from_get_groups_helix_resp(helix_resp, request, services):
+        d = helix_resp.get('groups', [{'id': 0}])[0]
+        res_d = {}
+        for k in d.keys():
+            if k not in ('id', ):
+                res_d['new_%s' % k] = d[k]
+            else:
+                res_d[k] = d[k]
+#        d['new_properties'] = '\n'.join(d['new_properties'])
+        print '### res_d', res_d
+        return ModifyGroupForm(res_d, request=request, services=services)
