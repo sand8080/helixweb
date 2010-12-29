@@ -156,6 +156,13 @@ def groups(request):
     c = _prepare_context(request)
     c.update(csrf(request))
 
+    resp = helix_cli.request(FilterGroupForm.get_services_req(request))
+    srvs = resp.get('services', [])
+    srvs_idx = {}
+    for s in srvs:
+        srvs_idx[s['id']] = s
+    c['services_idx'] = srvs_idx
+
     if len(request.GET) == 0 or (len(request.GET) == 1 and 'pager_offset' in request.GET):
         # setting default is_active value to True
         form = FilterGroupForm({'is_active': 'all'}, request=request)
@@ -165,7 +172,6 @@ def groups(request):
     if form.is_valid():
         resp = helix_cli.request(form.as_helix_request())
         form.update_total(resp)
-        print '### resp', resp.get('groups')
         c.update(process_helix_response(resp, 'groups', 'groups_error'))
         c['pager'] = form.pager
 
@@ -187,6 +193,7 @@ def add_group(request):
         form = AddGroupForm(request.POST, services=services, request=request)
         if form.is_valid():
             resp = helix_cli.request(form.as_helix_request())
+            print '### resp'
             form.handle_errors(resp)
             if resp['status'] == 'ok':
                 if request.POST.get('stay_here', '0') != '1':

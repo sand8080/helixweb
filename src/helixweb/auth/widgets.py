@@ -2,6 +2,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.forms.widgets import CheckboxInput, Widget
 from django.forms import TextInput
 from django.utils.safestring import mark_safe
+from helixweb.core.views import elems_as_table
 
 
 class ServicesSelectMultiple(Widget):
@@ -20,6 +21,7 @@ class ServicesSelectMultiple(Widget):
             s_props = filter(lambda x: x.startswith(s_id), self.sel_props)
             skip = len(s_id)
             props = [p[skip:] for p in s_props]
+            props = [p for p in s['properties'] if p in props]
             result.append({'service_id': s.get('id'), 'properties': props})
         return result
 
@@ -56,43 +58,17 @@ class ServicesSelectMultiple(Widget):
                 (self.COLUMNS * 2, rendered_cb, label_for, _('select all'), js_cb_all))
 
             props = srv['properties']
-            props_idx = self._props_indexes(len(props), self.COLUMNS)
-            rows = len(props_idx) / self.COLUMNS
-            for r_idx in range(rows):
-                output.append(u'<tr>')
-                for c_idx in range(self.COLUMNS):
-                    p_idx = props_idx[r_idx + c_idx * rows]
-                    if p_idx != None:
-                        p = props[p_idx]
-                        id = '%s_%s' % (srv['id'], p)
-                        attrs = {'id': id}
-                        label_for = u' for="%s"' % id
-                        cb = CheckboxInput(attrs)
-                        rendered_cb = cb.render(id, id in self.sel_props)
-                        output.append(u'<td>%s</td><td><label%s>%s</label></td>' %
-                            (rendered_cb, label_for, p))
-                    else:
-                        output.append(u'<td colspan="2"></td>')
-                output.append(u'</tr>')
+            rended_props = []
+            for p in props:
+                id = '%s_%s' % (srv['id'], p)
+                attrs = {'id': id}
+                label_for = u' for="%s"' % id
+                cb = CheckboxInput(attrs)
+                rendered_cb = cb.render(id, id in self.sel_props)
+                rended_props.append((rendered_cb, u'<label%s>%s</label>' % (label_for, p)))
+            output.append(elems_as_table(rended_props, self.COLUMNS))
         output.append(u'</table><br>')
         return mark_safe(u'\n'.join(output))
-
-    def _elems_in_cols(self, total, col_num):
-        result = [total / col_num] * col_num
-        for i in range(total % col_num):
-            result[i] += 1
-        return result
-
-    def _props_indexes(self, total, col_num):
-        el_in_cols = self._elems_in_cols(total, col_num)
-        rows = max(el_in_cols)
-        result = [None] * (rows * col_num)
-        prop_idx = 0
-        for col_num, el_num in enumerate(el_in_cols):
-            for i in range(el_num):
-                result[col_num * rows + i] = prop_idx
-                prop_idx += 1
-        return result
 
 
 class ConstInput(TextInput):

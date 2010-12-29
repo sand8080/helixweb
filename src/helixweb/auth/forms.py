@@ -3,7 +3,6 @@ from django.utils.translation import ugettext_lazy as _
 
 from helixweb.core.forms import HelixwebRequestForm, _get_session_id
 from helixweb.auth.widgets import ServicesSelectMultiple, ConstInput
-from django.forms.widgets import TextInput
 
 
 class LoginForm(HelixwebRequestForm):
@@ -109,11 +108,6 @@ class GroupForm(HelixwebRequestForm):
     def get_by_id_req(id, request):
         return {'action': 'get_groups', 'session_id': _get_session_id(request),
             'filter_params': {'ids': [int(id)]}, 'paging_params':{}}
-
-    @staticmethod
-    def get_services_req(request):
-        return {'action': 'get_services', 'session_id': _get_session_id(request),
-            'filter_params': {}, 'paging_params': {}}
 
 
 class AddGroupForm(GroupForm):

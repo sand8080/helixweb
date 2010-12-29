@@ -58,6 +58,9 @@
 
             {% if groups %}
 
+                {% load transform %}
+                {% load objectutils %}
+
                 <tr>
                     <td colspan="4">
                         {% include "pager.html" %}
@@ -93,6 +96,21 @@
                             {% endif %}
                         </td>
                         <td class="func_list">
+
+                            <table class="services_properties wide center">
+
+                                {% for row in grp.rights %}
+
+                                    <tr><th colspan="3">{{ services_idx|get:row.service_id|get:"name" }}</th></tr>
+
+                                    {{ row.properties|listtotable:3 }}
+
+                                {% endfor %}
+
+                            </table>
+
+                            {% comment %}
+
                             <a href="#" id="rights_{{ grp.id }}">[+] {% trans "list" %}</a>
                             <div id="rights_list_{{ grp.id }}" style="display:none;">
                                 services with rights of {{ grp.name }}
@@ -101,6 +119,7 @@
                             <script type="text/javascript">
                                 slider('rights_{{ grp.id }}', 'rights_list_{{ grp.id }}')
                             </script>
+                            {% endcomment %}
 
                         </td>
                     </tr>

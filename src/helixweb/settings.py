@@ -94,7 +94,6 @@ LOCALE_INDEPENDENT_PATHS = (
     re.compile('^/$'),
     re.compile('^/favicon.ico$'),
     re.compile('^/static/'),
-    re.compile('^/ajax/'),
 )
 
 TEMPLATE_DIRS = (

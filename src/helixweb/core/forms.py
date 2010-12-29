@@ -52,7 +52,6 @@ class HelixwebRequestForm(forms.Form):
             for f in fields:
                 self._errors[f] = self.error_class()
                 self._errors[f].append('')
-#            print filter(lambda x: x != NON_FIELD_ERRORS, self._errors.keys())
 
     def as_table(self):
         "Returns this form rendered as HTML <tr>s -- excluding the <table></table>."
@@ -62,3 +61,8 @@ class HelixwebRequestForm(forms.Form):
             row_ender = u'</td></tr>',
             help_text_html = u'<br />%s',
             errors_on_separate_row = False)
+
+    @staticmethod
+    def get_services_req(request):
+        return {'action': 'get_services', 'session_id': _get_session_id(request),
+            'filter_params': {}, 'paging_params': {}}
