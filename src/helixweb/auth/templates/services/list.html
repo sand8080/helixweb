@@ -58,6 +58,8 @@
 
             {% if services %}
 
+                {% load transform %}
+
                 <tr>
                     <td colspan="4">
                         {% include "pager.html" %}
@@ -71,7 +73,7 @@
                 </tr>
 
                 {% for srv in services %}
-                    <tr class="objects_data">
+                    <tr class="objects_data {% cycle 'row1' 'row2' %}">
                         <td>
                             {% allowedurl True %}
                                 /auth/modify_service/{{ srv.id }}/
@@ -86,17 +88,10 @@
                                 -
                             {% endif %}
                         </td>
-                        <td class="func_list">
-
-                            <a href="#" id="props_{{ srv.id }}">[+] {% trans "list" %}</a>
-                            <div id="props_list_{{ srv.id }}" style="display:none;">
-                                {{ srv.properties|unordered_list }}
-                            </div>
-
-                            <script type="text/javascript">
-                                slider('props_{{ srv.id }}', 'props_list_{{ srv.id }}')
-                            </script>
-
+                        <td>
+                            <table class="services_properties wide center">
+                                {{ srv.properties|listtotable:3 }}
+                            </table>
                         </td>
                     </tr>
 

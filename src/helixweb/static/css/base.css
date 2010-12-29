@@ -1,6 +1,9 @@
 table.main {width:75%;}
 table.main tr {vertical-align:top;}
 
+tr.row1 {background:white;}
+tr.row2 {background:#EFEFEF;}
+
 table.login {padding:20px 10px 20px 10px;}
 tr.login_tab {text-align:center;font-weight:bold;}
 span.errormessage {color:red;}
@@ -23,7 +26,6 @@ tr.objects_data {vertical-align:text-top;text-align:center;}
 
 .control {background:#EDE8E8;text-align:right;}
 .bordered {border:1px solid #BABABA;}
-.func_list {text-align:left;width:45%;}
 
 .menu_linked {color:#2c9e1f;}
 .current_item {color:#2c9e1f;}
@@ -40,3 +42,4 @@ table.filter_object li {list-style-type:none;list-style-position:outside;}
 table.left_menu td {padding-left:30px;font-weight:bold;}
 
 table.services_properties th {text-align:left;background:#EDE8E8;}
+table.services_properties td {text-align:left;}

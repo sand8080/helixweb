@@ -74,7 +74,7 @@
                 </tr>
 
                 {% for grp in groups %}
-                    <tr class="objects_data">
+                    <tr class="objects_data {% cycle 'row1' 'row2' %}">
                         <td>
                             {% allowedurl True %}
                                 /auth/modify_group/{{ grp.id }}/
@@ -95,7 +95,7 @@
                                 -
                             {% endif %}
                         </td>
-                        <td class="func_list">
+                        <td>
 
                             <table class="services_properties wide center">
 
