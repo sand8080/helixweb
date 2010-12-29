@@ -33,7 +33,7 @@ class ServicesSelectMultiple(Widget):
     def render(self, name, value, attrs=None):
         value = [] if value is None else value
         output = []
-        output.append(u'<table class="services_properties bordered wide center">')
+        output.append(u'<table class="services_properties wide center">')
         for srv in self.services:
             output.append(u'<tr><th colspan="%s">%s</th></tr>' %
                 (self.COLUMNS * 2, srv.get('name')))
@@ -49,11 +49,11 @@ class ServicesSelectMultiple(Widget):
 
             id_all = '%s_all' % srv['id']
             attrs = {'id': id_all}
+            label_for = u' for="%s"' % id_all
             cb = CheckboxInput(attrs)
-            alignment = '&nbsp; &nbsp; &nbsp; &nbsp;'
             rendered_cb = cb.render(id_all, id_all in self.sel_props)
-            output.append(u'<tr><td style="text-align:right;" colspan="%s">%s %s %s%s</td></tr>' %
-                (self.COLUMNS * 2, _('select all'), rendered_cb, alignment, js_cb_all))
+            output.append(u'<tr><td colspan="%s">%s <label%s>%s</label> %s</td></tr>' %
+                (self.COLUMNS * 2, rendered_cb, label_for, _('select all'), js_cb_all))
 
             props = srv['properties']
             props_idx = self._props_indexes(len(props), self.COLUMNS)
@@ -69,8 +69,8 @@ class ServicesSelectMultiple(Widget):
                         label_for = u' for="%s"' % id
                         cb = CheckboxInput(attrs)
                         rendered_cb = cb.render(id, id in self.sel_props)
-                        output.append(u'<td><label%s>%s</label></td><td>%s %s</td>' %
-                            (label_for, p, rendered_cb, alignment))
+                        output.append(u'<td>%s</td><td><label%s>%s</label></td>' %
+                            (rendered_cb, label_for, p))
                     else:
                         output.append(u'<td colspan="2"></td>')
                 output.append(u'</tr>')
