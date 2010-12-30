@@ -247,7 +247,6 @@ def modify_group(request, id):
                     return HttpResponseRedirect('/auth/get_groups/')
     else:
         resp = helix_cli.request(ModifyGroupForm.get_by_id_req(id, request))
-        print '### resp:', resp
         form = ModifyGroupForm.from_get_groups_helix_resp(resp, request, services)
         if form.is_valid():
             form.handle_errors(resp)

@@ -58,15 +58,15 @@ class ServicesSelectMultiple(Widget):
                 (self.COLUMNS * 2, rendered_cb, label_for, _('select all'), js_cb_all))
 
             props = srv['properties']
-            rended_props = []
+            rendered_props = []
             for p in props:
                 id = '%s_%s' % (srv['id'], p)
                 attrs = {'id': id}
                 label_for = u' for="%s"' % id
                 cb = CheckboxInput(attrs)
                 rendered_cb = cb.render(id, id in self.sel_props)
-                rended_props.append((rendered_cb, u'<label%s>%s</label>' % (label_for, p)))
-            output.append(elems_as_table(rended_props, self.COLUMNS))
+                rendered_props.append((rendered_cb, u'<label%s>%s</label>' % (label_for, p)))
+            output.append(elems_as_table(rendered_props, self.COLUMNS))
         output.append(u'</table><br>')
         return mark_safe(u'\n'.join(output))
 

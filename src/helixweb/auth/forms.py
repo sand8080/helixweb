@@ -155,11 +155,10 @@ class ModifyGroupForm(GroupForm):
         self.fields['new_rights'] = forms.CharField(label=_('group rights'),
             widget=ServicesSelectMultiple(*args, services=services), required=False)
 
-#    def as_helix_request(self):
-#        d = super(ModifyGroupForm, self).as_helix_request()
-#        d['new_properties'] = self._prepare_properties(d.get('new_properties', ''))
-#        d.pop('type')
-#        return d
+    def as_helix_request(self):
+        d = super(ModifyGroupForm, self).as_helix_request()
+        d['new_rights'] = self.fields['new_rights'].widget.as_helix_request()
+        return d
 
     @staticmethod
     def from_get_groups_helix_resp(helix_resp, request, services):
@@ -170,6 +169,7 @@ class ModifyGroupForm(GroupForm):
                 res_d['new_%s' % k] = d[k]
             else:
                 res_d[k] = d[k]
-#        d['new_properties'] = '\n'.join(d['new_properties'])
-        print '### res_d', res_d
+        for srv in res_d.pop('new_rights', []):
+            for p in srv['properties']:
+                res_d['%s_%s' % (srv['service_id'], p)] = ''
         return ModifyGroupForm(res_d, request=request, services=services)

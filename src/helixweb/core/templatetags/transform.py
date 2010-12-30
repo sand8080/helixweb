@@ -10,7 +10,6 @@ register = Library()
 
 @register.filter
 def listtotable(values, col_num):
-    print '### values', values
     values = map(force_unicode, values)
     values = [conditional_escape(v) for v in values]
     return mark_safe(elems_as_table(values, col_num))
