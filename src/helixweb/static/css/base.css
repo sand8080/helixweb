@@ -43,3 +43,6 @@ table.left_menu td {padding-left:30px;font-weight:bold;}
 
 table.services_properties th {text-align:left;background:#EDE8E8;}
 table.services_properties td {text-align:left;}
+
+/*.marked {color:green;}*/
+.not_marked {color:red;}

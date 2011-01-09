@@ -15,3 +15,15 @@ def listtotable(values, col_num):
     return mark_safe(elems_as_table(values, col_num))
 listtotable.is_safe = True
 
+
+@register.filter
+def markitems(values, mark_values):
+    values = map(force_unicode, values)
+    values = [conditional_escape(v) for v in values]
+    result = []
+    for val in values:
+        if val in mark_values:
+            result.append(mark_safe('<div class="marked">%s</div>' % val))
+        else:
+            result.append(mark_safe('<div class="not_marked">%s</div>' % val))
+    return result
