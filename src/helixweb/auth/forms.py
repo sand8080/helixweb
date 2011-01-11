@@ -6,15 +6,15 @@ from helixweb.auth.widgets import ServicesSelectMultiple, ConstInput
 
 
 class LoginForm(HelixwebRequestForm):
-    def __init__(self, *args, **kwargs):
-        self.action = 'login'
-        request = kwargs['request']
-        request.COOKIES['session_id'] = None
-        super(LoginForm, self).__init__(*args, **kwargs)
-
+    action = 'login'
     environment_name = forms.CharField(label=_('environment name'), max_length=32)
     login = forms.CharField(label=_('user login'))
     password = forms.CharField(label=_('password'), max_length=32)
+
+    def __init__(self, *args, **kwargs):
+        request = kwargs['request']
+        request.COOKIES['session_id'] = None
+        super(LoginForm, self).__init__(*args, **kwargs)
 
 
 class ServiceForm(HelixwebRequestForm):
@@ -28,16 +28,13 @@ class ServiceForm(HelixwebRequestForm):
 
 
 class AddServiceForm(ServiceForm):
+    action = 'add_service'
     name = forms.CharField(label=_('service name'), max_length=32)
     type = forms.CharField(label=_('service type'), max_length=32)
     properties = forms.CharField(label=_('service functions'),
         widget=forms.Textarea(attrs={'cols': 20, 'rows': 10}))
     is_active = forms.BooleanField(label=_('is active'), initial=True,
         required=False)
-
-    def __init__(self, *args, **kwargs):
-        self.action = 'add_service'
-        super(AddServiceForm, self).__init__(*args, **kwargs)
 
     def as_helix_request(self):
         d = super(AddServiceForm, self).as_helix_request()
@@ -46,16 +43,13 @@ class AddServiceForm(ServiceForm):
 
 
 class ModifyServiceForm(ServiceForm):
+    action = 'modify_service'
     id = forms.IntegerField(widget=forms.widgets.HiddenInput)
     new_name = forms.CharField(label=_('service name'), max_length=32)
     type = forms.CharField(label=_('service type'), widget=ConstInput)
     new_properties = forms.CharField(label=_('service functions'),
         widget=forms.Textarea(attrs={'cols': 20, 'rows': 10}), required=False)
     new_is_active = forms.BooleanField(label=_('is active'), required=False)
-    action = 'modify_service'
-
-    def __init__(self, *args, **kwargs):
-        super(ModifyServiceForm, self).__init__(*args, **kwargs)
 
     def as_helix_request(self):
         d = super(ModifyServiceForm, self).as_helix_request()
@@ -83,11 +77,8 @@ class ModifyServiceForm(ServiceForm):
 
 
 class ModifyEnvironmentForm(HelixwebRequestForm):
-    new_name = forms.CharField(label=_('environment name'), max_length=32)
     action = 'modify_environment'
-
-    def __init__(self, *args, **kwargs):
-        super(ModifyEnvironmentForm, self).__init__(*args, **kwargs)
+    new_name = forms.CharField(label=_('environment name'), max_length=32)
 
     @staticmethod
     def get_req(request):
@@ -103,6 +94,12 @@ class ModifyEnvironmentForm(HelixwebRequestForm):
         return ModifyEnvironmentForm(d, request=request)
 
 
+class ModifyPasswordForm(HelixwebRequestForm):
+    action ='modify_password'
+    old_password = forms.CharField(label=_('old password'))
+    new_password = forms.CharField(label=_('new password'))
+
+
 class GroupForm(HelixwebRequestForm):
     @staticmethod
     def get_by_id_req(id, request):
@@ -111,10 +108,10 @@ class GroupForm(HelixwebRequestForm):
 
 
 class AddGroupForm(GroupForm):
+    action = 'add_group'
     name = forms.CharField(label=_('group name'), max_length=32)
     is_active = forms.BooleanField(label=_('is active'), initial=True,
         required=False)
-    action = 'add_group'
 
     def __init__(self, *args, **kwargs):
         services = kwargs.pop('services', [])
@@ -129,10 +126,10 @@ class AddGroupForm(GroupForm):
 
 
 class DeleteGroupForm(GroupForm):
+    action = 'delete_group'
     id = forms.IntegerField(widget=forms.widgets.HiddenInput)
     name = forms.CharField(label=_('group name'), max_length=32,
         widget=ConstInput)
-    action = 'delete_group'
 
     def __init__(self, *args, **kwargs):
         super(DeleteGroupForm, self).__init__(*args, **kwargs)
@@ -144,10 +141,10 @@ class DeleteGroupForm(GroupForm):
 
 
 class ModifyGroupForm(GroupForm):
+    action = 'modify_group'
     id = forms.IntegerField(widget=forms.widgets.HiddenInput)
     new_name = forms.CharField(label=_('group name'), max_length=32)
     new_is_active = forms.BooleanField(label=_('is active'), required=False)
-    action = 'modify_group'
 
     def __init__(self, *args, **kwargs):
         services = kwargs.pop('services', [])

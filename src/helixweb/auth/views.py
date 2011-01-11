@@ -13,7 +13,8 @@ from helixweb.core.client import Client
 from helixweb.core.forms import _get_session_id
 
 from helixweb.auth.forms import LoginForm, AddServiceForm, ModifyServiceForm,\
-    ModifyEnvironmentForm, AddGroupForm, DeleteGroupForm, ModifyGroupForm
+    ModifyEnvironmentForm, AddGroupForm, DeleteGroupForm, ModifyGroupForm,\
+    ModifyPasswordForm
 from helixweb.auth.forms_filters import FilterServiceForm, FilterGroupForm
 from helixweb.auth.security import get_rights
 from helixweb.auth import settings
@@ -27,6 +28,7 @@ def _prepare_context(request):
     c['rights'] = get_rights(_get_session_id(request))
     c.update(csrf(request))
     c.update(cur_lang(request))
+    c.update(csrf(request))
     return c
 
 
@@ -65,7 +67,6 @@ def login(request):
 @login_redirector
 def add_service(request):
     c = _prepare_context(request)
-    c.update(csrf(request))
     if request.method == 'POST':
         form = AddServiceForm(request.POST, request=request)
         if form.is_valid():
@@ -86,7 +87,6 @@ def add_service(request):
 @login_redirector
 def modify_service(request, id):
     c = _prepare_context(request)
-    c.update(csrf(request))
     if request.method == 'POST':
         form = ModifyServiceForm(request.POST, request=request)
         if form.is_valid():
@@ -108,8 +108,6 @@ def modify_service(request, id):
 @login_redirector
 def services(request):
     c = _prepare_context(request)
-    c.update(csrf(request))
-
     if len(request.GET) == 0 or (len(request.GET) == 1 and 'pager_offset' in request.GET):
         # setting default is_active value to True
         form = FilterServiceForm({'is_active': 'all'}, request=request)
@@ -131,8 +129,6 @@ def services(request):
 @login_redirector
 def modify_environment(request):
     c = _prepare_context(request)
-    c.update(csrf(request))
-
     if request.method == 'POST':
         form = ModifyEnvironmentForm(request.POST, request=request)
         if form.is_valid():
@@ -150,10 +146,24 @@ def modify_environment(request):
 
 
 @login_redirector
+def modify_password(request):
+    c = _prepare_context(request)
+    if request.method == 'POST':
+        pass
+        form = ModifyPasswordForm(request.POST, request=request)
+        if form.is_valid():
+            resp = helix_cli.request(form.as_helix_request())
+            form.handle_errors(resp)
+    else:
+        form = ModifyPasswordForm(request=request)
+    c['form'] = form
+    return render_to_response('user/modify_password.html', c,
+        context_instance=RequestContext(request))
+
+
+@login_redirector
 def groups(request):
     c = _prepare_context(request)
-    c.update(csrf(request))
-
     resp = helix_cli.request(FilterGroupForm.get_services_req(request))
     srvs = resp.get('services', [])
     srvs_idx = {}
@@ -182,7 +192,6 @@ def groups(request):
 @login_redirector
 def add_group(request):
     c = _prepare_context(request)
-    c.update(csrf(request))
     resp = helix_cli.request(AddGroupForm.get_services_req(request))
     services = resp.get('services', [])
     c.update(process_helix_response(resp, 'services', 'services_error'))
@@ -208,7 +217,6 @@ def add_group(request):
 @login_redirector
 def delete_group(request, id):
     c = _prepare_context(request)
-    c.update(csrf(request))
     if request.method == 'POST':
         form = DeleteGroupForm(request.POST, request=request)
         if form.is_valid():
@@ -232,7 +240,6 @@ def delete_group(request, id):
 @login_redirector
 def modify_group(request, id):
     c = _prepare_context(request)
-    c.update(csrf(request))
     resp = helix_cli.request(ModifyGroupForm.get_services_req(request))
     services = resp.get('services', [])
     c.update(process_helix_response(resp, 'services', 'services_error'))

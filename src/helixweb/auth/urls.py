@@ -9,6 +9,8 @@ urlpatterns = patterns('',
 
     (r'^modify_environment/$', 'auth.views.modify_environment'),
 
+    (r'^modify_password/$', 'auth.views.modify_password'),
+
     (r'^get_services/$', 'auth.views.services'),
     (r'^add_service/$', 'auth.views.add_service'),
     (r'^modify_service/(?P<id>\d+)/$', 'auth.views.modify_service'),
