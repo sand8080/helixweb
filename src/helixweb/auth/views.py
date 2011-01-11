@@ -75,11 +75,11 @@ def add_service(request):
                 if request.POST.get('stay_here', '0') == '1':
                     return HttpResponseRedirect('.')
                 else:
-                    return HttpResponseRedirect('../get_services/')
+                    return HttpResponseRedirect('/auth/get_services/')
     else:
         form = AddServiceForm(request=request)
     c['add_service_form'] = form
-    return render_to_response('services/add.html', c,
+    return render_to_response('service/add.html', c,
         context_instance=RequestContext(request))
 
 
@@ -94,14 +94,14 @@ def modify_service(request, id):
             form.handle_errors(resp)
             if resp['status'] == 'ok':
                 if request.POST.get('stay_here', '0') != '1':
-                    return HttpResponseRedirect('../../get_services/')
+                    return HttpResponseRedirect('/auth/get_services/')
     else:
         resp = helix_cli.request(ModifyServiceForm.get_by_id_req(id, request))
         form = ModifyServiceForm.from_get_services_helix_resp(resp, request)
         if form.is_valid():
             form.handle_errors(resp)
     c['form'] = form
-    return render_to_response('services/modify.html', c,
+    return render_to_response('service/modify.html', c,
         context_instance=RequestContext(request))
 
 
@@ -124,7 +124,7 @@ def services(request):
 
     c['filter_service_form'] = form
 
-    return render_to_response('services/list.html', c,
+    return render_to_response('service/list.html', c,
         context_instance=RequestContext(request))
 
 
