@@ -6,12 +6,12 @@
 {% load i18n %}
 
 <table class="left_menu bordered wide">
-    <tr><td>&nbsp;</td></tr>
     <tr>
         <td>
             {% allowedurl %}
-                /auth/modify_environment/
-                {% trans "environment" %}
+                /auth/add_user/
+                <br>
+                {% trans "add user" %}
             {% endallowedurl %}
             <br>
         </td>
@@ -19,9 +19,14 @@
     <tr>
         <td>
             {% allowedurl %}
-                /auth/modify_password/
+                /auth/get_groups/
                 <br>
-                {% trans "change password" %}
+                {% trans "groups" %}
+            {% endallowedurl %}
+            {% allowedurl %}
+                /auth/add_group/
+                <br>
+                {% trans "add group" %}
             {% endallowedurl %}
             <br>
         </td>
@@ -44,14 +49,19 @@
     <tr>
         <td>
             {% allowedurl %}
-                /auth/get_groups/
+                /auth/modify_environment/
                 <br>
-                {% trans "groups" %}
+                {% trans "environment" %}
             {% endallowedurl %}
+            <br>
+        </td>
+    </tr>
+    <tr>
+        <td>
             {% allowedurl %}
-                /auth/add_group/
+                /auth/modify_password/
                 <br>
-                {% trans "add group" %}
+                {% trans "change password" %}
             {% endallowedurl %}
             <br>
         </td>
