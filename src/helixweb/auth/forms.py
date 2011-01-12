@@ -9,7 +9,8 @@ class LoginForm(HelixwebRequestForm):
     action = 'login'
     environment_name = forms.CharField(label=_('environment name'), max_length=32)
     login = forms.CharField(label=_('user login'))
-    password = forms.CharField(label=_('password'), max_length=32)
+    password = forms.CharField(label=_('password'), max_length=32,
+        widget=forms.PasswordInput)
 
     def __init__(self, *args, **kwargs):
         request = kwargs['request']
@@ -96,8 +97,10 @@ class ModifyEnvironmentForm(HelixwebRequestForm):
 
 class ModifyPasswordForm(HelixwebRequestForm):
     action ='modify_password'
-    old_password = forms.CharField(label=_('old password'))
-    new_password = forms.CharField(label=_('new password'))
+    old_password = forms.CharField(label=_('old password'),
+        widget=forms.PasswordInput)
+    new_password = forms.CharField(label=_('new password'),
+         widget=forms.PasswordInput)
 
 
 class GroupForm(HelixwebRequestForm):
