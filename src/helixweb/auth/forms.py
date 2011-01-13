@@ -7,10 +7,12 @@ from helixweb.auth.widgets import ServicesSelectMultiple, ConstInput
 
 class LoginForm(HelixwebRequestForm):
     action = 'login'
-    environment_name = forms.CharField(label=_('environment name'), max_length=32)
-    login = forms.CharField(label=_('user login'))
-    password = forms.CharField(label=_('password'), max_length=32,
-        widget=forms.PasswordInput)
+    environment_name = forms.CharField(label=_('environment name'),
+        max_length=32)
+    login = forms.CharField(label=_('user login'),
+        max_length=32)
+    password = forms.CharField(label=_('password'),
+        max_length=32, widget=forms.PasswordInput)
 
     def __init__(self, *args, **kwargs):
         request = kwargs['request']
@@ -95,12 +97,32 @@ class ModifyEnvironmentForm(HelixwebRequestForm):
         return ModifyEnvironmentForm(d, request=request)
 
 
+class AddUserForm(HelixwebRequestForm):
+    action = 'add_user'
+    login = forms.CharField(label=_('login'), max_length=32)
+    password = forms.CharField(label=_('password'),
+        max_length=32, widget=forms.PasswordInput)
+
+    def __init__(self, *args, **kwargs):
+        groups = kwargs.pop('groups', [])
+        super(AddUserForm, self).__init__(*args, **kwargs)
+        choices = [(g['id'], g['name']) for g in groups]
+        self.fields['groups_ids'] = forms.MultipleChoiceField(label=_('groups'),
+            required=False, choices=choices,
+            widget=forms.widgets.CheckboxSelectMultiple)
+
+    def as_helix_request(self):
+        d = super(AddUserForm, self).as_helix_request()
+        d['groups_ids'] = map(int, d['groups_ids'])
+        return d
+
+
 class ModifyPasswordForm(HelixwebRequestForm):
     action ='modify_password'
     old_password = forms.CharField(label=_('old password'),
-        widget=forms.PasswordInput)
+        max_length=32, widget=forms.PasswordInput)
     new_password = forms.CharField(label=_('new password'),
-         widget=forms.PasswordInput)
+        max_length=32, widget=forms.PasswordInput)
 
 
 class GroupForm(HelixwebRequestForm):
@@ -108,6 +130,11 @@ class GroupForm(HelixwebRequestForm):
     def get_by_id_req(id, request):
         return {'action': 'get_groups', 'session_id': _get_session_id(request),
             'filter_params': {'ids': [int(id)]}, 'paging_params':{}}
+
+    @staticmethod
+    def get_all_active_req(request):
+        return {'action': 'get_groups', 'session_id': _get_session_id(request),
+            'filter_params': {'is_active': True}, 'paging_params':{}}
 
 
 class AddGroupForm(GroupForm):

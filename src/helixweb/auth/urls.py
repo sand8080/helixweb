@@ -20,6 +20,8 @@ urlpatterns = patterns('',
     (r'^delete_group/(?P<id>\d+)/$', 'auth.views.delete_group'),
     (r'^modify_group/(?P<id>\d+)/$', 'auth.views.modify_group'),
 
+    (r'^add_user/$', 'auth.views.add_user'),
+
     # Uncomment the admin/doc line below to enable admin documentation:
     # (r'^admin/doc/', include('django.contrib.admindocs.urls')),
 

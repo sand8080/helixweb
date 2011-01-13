@@ -14,7 +14,7 @@ from helixweb.core.forms import _get_session_id
 
 from helixweb.auth.forms import LoginForm, AddServiceForm, ModifyServiceForm,\
     ModifyEnvironmentForm, AddGroupForm, DeleteGroupForm, ModifyGroupForm,\
-    ModifyPasswordForm
+    ModifyPasswordForm, AddUserForm, GroupForm
 from helixweb.auth.forms_filters import FilterServiceForm, FilterGroupForm
 from helixweb.auth.security import get_rights
 from helixweb.auth import settings
@@ -79,7 +79,7 @@ def add_service(request):
                     return HttpResponseRedirect('/auth/get_services/')
     else:
         form = AddServiceForm(request=request)
-    c['add_service_form'] = form
+    c['form'] = form
     return render_to_response('service/add.html', c,
         context_instance=RequestContext(request))
 
@@ -142,6 +142,28 @@ def modify_environment(request):
     c['modify_environment_form'] = form
 
     return render_to_response('environment/modify.html', c,
+        context_instance=RequestContext(request))
+
+
+@login_redirector
+def add_user(request):
+    c = _prepare_context(request)
+    resp = helix_cli.request(GroupForm.get_all_active_req(request))
+    groups = resp.get('groups')
+    if request.method == 'POST':
+        form = AddUserForm(request.POST, groups=groups, request=request)
+        if form.is_valid():
+            resp = helix_cli.request(form.as_helix_request())
+            form.handle_errors(resp)
+            if resp['status'] == 'ok':
+                if request.POST.get('stay_here', '0') == '1':
+                    return HttpResponseRedirect('.')
+                else:
+                    return HttpResponseRedirect('/auth/get_users/')
+    else:
+        form = AddUserForm(groups=groups, request=request)
+    c['form'] = form
+    return render_to_response('user/add.html', c,
         context_instance=RequestContext(request))
 
 
