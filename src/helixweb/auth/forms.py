@@ -102,6 +102,8 @@ class AddUserForm(HelixwebRequestForm):
     login = forms.CharField(label=_('login'), max_length=32)
     password = forms.CharField(label=_('password'),
         max_length=32, widget=forms.PasswordInput)
+    is_active = forms.BooleanField(label=_('is active'), initial=True,
+        required=False)
 
     def __init__(self, *args, **kwargs):
         groups = kwargs.pop('groups', [])
