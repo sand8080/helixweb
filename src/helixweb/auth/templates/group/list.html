@@ -6,8 +6,6 @@
 
 {% block content %}
 
-<script type="text/javascript" src="/static/js/utils.js"></script>
-
 <form action="" method="get">
     <div class="bordered">
         <table class="filter_object center">
@@ -19,7 +17,7 @@
                 <td></td>
             </tr>
 
-            {{ filter_group_form.as_table }}
+            {{ form.as_table }}
 
             <tr>
                 <td colspan="2" class="control">
@@ -108,18 +106,6 @@
                                 {% endfor %}
 
                             </table>
-
-                            {% comment %}
-
-                            <a href="#" id="rights_{{ grp.id }}">[+] {% trans "list" %}</a>
-                            <div id="rights_list_{{ grp.id }}" style="display:none;">
-                                services with rights of {{ grp.name }}
-                            </div>
-
-                            <script type="text/javascript">
-                                slider('rights_{{ grp.id }}', 'rights_list_{{ grp.id }}')
-                            </script>
-                            {% endcomment %}
 
                         </td>
                     </tr>
