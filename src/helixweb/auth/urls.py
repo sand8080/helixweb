@@ -20,6 +20,7 @@ urlpatterns = patterns('',
     (r'^delete_group/(?P<id>\d+)/$', 'auth.views.delete_group'),
     (r'^modify_group/(?P<id>\d+)/$', 'auth.views.modify_group'),
 
+    (r'^get_users/$', 'auth.views.users'),
     (r'^add_user/$', 'auth.views.add_user'),
 
     # Uncomment the admin/doc line below to enable admin documentation:

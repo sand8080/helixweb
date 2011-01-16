@@ -1,0 +1,126 @@
+{% extends "base_auth.html" %}
+
+{% load i18n %}
+
+{% block title %}{% trans "users list" %}{% endblock %}
+
+{% block content %}
+
+<form action="" method="get">
+    <div class="bordered">
+        <table class="filter_object center">
+
+            <tr>
+                <th>
+                    <h2 class="menu_linked">{% trans "users" %}</h2>
+                </th>
+                <td></td>
+            </tr>
+
+            {{ form.as_table }}
+
+            <tr>
+                <td colspan="2" class="control">
+                    <input type="submit" value={% trans "filter" %} />
+                </td>
+            </tr>
+        </table>
+        <br>
+    </div>
+
+    <br>
+
+    {% load urlutils %}
+
+    <div>
+        {% trans "total users" %}: {{ pager.total }} &nbsp;
+        {% allowedurl %}
+            /auth/add_user/
+            {% trans "add user" %}
+        {% endallowedurl %}
+    </div>
+
+    <br>
+
+    <table class="center wide bordered">
+
+        {% if users_error %}
+
+            <tr>
+                <td>
+                    <span class="errormessage">{% trans users_error %}</span>
+                </td>
+            </tr>
+
+        {% else %}
+
+            {% if users %}
+
+
+                {% load transform %}
+                {% load objectutils %}
+
+                <tr>
+                    <td colspan="4">
+                        {% include "pager.html" %}
+                    </td>
+                </tr>
+
+                <tr class="objects_fields">
+                    <th>{% trans "login" %}</th>
+                    <th>{% trans "is active" %}</th>
+                    <th>{% trans "groups" %}</th>
+                    {% comment %}
+                    <th>{% trans "rights" %}</th>
+                    {% endcomment %}
+                </tr>
+
+                {% for u in users %}
+                    <tr class="objects_data {% cycle 'row1' 'row2' %}">
+                        <td>
+                            {% allowedurl True %}
+                                /auth/modify_user/{{ u.id }}/
+                                {{ u.login }}
+                            {% endallowedurl %}
+                            <br>
+                        </td>
+                        <td>
+                            {% if u.is_active %}
+                                +
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% for grp_id in u.groups_ids %}
+                                {{ groups_idx|get:grp_id|get:"name" }}
+                                <br>
+                            {% endfor %}
+                        </td>
+                        {% comment %}
+                        <td>rights slider</td>
+                        {% endcomment %}
+                    </tr>
+
+                {% endfor %}
+
+
+                <tr>
+                    <td colspan="4">
+                        {% include "pager.html" %}
+                    </td>
+                </tr>
+
+            {% else %}
+
+                <tr><th>{% trans "no users found" %}</th></tr>
+
+            {% endif %}
+
+        {% endif %}
+
+    </table>
+
+</form>
+
+{% endblock %}

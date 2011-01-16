@@ -15,7 +15,8 @@ from helixweb.core.forms import _get_session_id
 from helixweb.auth.forms import LoginForm, AddServiceForm, ModifyServiceForm,\
     ModifyEnvironmentForm, AddGroupForm, DeleteGroupForm, ModifyGroupForm,\
     ModifyPasswordForm, AddUserForm, GroupForm
-from helixweb.auth.forms_filters import FilterServiceForm, FilterGroupForm
+from helixweb.auth.forms_filters import FilterServiceForm, FilterGroupForm,\
+    FilterUserForm
 from helixweb.auth.security import get_rights
 from helixweb.auth import settings
 
@@ -37,6 +38,14 @@ def _get_backurl(request):
         return base64.decodestring(request.GET['backurl'])
     else:
         return '/%s/auth/get_services/' % cur_lang_value(request)
+
+
+def _build_index(helix_resp, field):
+    ds = helix_resp.get(field, [])
+    ds_idx = {}
+    for d in ds:
+        ds_idx[d['id']] = d
+    return ds_idx
 
 
 def login(request):
@@ -168,6 +177,28 @@ def add_user(request):
 
 
 @login_redirector
+def users(request):
+    c = _prepare_context(request)
+    resp = helix_cli.request(FilterUserForm.get_active_groups_req(request))
+    c['groups_idx'] = _build_index(resp, 'groups')
+
+    if len(request.GET) == 0 or (len(request.GET) == 1 and 'pager_offset' in request.GET):
+        # setting default is_active value to True
+        form = FilterUserForm({'is_active': 'all'}, request=request)
+    else:
+        form = FilterUserForm(request.GET, request=request)
+
+    if form.is_valid():
+        resp = helix_cli.request(form.as_helix_request())
+        form.update_total(resp)
+        c.update(process_helix_response(resp, 'users', 'users_error'))
+        c['pager'] = form.pager
+    c['form'] = form
+    return render_to_response('user/list.html', c,
+        context_instance=RequestContext(request))
+
+
+@login_redirector
 def modify_password(request):
     c = _prepare_context(request)
     if request.method == 'POST':
@@ -205,7 +236,7 @@ def groups(request):
         c.update(process_helix_response(resp, 'groups', 'groups_error'))
         c['pager'] = form.pager
 
-    c['filter_group_form'] = form
+    c['form'] = form
 
     return render_to_response('group/list.html', c,
         context_instance=RequestContext(request))
