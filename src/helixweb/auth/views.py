@@ -176,11 +176,28 @@ def add_user(request):
         context_instance=RequestContext(request))
 
 
+def _merge_groups_rights(groups_idx, groups_ids):
+    result = []
+    for g_id in groups_ids:
+        group = groups_idx[g_id]
+        rights = group['rights']
+        for r in rights:
+            if result:
+                pass
+            else:
+                result[r]
+    return result
+
+
 @login_redirector
 def users(request):
     c = _prepare_context(request)
     resp = helix_cli.request(FilterUserForm.get_active_groups_req(request))
-    c['groups_idx'] = _build_index(resp, 'groups')
+    groups_idx = _build_index(resp, 'groups')
+    c['groups_idx'] = groups_idx
+
+    resp = helix_cli.request(FilterUserForm.get_services_req(request))
+    c['services_idx'] = _build_index(resp, 'services')
 
     if len(request.GET) == 0 or (len(request.GET) == 1 and 'pager_offset' in request.GET):
         # setting default is_active value to True
@@ -191,6 +208,10 @@ def users(request):
     if form.is_valid():
         resp = helix_cli.request(form.as_helix_request())
         form.update_total(resp)
+        users = resp.get('users', [])
+        for u in users:
+            u['rights'] = _merge_groups_rights(groups_idx, u['groups_ids'])
+        resp['users'] = users
         c.update(process_helix_response(resp, 'users', 'users_error'))
         c['pager'] = form.pager
     c['form'] = form
