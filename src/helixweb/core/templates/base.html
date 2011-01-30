@@ -22,20 +22,12 @@
                     <table class="header">
                         <tr>
                             <td style="padding-left:17px;"><h1>helixproject</h1></td>
-                            <td style="text-align:right;"></td>
-                            <td>
+                            <td style="text-align:right;">
                                 {% load lang_switcher %}
                                 {% lang_switcher %}
-
-                                {% comment %}
-                                <br>
-                                {% if logged_in %}
+                                {% if not hide_logout %}
                                     <a href={{ "/auth/logout/"|chlocale:cur_lang }}>{% trans "logout" %}</a>
-                                {% else %}
-                                    <a href={{ "/auth/login/"|chlocale:cur_lang }}>{% trans "login" %}</a>
                                 {% endif %}
-                                {% endcomment %}
-
                             </td>
                         </tr>
                     </table>

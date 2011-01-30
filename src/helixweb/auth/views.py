@@ -14,7 +14,7 @@ from helixweb.core.forms import _get_session_id
 
 from helixweb.auth.forms import LoginForm, AddServiceForm, ModifyServiceForm,\
     ModifyEnvironmentForm, AddGroupForm, DeleteGroupForm, ModifyGroupForm,\
-    ModifyPasswordForm, AddUserForm, GroupForm
+    ModifyPasswordForm, AddUserForm, GroupForm, LogoutForm
 from helixweb.auth.forms_filters import FilterServiceForm, FilterGroupForm,\
     FilterUserForm
 from helixweb.auth.security import get_rights
@@ -69,8 +69,18 @@ def login(request):
     else:
         form = LoginForm(request=request)
     c['login_form'] = form
+    c['hide_logout'] = True
     return render_to_response('login.html', c,
         context_instance=RequestContext(request))
+
+
+@login_redirector
+def logout(request):
+#    c = _prepare_context(request)
+    form = LogoutForm(request=request)
+    if form.is_valid():
+        helix_cli.request(form.as_helix_request())
+    return HttpResponseRedirect('/auth/login/')
 
 
 @login_redirector

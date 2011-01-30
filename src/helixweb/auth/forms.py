@@ -20,6 +20,10 @@ class LoginForm(HelixwebRequestForm):
         super(LoginForm, self).__init__(*args, **kwargs)
 
 
+class LogoutForm(HelixwebRequestForm):
+    pass
+
+
 class ServiceForm(HelixwebRequestForm):
     def _prepare_properties(self, s):
         def clean_prop(p):
