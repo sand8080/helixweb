@@ -21,7 +21,7 @@ class LoginForm(HelixwebRequestForm):
 
 
 class LogoutForm(HelixwebRequestForm):
-    pass
+    action = 'logout'
 
 
 class ServiceForm(HelixwebRequestForm):

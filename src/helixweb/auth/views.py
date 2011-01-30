@@ -76,11 +76,12 @@ def login(request):
 
 @login_redirector
 def logout(request):
-#    c = _prepare_context(request)
-    form = LogoutForm(request=request)
+    form = LogoutForm({}, request=request)
     if form.is_valid():
         helix_cli.request(form.as_helix_request())
-    return HttpResponseRedirect('/auth/login/')
+    resp = HttpResponseRedirect('/auth/login/')
+    resp.delete_cookie('session_id')
+    return resp
 
 
 @login_redirector
