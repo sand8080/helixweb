@@ -195,7 +195,6 @@ def users(request):
     resp = helix_cli.request(FilterUserForm.get_active_groups_req(request))
     groups_idx = _build_index(resp, 'groups')
     c['groups_idx'] = groups_idx
-
     resp = helix_cli.request(FilterUserForm.get_services_req(request))
     c['services_idx'] = _build_index(resp, 'services')
 
@@ -208,15 +207,35 @@ def users(request):
     if form.is_valid():
         resp = helix_cli.request(form.as_helix_request())
         form.update_total(resp)
-        users = resp.get('users', [])
-        for u in users:
-            u['rights'] = _merge_groups_rights(groups_idx, u['groups_ids'])
-        resp['users'] = users
+        users_list = resp.get('users', [])
+        _calculate_summary_user_rights(users_list, groups_idx)
         c.update(process_helix_response(resp, 'users', 'users_error'))
         c['pager'] = form.pager
     c['form'] = form
     return render_to_response('user/list.html', c,
         context_instance=RequestContext(request))
+
+
+def _calculate_summary_user_rights(users, groups_idx):
+    def _get_summary_service(rights, srv_id):
+        for r in rights:
+            if r['service_id'] == srv_id:
+                return r
+        return None
+
+    for u in users:
+        rights = []
+        for grp_id in u['groups_ids']:
+            grp = groups_idx[grp_id]
+            grp_rights = grp['rights']
+            for srv in grp_rights:
+                srv_id = srv['service_id']
+                summ_rights = _get_summary_service(rights, srv_id)
+                if summ_rights is None:
+                    rights.append(srv)
+                else:
+                    summ_rights['properties'] += srv['properties']
+        u['rights'] = rights
 
 
 @login_redirector
