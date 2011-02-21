@@ -15,12 +15,16 @@ table.header {width:100%;background:#EDE8E8;padding:10px;}
 
 table.lang_sw {margin:auto 0px auto auto;}
 table.lang_sw td {border:1px solid #BABABA;padding:3px;}
+td.lang_sel {background:#FAFAC8;}
+
+table.service_sw {margin:auto auto auto 0px;}
+table.service_sw td {border:1px solid #BABABA;padding:5px;}
+td.service_sel {background:#FAFAC8;}
 
 table.object_form td {vertical-align:top;}
 table.object_form th {vertical-align:top;text-align:right;}
 table.object_form ul {list-style:none;}
 
-td.lang_sel {background:#FAFAC8;}
 
 tr.objects_fields {background:#EFF3FF;}
 tr.objects_data {vertical-align:text-top;text-align:center;}

@@ -18,6 +18,7 @@
     <table class="center main">
         <tr>
             <td colspan="2">
+
                 <div id="header">
                     <table class="header">
                         <tr>
@@ -25,15 +26,24 @@
                             <td style="text-align:right;">
                                 {% load lang_switcher %}
                                 {% lang_switcher %}
-                                {% if not hide_logout %}
+                                {% if logged_in %}
                                     <a href={{ "/auth/logout/"|chlocale:cur_lang }}>{% trans "logout" %}</a>
                                 {% endif %}
                             </td>
                         </tr>
                     </table>
                 </div>
+
             </td>
         </tr>
+        {% if logged_in %}
+        <tr>
+            <td colspan="2">
+                {% load service_switcher %}
+                {% service_switcher %}
+            <td>
+        </tr>
+        {% endif %}
         <tr>
             <td width="20%">
                 <div id="sidebar">

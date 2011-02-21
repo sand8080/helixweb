@@ -1,0 +1,16 @@
+{% load i18n %}
+
+<table class="service_sw">
+    <tr>
+
+        {% for s in services %}
+            {% if s == cur_service %}
+                <td class="service_sel">{% trans s %}</td>
+            {% else %}
+                <td><a href="/{{ s }}/{% if url_params %}?{{ url_params }}{% endif %}">
+                    {% trans s %}</a>
+                </td>
+            {% endif %}
+        {% endfor %}
+    </tr>
+</table>

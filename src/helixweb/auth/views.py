@@ -27,6 +27,8 @@ helix_cli = Client(settings.AUTH_SERVICE_URL)
 def _prepare_context(request):
     c = {}
     c['rights'] = get_rights(_get_session_id(request))
+    c['logged_in'] = True
+    c['cur_service'] = 'auth'
     c.update(csrf(request))
     c.update(cur_lang(request))
     c.update(csrf(request))
@@ -69,7 +71,6 @@ def login(request):
     else:
         form = LoginForm(request=request)
     c['login_form'] = form
-    c['hide_logout'] = True
     return render_to_response('login.html', c,
         context_instance=RequestContext(request))
 
