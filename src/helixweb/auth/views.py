@@ -14,7 +14,7 @@ from helixweb.core.forms import _get_session_id
 
 from helixweb.auth.forms import LoginForm, AddServiceForm, ModifyServiceForm,\
     ModifyEnvironmentForm, AddGroupForm, DeleteGroupForm, ModifyGroupForm,\
-    ModifyPasswordForm, AddUserForm, GroupForm, LogoutForm
+    ModifyUserSelfForm, AddUserForm, GroupForm, LogoutForm
 from helixweb.auth.forms_filters import FilterServiceForm, FilterGroupForm,\
     FilterUserForm
 from helixweb.auth.security import get_rights
@@ -251,18 +251,18 @@ def _calculate_summary_user_rights(users, groups_idx):
 
 
 @login_redirector
-def modify_password(request):
+def modify_user_self(request):
     c = _prepare_context(request)
     if request.method == 'POST':
         pass
-        form = ModifyPasswordForm(request.POST, request=request)
+        form = ModifyUserSelfForm(request.POST, request=request)
         if form.is_valid():
             resp = helix_cli.request(form.as_helix_request())
             form.handle_errors(resp)
     else:
-        form = ModifyPasswordForm(request=request)
+        form = ModifyUserSelfForm(request=request)
     c['form'] = form
-    return render_to_response('user/modify_password.html', c,
+    return render_to_response('user/modify_user_self.html', c,
         context_instance=RequestContext(request))
 
 

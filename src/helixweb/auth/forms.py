@@ -123,8 +123,8 @@ class AddUserForm(HelixwebRequestForm):
         return d
 
 
-class ModifyPasswordForm(HelixwebRequestForm):
-    action ='modify_password'
+class ModifyUserSelfForm(HelixwebRequestForm):
+    action ='modify_user_self'
     old_password = forms.CharField(label=_('old password'),
         max_length=32, widget=forms.PasswordInput)
     new_password = forms.CharField(label=_('new password'),
