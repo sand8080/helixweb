@@ -80,3 +80,21 @@ class FilterUserForm(FilterAuthForm):
             val = bool(int(d['filter_params']['is_active']))
             d['filter_params']['is_active'] = val
         return d
+
+
+class FilterActionLogsForm(FilterAuthForm):
+    action_name = forms.CharField(label=_('action name'), max_length=32,
+        required=False)
+
+    def __init__(self, *args, **kwargs):
+        self.action = 'get_action_logs'
+        super(FilterActionLogsForm, self).__init__(*args, **kwargs)
+
+    def as_helix_request(self):
+        d = super(FilterActionLogsForm, self).as_helix_request()
+        action = d['filter_params'].pop('action_name', None)
+        if action:
+            d['filter_params']['action'] = action
+        print '### form as_helix_request', d
+        return d
+

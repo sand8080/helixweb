@@ -12,11 +12,11 @@ from helixweb.core.views import login_redirector, process_helix_response
 from helixweb.core.client import Client
 from helixweb.core.forms import _get_session_id
 
-from helixweb.auth.forms import LoginForm, AddServiceForm, ModifyServiceForm,\
-    ModifyEnvironmentForm, AddGroupForm, DeleteGroupForm, ModifyGroupForm,\
-    ModifyUserSelfForm, AddUserForm, GroupForm, LogoutForm
-from helixweb.auth.forms_filters import FilterServiceForm, FilterGroupForm,\
-    FilterUserForm
+from helixweb.auth.forms import (LoginForm, AddServiceForm, ModifyServiceForm,
+    ModifyEnvironmentForm, AddGroupForm, DeleteGroupForm, ModifyGroupForm,
+    ModifyUserSelfForm, AddUserForm, GroupForm, LogoutForm)
+from helixweb.auth.forms_filters import (FilterServiceForm, FilterGroupForm,
+    FilterUserForm, FilterActionLogsForm)
 from helixweb.auth.security import get_rights
 from helixweb.auth import settings
 
@@ -364,4 +364,21 @@ def modify_group(request, id):
             form.handle_errors(resp)
     c['form'] = form
     return render_to_response('group/modify.html', c,
+        context_instance=RequestContext(request))
+
+
+@login_redirector
+def action_logs(request):
+    c = _prepare_context(request)
+    if request.method == 'GET':
+        form = FilterActionLogsForm(request.GET, request=request)
+    else:
+        form = FilterActionLogsForm({}, request=request)
+    if form.is_valid():
+        resp = helix_cli.request(form.as_helix_request())
+        form.update_total(resp)
+        c.update(process_helix_response(resp, 'action_logs', 'action_logs_error'))
+        c['pager'] = form.pager
+    c['form'] = form
+    return render_to_response('action_logs/list.html', c,
         context_instance=RequestContext(request))

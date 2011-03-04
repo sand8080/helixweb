@@ -24,6 +24,8 @@ urlpatterns = patterns('',
     (r'^get_users/$', 'auth.views.users'),
     (r'^add_user/$', 'auth.views.add_user'),
 
+    (r'^get_action_logs/$', 'auth.views.action_logs'),
+
     # Uncomment the admin/doc line below to enable admin documentation:
     # (r'^admin/doc/', include('django.contrib.admindocs.urls')),
 

@@ -1,0 +1,126 @@
+{% extends "base_auth.html" %}
+
+{% load i18n %}
+
+{% block title %}{% trans "action logs list" %}{% endblock %}
+
+{% block content %}
+
+<form action="" method="get">
+    <div class="bordered">
+        <table class="filter_object center">
+
+            <tr>
+                <th>
+                    <h2 class="menu_linked">{% trans "action logs" %}</h2>
+                </th>
+                <td></td>
+            </tr>
+
+            {{ form.as_table }}
+
+            <tr>
+                <td colspan="2" class="control">
+                    <input type="submit" value={% trans "filter" %} />
+                </td>
+            </tr>
+        </table>
+        <br>
+    </div>
+
+    <br>
+
+    <table class="center wide bordered">
+
+        {% if action_logs_error %}
+
+            <tr>
+                <td>
+                    <span class="errormessage">{% trans action_logs_error %}</span>
+                </td>
+            </tr>
+
+        {% else %}
+
+            {% if action_logs %}
+
+                {% load transform %}
+                {% load objectutils %}
+
+                <tr>
+                    <td colspan="4">
+                        {% include "pager.html" %}
+                    </td>
+                </tr>
+
+                <tr class="objects_fields">
+                    <th>{% trans "action" %}</th>
+                    <th>{% trans "request date" %}</th>
+                    <th>{% trans "users" %}</th>
+                    <th>{% trans "address" %}</th>
+                    <th>{% trans "data" %}</th>
+                </tr>
+
+                {% comment %}
+                {% for grp in groups %}
+                    <tr class="objects_data {% cycle 'row1' 'row2' %}">
+                        <td>
+                            {% allowedurl True %}
+                                /auth/modify_group/{{ grp.id }}/
+                                {% trans grp.name %}
+                            {% endallowedurl %}
+                            <br>
+                            <span style="font-size:small;">
+                            {% allowedurl%}
+                                /auth/delete_group/{{ grp.id }}/
+                                {% trans "delete group" %}
+                            {% endallowedurl %}
+                            </span>
+                        </td>
+                        <td>
+                            {% if grp.is_active %}
+                                +
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
+                        <td>
+
+                            <table class="services_properties wide center">
+
+                                {% for row in grp.rights %}
+
+                                    <tr><th colspan="3">{{ services_idx|get:row.service_id|get:"name" }}</th></tr>
+
+                                    {{ services_idx|get:row.service_id|get:"properties"|markitems:row.properties|listtotable:3 }}
+
+                                {% endfor %}
+
+                            </table>
+
+                        </td>
+                    </tr>
+
+                {% endfor %}
+                {% endcomment %}
+
+
+                <tr>
+                    <td colspan="4">
+                        {% include "pager.html" %}
+                    </td>
+                </tr>
+
+            {% else %}
+
+                <tr><th>{% trans "no action logs found" %}</th></tr>
+
+            {% endif %}
+
+        {% endif %}
+
+    </table>
+
+</form>
+
+{% endblock %}
