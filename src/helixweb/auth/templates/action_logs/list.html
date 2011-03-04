@@ -61,49 +61,18 @@
                     <th>{% trans "data" %}</th>
                 </tr>
 
-                {% comment %}
-                {% for grp in groups %}
+                {% for a_l in action_logs %}
                     <tr class="objects_data {% cycle 'row1' 'row2' %}">
-                        <td>
-                            {% allowedurl True %}
-                                /auth/modify_group/{{ grp.id }}/
-                                {% trans grp.name %}
-                            {% endallowedurl %}
-                            <br>
-                            <span style="font-size:small;">
-                            {% allowedurl%}
-                                /auth/delete_group/{{ grp.id }}/
-                                {% trans "delete group" %}
-                            {% endallowedurl %}
-                            </span>
-                        </td>
-                        <td>
-                            {% if grp.is_active %}
-                                +
-                            {% else %}
-                                -
-                            {% endif %}
-                        </td>
-                        <td>
-
-                            <table class="services_properties wide center">
-
-                                {% for row in grp.rights %}
-
-                                    <tr><th colspan="3">{{ services_idx|get:row.service_id|get:"name" }}</th></tr>
-
-                                    {{ services_idx|get:row.service_id|get:"properties"|markitems:row.properties|listtotable:3 }}
-
-                                {% endfor %}
-
-                            </table>
-
-                        </td>
+                        <td>{{ a_l.action }}</td>
+                        <td>{{ a_l.request_date }}</td>
+                        <td>users</td>
+                        <td>{{ a_l.address }}</td>
+                        <td>data</td>
                     </tr>
-
                 {% endfor %}
-                {% endcomment %}
 
+                {% comment %}
+                {% endcomment %}
 
                 <tr>
                     <td colspan="4">

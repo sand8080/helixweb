@@ -95,6 +95,5 @@ class FilterActionLogsForm(FilterAuthForm):
         action = d['filter_params'].pop('action_name', None)
         if action:
             d['filter_params']['action'] = action
-        print '### form as_helix_request', d
         return d
 
