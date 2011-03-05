@@ -75,30 +75,30 @@
                         <td>{{ a_l.request_date|date:"Y-m-d H:i:s" }}</td>
                         <td align="left">
                             <table>
-                                <tr>
-                                    <td>{% trans "actor" %}</td>
-                                    <td>
-                                        {% if a_l.actor_user_id %}
+                                {% if a_l.actor_user_id %}
+                                    <tr>
+                                        <td>{% trans "actor" %}</td>
+                                        <td>
                                             {% allowedurl True %}
                                                 /auth/get_users/?id={{ a_l.actor_user_id }}
                                                 {{ a_l.actor_user_id }}
                                             {% endallowedurl %}
-                                        {% endif %}
-                                    </td>
-                                </tr>
+                                        </td>
+                                    </tr>
+                                {% endif %}
 
-                                <tr>
-                                    <td>{% trans "subjects" %}</td>
-                                    <td>
-                                        {% if a_l.subject_users_ids %}
+                                {% if a_l.subject_users_ids %}
+                                    <tr>
+                                        <td>{% trans "subjects" %}</td>
+                                        <td>
                                             {% if '/auth/get_users/'|is_url_allowed:rights %}
                                                 {{ '/auth/get_users/?id='|gen_urls_list:a_l.subject_users_ids}}
                                             {% else %}
                                                 a_l.subject_users_ids|join:', '
                                             {% endif %}
-                                        {% endif %}
-                                    </td>
-                                </tr>
+                                        </td>
+                                    </tr>
+                                {% endif %}
                             </table>
 
                         </td>

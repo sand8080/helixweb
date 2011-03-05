@@ -88,8 +88,19 @@ class FilterUserForm(FilterAuthForm):
 
 
 class FilterActionLogsForm(FilterAuthForm):
-    action_name = forms.CharField(label=_('action name'), max_length=32,
-        required=False)
+    action_name = forms.CharField(label=_('action name'), required=False,
+        widget=forms.widgets.Select(choices=(
+            ('', ''), ('login', _('login')), ('logout', _('logout')),
+            ('add_environment', _('add environment')),
+            ('modify_environment', _('modify environment')),
+            ('add_service', _('add service')),
+            ('modify_service', _('modify service')),
+            ('add_group', _('add group')),
+            ('modify_group', _('modify group')),
+            ('delete_group', _('delete group')),
+            ('add_user', _('add user')),
+            ('modify_user_self', _('modify user self')),
+        )))
 
     def __init__(self, *args, **kwargs):
         self.action = 'get_action_logs'
