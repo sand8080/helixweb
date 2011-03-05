@@ -60,6 +60,7 @@ class FilterGroupForm(FilterAuthForm):
 class FilterUserForm(FilterAuthForm):
     login = forms.CharField(label=_('login'), max_length=32,
         required=False)
+    id = forms.IntegerField(label=_('id'), required=False)
     is_active = forms.ChoiceField(label=_('is active'), required=False, widget=forms.widgets.RadioSelect(),
         choices=(('all', _('all')), ('1', _('active')), ('0', _('inactive'))),
         initial='all')
@@ -73,12 +74,16 @@ class FilterUserForm(FilterAuthForm):
         d['filter_params']['roles'] = ['user']
         l = d['filter_params'].pop('login').strip()
         if len(l):
-            d['filter_params']['name'] = l
-        if d['filter_params']['is_active'] == 'all':
+            d['filter_params']['login'] = l
+
+        if (not d['filter_params']['is_active'] or
+            d['filter_params']['is_active'] == 'all'):
             d['filter_params'].pop('is_active')
         else:
             val = bool(int(d['filter_params']['is_active']))
             d['filter_params']['is_active'] = val
+        if not d['filter_params']['id']:
+            d['filter_params'].pop('id')
         return d
 
 
