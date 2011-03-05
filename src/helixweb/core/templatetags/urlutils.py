@@ -1,14 +1,10 @@
-from django.template import Library, Node, resolve_variable, TemplateSyntaxError,\
-    VariableDoesNotExist
+from django.template import (Library, Node, resolve_variable, TemplateSyntaxError,
+    VariableDoesNotExist)
 
 register = Library()
 
 
-class UrlNode(Node):
-    def __init__(self, nodelist, always_show_text=None):
-        self.nodelist = nodelist
-        self.always_show_text = always_show_text == 'True'
-
+class UrlAccessChecker(object):
     def _get_service_rights(self, rights, srv_type):
         r = filter(lambda x: x.get('service_type', '') == srv_type, rights)
         if len(r):
@@ -29,7 +25,7 @@ class UrlNode(Node):
         srv_types = filter(lambda x: len(x), chunks)
         return srv_types[0]
 
-    def _is_url_allowed(self, url, rights):
+    def is_url_allowed(self, url, rights):
         srv_type = self._get_service_type(url)
         action = self._get_action_name(url)
         r = self._get_service_rights(rights, srv_type)
@@ -37,6 +33,12 @@ class UrlNode(Node):
             return action in r.get('properties', [])
         else:
             return False
+
+
+class UrlNode(Node):
+    def __init__(self, nodelist, always_show_text=None):
+        self.nodelist = nodelist
+        self.always_show_text = always_show_text == 'True'
 
     def _get_url_params(self, rended):
         l = rended.split(None, 1)
@@ -52,7 +54,8 @@ class UrlNode(Node):
 
         try:
             rights = resolve_variable('rights', context)
-            if self._is_url_allowed(url, rights):
+            checker = UrlAccessChecker()
+            if checker.is_url_allowed(url, rights):
                 request = resolve_variable('request', context)
                 cur_lang = resolve_variable('cur_lang', context)
                 lang_url = '/%s%s' % (cur_lang, url)
@@ -71,6 +74,15 @@ class UrlNode(Node):
 
 @register.tag
 def allowedurl(parser, token):
+    '''
+    Usage:
+    {% allowedurl show_text_param %}
+        url_to_check showing_text
+    {% endallowedurl %}
+    show_text_param - default value False. To show text in case access
+        denied to url set value to True.
+    url_to_check - check access to url
+    '''
     bits = token.split_contents()
     if len(bits) > 2:
         raise TemplateSyntaxError('%s tag requires one or no arguments'
@@ -82,3 +94,20 @@ def allowedurl(parser, token):
     except IndexError:
         always_show_text = None
     return UrlNode(nodelist, always_show_text)
+
+
+@register.filter
+def is_url_allowed(url, rights):
+    '''
+    Usage:
+    url|is_url_allowed
+    Returns True or False
+    '''
+    checker = UrlAccessChecker()
+    return checker.is_url_allowed(url, rights)
+
+
+@register.filter
+def gen_urls_list(base_url, values):
+    return ', '.join(['<a href="%s%s">%s</a>' % (base_url, v, v) for v in values])
+gen_urls_list.is_safe = True

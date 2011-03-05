@@ -100,5 +100,6 @@ class FilterActionLogsForm(FilterAuthForm):
         action = d['filter_params'].pop('action_name', None)
         if action:
             d['filter_params']['action'] = action
+        d['ordering_params'] = ['-id']
         return d
 

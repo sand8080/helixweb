@@ -1,5 +1,7 @@
 from datetime import datetime, timedelta
 import base64
+import iso8601
+import cjson
 
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect
@@ -367,6 +369,13 @@ def modify_group(request, id):
         context_instance=RequestContext(request))
 
 
+def _prepare_action_log(a_log):
+    a_log['request_date'] = iso8601.parse_date(a_log['request_date'])
+    a_log['request'] = cjson.decode(a_log['request'])
+    a_log['response'] = cjson.decode(a_log['response'])
+    return a_log
+
+
 @login_redirector
 def action_logs(request):
     c = _prepare_context(request)
@@ -377,6 +386,7 @@ def action_logs(request):
     if form.is_valid():
         resp = helix_cli.request(form.as_helix_request())
         form.update_total(resp)
+        resp['action_logs'] = map(_prepare_action_log, resp['action_logs'])
         c.update(process_helix_response(resp, 'action_logs', 'action_logs_error'))
         c['pager'] = form.pager
     c['form'] = form

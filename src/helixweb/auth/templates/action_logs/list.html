@@ -30,6 +30,13 @@
 
     <br>
 
+    <div>
+        {% trans "total action logs" %}: {{ pager.total }} &nbsp;
+    </div>
+
+    <br>
+
+
     <table class="center wide bordered">
 
         {% if action_logs_error %}
@@ -57,17 +64,88 @@
                     <th>{% trans "action" %}</th>
                     <th>{% trans "request date" %}</th>
                     <th>{% trans "users" %}</th>
-                    <th>{% trans "address" %}</th>
-                    <th>{% trans "data" %}</th>
+                    <th>{% trans "request info" %}</th>
                 </tr>
+
+                {% load urlutils %}
 
                 {% for a_l in action_logs %}
                     <tr class="objects_data {% cycle 'row1' 'row2' %}">
                         <td>{{ a_l.action }}</td>
-                        <td>{{ a_l.request_date }}</td>
-                        <td>users</td>
-                        <td>{{ a_l.address }}</td>
-                        <td>data</td>
+                        <td>{{ a_l.request_date|date:"Y-m-d H:i:s" }}</td>
+                        <td align="left">
+                            <table>
+                                <tr>
+                                    <td>{% trans "actor" %}</td>
+                                    <td>
+                                        {% if a_l.actor_user_id %}
+                                            {% allowedurl True %}
+                                                /auth/get_users/?id={{ a_l.actor_user_id }}
+                                                {{ a_l.actor_user_id }}
+                                            {% endallowedurl %}
+                                        {% endif %}
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>{% trans "subjects" %}</td>
+                                    <td>
+                                        {% if a_l.subject_users_ids %}
+                                            {% if '/auth/get_users/'|is_url_allowed:rights %}
+                                                {{ '/auth/get_users/?id='|gen_urls_list:a_l.subject_users_ids}}
+                                            {% else %}
+                                                a_l.subject_users_ids|join:', '
+                                            {% endif %}
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            </table>
+
+                        </td>
+                        <td align="left" width="50%">
+                            <table>
+                                <tr>
+                                    <td
+                                        {% if a_l.response.status == 'ok' %}
+                                            style="color:green;"
+                                        {% else %}
+                                            style="color:red;"
+                                        {% endif %}
+                                    >
+                                        {% trans "request" %}</td>
+                                    <td>{{ a_l.request }}</td>
+                                </tr>
+                                <tr>
+                                    <td
+                                        {% if a_l.response.status == 'ok' %}
+                                            style="color:green;"
+                                        {% else %}
+                                            style="color:red;"
+                                        {% endif %}
+                                    >
+                                        {% trans "response" %}
+                                    </td>
+                                    <td>
+                                        {{ a_l.response }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>{% trans "address" %}</td>
+                                    <td>{{ a_l.remote_addr }}</td>
+                                </tr>
+                                {% if a_l.custom_actor_info %}
+                                    <tr>
+                                        <td>
+                                            <span style="white-space:nowrap;">
+                                                {% trans "custom info" %}
+                                            </span>
+                                        </td>
+                                        <td>{{ a_l.custom_actor_info }}</td>
+                                    </tr>
+                                {% endif %}
+                            </table>
+
+                        </td>
                     </tr>
                 {% endfor %}
 
