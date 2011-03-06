@@ -6,7 +6,12 @@ from helixweb.core.forms import HelixwebRequestForm
 
 
 class FilterAuthForm(FilterForm, HelixwebRequestForm):
-    pass
+    def _strip_filter_param(self, d, name):
+        p = d['filter_params'].pop(name, None)
+        if p:
+            p = p.strip()
+            if len(p):
+                d[ 'filter_params'][name] = p
 
 
 class FilterServiceForm(FilterAuthForm):
@@ -101,6 +106,8 @@ class FilterActionLogsForm(FilterAuthForm):
             ('add_user', _('add user')),
             ('modify_user_self', _('modify user self')),
         )))
+    sess_id = forms.CharField(label=_('session'), max_length=40,
+        required=False)
 
     def __init__(self, *args, **kwargs):
         self.action = 'get_action_logs'
@@ -111,6 +118,9 @@ class FilterActionLogsForm(FilterAuthForm):
         action = d['filter_params'].pop('action_name', None)
         if action:
             d['filter_params']['action'] = action
+        sess_id = d['filter_params'].pop('sess_id', None)
+        if sess_id:
+            d['filter_params']['session_id'] = sess_id.strip()
         d['ordering_params'] = ['-id']
         return d
 

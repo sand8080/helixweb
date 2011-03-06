@@ -386,7 +386,8 @@ def action_logs(request):
     if form.is_valid():
         resp = helix_cli.request(form.as_helix_request())
         form.update_total(resp)
-        resp['action_logs'] = map(_prepare_action_log, resp['action_logs'])
+        if 'action_logs' in resp:
+            resp['action_logs'] = map(_prepare_action_log, resp['action_logs'])
         c.update(process_helix_response(resp, 'action_logs', 'action_logs_error'))
         c['pager'] = form.pager
     c['form'] = form
