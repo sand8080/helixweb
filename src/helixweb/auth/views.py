@@ -38,10 +38,14 @@ def _prepare_context(request):
 
 
 def _get_backurl(request):
+    default_url = '/%s/auth/' % cur_lang_value(request)
     if 'backurl' in request.GET:
-        return base64.decodestring(request.GET['backurl'])
+        try:
+            return base64.decodestring(request.GET['backurl'])
+        except Exception:
+            return default_url
     else:
-        return '/%s/auth/get_services/' % cur_lang_value(request)
+        return default_url
 
 
 def _build_index(helix_resp, field):
@@ -85,6 +89,13 @@ def logout(request):
     resp = HttpResponseRedirect('/auth/login/')
     resp.delete_cookie('session_id')
     return resp
+
+
+@login_redirector
+def description(request):
+    c = _prepare_context(request)
+    return render_to_response('description.html', c,
+        context_instance=RequestContext(request))
 
 
 @login_redirector

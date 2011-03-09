@@ -5,6 +5,8 @@ from django.conf.urls.defaults import patterns
 # admin.autodiscover()
 
 urlpatterns = patterns('',
+    (r'^$', 'auth.views.description'),
+
     (r'^login/', 'auth.views.login'),
     (r'^logout/', 'auth.views.logout'),
 

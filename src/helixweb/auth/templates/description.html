@@ -1,0 +1,27 @@
+{% extends "base_auth.html" %}
+
+{% load i18n %}
+
+{% block title %}{% trans "add service" %}{% endblock %}
+
+{% block content %}
+
+
+    <div class="bordered">
+
+        <table class="wide center">
+            <tr>
+                <td>
+                    <p>
+                    {% blocktrans %}
+                    Helixauth is service for authorization and authentication
+                    helixprojects users.
+                    {% endblocktrans %}
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <br>
+    </div>
+
+{% endblock %}
