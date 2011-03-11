@@ -72,7 +72,11 @@
                 {% for a_l in action_logs %}
                     <tr class="objects_data {% cycle 'row1' 'row2' %}">
                         <td>{{ a_l.action }}</td>
-                        <td>{{ a_l.request_date|date:"Y-m-d H:i:s" }}</td>
+                        <td>
+                            <span style="white-space:nowrap;">
+                                {{ a_l.request_date|date:"Y-m-d H:i:s" }}
+                            </span>
+                        </td>
                         <td align="left">
                             <table>
                                 {% if a_l.actor_user_id %}
@@ -100,9 +104,8 @@
                                     </tr>
                                 {% endif %}
                             </table>
-
                         </td>
-                        <td align="left" width="50%">
+                        <td align="left" width="60%">
                             <table>
                                 <tr>
                                     <td

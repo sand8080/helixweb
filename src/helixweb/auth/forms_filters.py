@@ -1,3 +1,5 @@
+import datetime
+import pytz
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
@@ -6,12 +8,36 @@ from helixweb.core.forms import HelixwebRequestForm
 
 
 class FilterAuthForm(FilterForm, HelixwebRequestForm):
-    def _strip_filter_param(self, d, name):
-        p = d['filter_params'].pop(name, None)
-        if p:
-            p = p.strip()
-            if len(p):
-                d[ 'filter_params'][name] = p
+    def _strip_filter_param(self, d, name, new_name=None):
+        if new_name is None:
+            new_name = name
+        f_params = d['filter_params']
+        if name in f_params:
+            p = f_params.pop(name, None)
+            if isinstance(p, (str, unicode)):
+                p = p.strip()
+            if p:
+                d[ 'filter_params'][new_name] = p
+
+    def _strip_from_date_param(self, d, name):
+        self._strip_filter_param(d, name)
+        f_params = d['filter_params']
+        f_d = f_params.get(name, None)
+        if f_d:
+            res_f_d = datetime.datetime(year=f_d.year,
+                month=f_d.month, day=f_d.day, hour=0, minute=0,
+                second=0, tzinfo=pytz.utc)
+            f_params[name] = res_f_d.isoformat()
+
+    def _strip_to_date_param(self, d, name):
+        self._strip_filter_param(d, name)
+        f_params = d['filter_params']
+        f_d = f_params.get(name, None)
+        if f_d:
+            res_f_d = datetime.datetime(year=f_d.year,
+                month=f_d.month, day=f_d.day, hour=23, minute=59,
+                second=59, tzinfo=pytz.utc)
+            f_params[name] = res_f_d.isoformat()
 
 
 class FilterServiceForm(FilterAuthForm):
@@ -108,6 +134,8 @@ class FilterActionLogsForm(FilterAuthForm):
         )))
     sess_id = forms.CharField(label=_('session'), max_length=40,
         required=False)
+    from_request_date = forms.DateField(label=_('from'), required=False)
+    to_request_date = forms.DateField(label=_('to'), required=False)
 
     def __init__(self, *args, **kwargs):
         self.action = 'get_action_logs'
@@ -115,12 +143,10 @@ class FilterActionLogsForm(FilterAuthForm):
 
     def as_helix_request(self):
         d = super(FilterActionLogsForm, self).as_helix_request()
-        action = d['filter_params'].pop('action_name', None)
-        if action:
-            d['filter_params']['action'] = action
-        sess_id = d['filter_params'].pop('sess_id', None)
-        if sess_id:
-            d['filter_params']['session_id'] = sess_id.strip()
+        self._strip_filter_param(d, 'action_name', new_name='action')
+        self._strip_filter_param(d, 'sess_id', new_name='session_id')
+        self._strip_from_date_param(d, 'from_request_date')
+        self._strip_to_date_param(d, 'to_request_date')
         d['ordering_params'] = ['-id']
         return d
 
