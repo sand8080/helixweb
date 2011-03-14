@@ -31,7 +31,6 @@ def _prepare_context(request):
     c['rights'] = get_rights(_get_session_id(request))
     c['logged_in'] = True
     c['cur_service'] = 'auth'
-    c.update(csrf(request))
     c.update(cur_lang(request))
     c.update(csrf(request))
     return c
