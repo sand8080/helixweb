@@ -26,33 +26,15 @@
             </tr>
         </table>
 
-        lang: {{ cur_lang }}
         <script type="text/javascript" src="/static/js/jquery-ui.js"></script>
+        <script type="text/javascript" src="/static/js/jquery.url.min.js"></script>
         <script type="text/javascript" src="/static/js/i18n/jquery-ui-i18n.js"></script>
+        <script type="text/javascript" src="/static/js/calendar.js"></script>
         <link rel="stylesheet" type="text/css" href="/static/css/jquery-ui/overcast/jquery-ui.custom.css" />
 
         <script type="text/javascript">
-            $(function() {
-                $( "#id_from_request_date" ).datepicker( $.datepicker.regional[ "{{ cur_lang }}" ] );
-                $( "#id_from_request_date" ).datepicker({
-                    changeYear: true,
-                    showOn: "button",
-                    buttonImage: "images/calendar.gif",
-                    buttonImageOnly: true
-                });
-                $( "#id_from_request_date" ).datepicker( "option", "dateFormat", "yy-mm-dd" );
-            });
-
-            $(function() {
-                $( "#id_to_request_date" ).datepicker( $.datepicker.regional[ "{{ cur_lang }}" ] );
-                $( "#id_to_request_date" ).datepicker({
-                    changeYear: true,
-                    showOn: "button",
-                    buttonImage: "images/calendar.gif",
-                    buttonImageOnly: true
-                });
-                $( "#id_to_request_date" ).datepicker( "option", "dateFormat", "yy-mm-dd" );
-            });
+            calendar("from_request_date")
+            calendar("to_request_date")
         </script>
 
         <br>
