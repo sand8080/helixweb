@@ -103,10 +103,16 @@
                             {% endif %}
                         </td>
                         <td>
-                            {% for grp_id in u.groups_ids %}
-                                {{ groups_idx|get:grp_id|get:"name" }}
-                                <br>
-                            {% endfor %}
+                            {% if u.role == 'super' %}
+                                <span style="color:red;">
+                                    [[ {% trans "Super User" %} ]]
+                                </span>
+                            {% else %}
+                                {% for grp_id in u.groups_ids %}
+                                    {{ groups_idx|get:grp_id|get:"name" }}
+                                    <br>
+                                {% endfor %}
+                            {% endif %}
                         </td>
                         <td width="60%">
                             <a href="#" id="rights_{{ u.id }}">[+] {% trans "rights" %}</a>

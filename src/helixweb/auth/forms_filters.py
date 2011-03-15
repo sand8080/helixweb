@@ -102,19 +102,14 @@ class FilterUserForm(FilterAuthForm):
 
     def as_helix_request(self):
         d = super(FilterUserForm, self).as_helix_request()
-        d['filter_params']['roles'] = ['user']
-        l = d['filter_params'].pop('login').strip()
-        if len(l):
-            d['filter_params']['login'] = l
-
+        self._strip_filter_param(d, 'login')
+        self._strip_filter_param(d, 'id')
         if (not d['filter_params']['is_active'] or
             d['filter_params']['is_active'] == 'all'):
             d['filter_params'].pop('is_active')
         else:
             val = bool(int(d['filter_params']['is_active']))
             d['filter_params']['is_active'] = val
-        if not d['filter_params']['id']:
-            d['filter_params'].pop('id')
         return d
 
 
