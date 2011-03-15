@@ -137,11 +137,6 @@ class GroupForm(HelixwebRequestForm):
         return {'action': 'get_groups', 'session_id': _get_session_id(request),
             'filter_params': {'ids': [int(id)]}, 'paging_params':{}}
 
-    @staticmethod
-    def get_all_active_req(request):
-        return {'action': 'get_groups', 'session_id': _get_session_id(request),
-            'filter_params': {'is_active': True}, 'paging_params':{}}
-
 
 class AddGroupForm(GroupForm):
     action = 'add_group'

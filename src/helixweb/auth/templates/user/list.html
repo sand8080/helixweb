@@ -7,6 +7,7 @@
 {% block content %}
 
 <form action="" method="get">
+
     <div class="bordered">
         <table class="filter_object center">
 
@@ -44,15 +45,26 @@
 
     <table class="center wide bordered">
 
-        {% if users_error %}
+        {% if users_error or groups_error or services_error %}
 
             <tr>
                 <td>
                     <span class="errormessage">{% trans users_error %}</span>
                 </td>
             </tr>
+            <tr>
+                <td>
+                    <span class="errormessage">{% trans groups_error %}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span class="errormessage">{% trans services_error %}</span>
+                </td>
+            </tr>
 
         {% else %}
+
 
             {% if users %}
 
@@ -129,7 +141,6 @@
                     </tr>
 
                 {% endfor %}
-
 
                 <tr>
                     <td colspan="4">

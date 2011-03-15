@@ -44,11 +44,16 @@
 
     <table class="center wide bordered">
 
-        {% if groups_error %}
+        {% if groups_error or services_error %}
 
             <tr>
                 <td>
                     <span class="errormessage">{% trans groups_error %}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span class="errormessage">{% trans services_error %}</span>
                 </td>
             </tr>
 

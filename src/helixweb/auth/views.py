@@ -181,8 +181,9 @@ def modify_environment(request):
 @login_redirector
 def add_user(request):
     c = _prepare_context(request)
-    resp = helix_cli.request(GroupForm.get_all_active_req(request))
-    groups = resp.get('groups')
+    resp = helix_cli.request(GroupForm.get_active_groups_req(request))
+    c.update(process_helix_response(resp, 'groups', 'groups_error'))
+    groups = resp.get('groups', [])
     if request.method == 'POST':
         form = AddUserForm(request.POST, groups=groups, request=request)
         if form.is_valid():
@@ -217,9 +218,12 @@ def _merge_groups_rights(groups_idx, groups_ids):
 def users(request):
     c = _prepare_context(request)
     resp = helix_cli.request(FilterUserForm.get_active_groups_req(request))
+    c.update(process_helix_response(resp, 'groups', 'groups_error'))
     groups_idx = _build_index(resp, 'groups')
     c['groups_idx'] = groups_idx
+
     resp = helix_cli.request(FilterUserForm.get_services_req(request))
+    c.update(process_helix_response(resp, 'services', 'services_error'))
     c['services_idx'] = _build_index(resp, 'services')
 
     if len(request.GET) == 0 or (len(request.GET) == 1 and 'pager_offset' in request.GET):
@@ -250,6 +254,8 @@ def _calculate_summary_user_rights(users, groups_idx):
     for u in users:
         rights = []
         for grp_id in u['groups_ids']:
+            if grp_id not in groups_idx:
+                continue
             grp = groups_idx[grp_id]
             grp_rights = grp['rights']
             for srv in grp_rights:
@@ -282,6 +288,7 @@ def modify_user_self(request):
 def groups(request):
     c = _prepare_context(request)
     resp = helix_cli.request(FilterGroupForm.get_services_req(request))
+    c.update(process_helix_response(resp, 'services', 'services_error'))
     srvs = resp.get('services', [])
     srvs_idx = {}
     for s in srvs:
@@ -358,8 +365,8 @@ def delete_group(request, id):
 def modify_group(request, id):
     c = _prepare_context(request)
     resp = helix_cli.request(ModifyGroupForm.get_services_req(request))
-    services = resp.get('services', [])
     c.update(process_helix_response(resp, 'services', 'services_error'))
+    services = resp.get('services', [])
 
     if request.method == 'POST':
         form = ModifyGroupForm(request.POST, services=services, request=request)
