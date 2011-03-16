@@ -132,7 +132,13 @@
 
                                     {% else %}
 
-                                        {% trans "no rights" %}
+                                        {% if u.role == 'super' %}
+                                            <span style="color:red;">
+                                                [[ {% trans "all rights granted" %} ]]
+                                            </span>
+                                        {% else %}
+                                            {% trans "no rights" %}
+                                        {% endif %}
 
                                     {% endif %}
 
