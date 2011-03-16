@@ -18,7 +18,7 @@ from helixweb.auth.forms import (LoginForm, AddServiceForm, ModifyServiceForm,
     ModifyEnvironmentForm, AddGroupForm, DeleteGroupForm, ModifyGroupForm,
     ModifyUserSelfForm, AddUserForm, GroupForm, LogoutForm)
 from helixweb.auth.forms_filters import (FilterServiceForm, FilterGroupForm,
-    FilterUserForm, FilterActionLogsForm)
+    FilterUserForm, FilterActionLogsForm, FilterActionLogsSelfForm)
 from helixweb.auth.security import get_rights
 from helixweb.auth import settings
 
@@ -393,13 +393,12 @@ def _prepare_action_log(a_log):
     return a_log
 
 
-@login_redirector
-def action_logs(request):
+def _action_logs(request, al_form_cls):
     c = _prepare_context(request)
     if request.method == 'GET':
-        form = FilterActionLogsForm(request.GET, request=request)
+        form = al_form_cls(request.GET, request=request)
     else:
-        form = FilterActionLogsForm({}, request=request)
+        form = al_form_cls({}, request=request)
     if form.is_valid():
         resp = helix_cli.request(form.as_helix_request())
         form.update_total(resp)
@@ -408,5 +407,18 @@ def action_logs(request):
         c.update(process_helix_response(resp, 'action_logs', 'action_logs_error'))
         c['pager'] = form.pager
     c['form'] = form
+    return c
+
+
+@login_redirector
+def action_logs(request):
+    c = _action_logs(request, FilterActionLogsForm)
+    return render_to_response('action_logs/list.html', c,
+        context_instance=RequestContext(request))
+
+
+@login_redirector
+def action_logs_self(request):
+    c = _action_logs(request, FilterActionLogsSelfForm)
     return render_to_response('action_logs/list.html', c,
         context_instance=RequestContext(request))

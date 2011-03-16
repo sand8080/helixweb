@@ -77,7 +77,12 @@
             {% allowedurl %}
                 /auth/modify_user_self/
                 <br>
-                {% trans "change password" %}
+                {% trans "change your password" %}
+            {% endallowedurl %}
+            {% allowedurl %}
+                /auth/get_action_logs_self/
+                <br>
+                {% trans "your action logs" %}
             {% endallowedurl %}
             <br>
         </td>
