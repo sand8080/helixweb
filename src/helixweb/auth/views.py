@@ -159,6 +159,32 @@ def services(request):
         context_instance=RequestContext(request))
 
 
+
+def add_environment(request):
+    c = {}
+    c.update(csrf(request))
+    c.update(cur_lang(request))
+#    if request.method == 'POST':
+#        form = LoginForm(request.POST, request=request)
+#        if form.is_valid():
+#            resp = helix_cli.notchecked_request(form.as_helix_request())
+#            form.handle_errors(resp)
+#            status = resp.get('status', None)
+#            s_id = resp.get('session_id', None)
+#            if status == 'ok' and s_id is not None:
+#                # TODO: set secure cookie
+#                b_url = _get_backurl(request)
+#                response = HttpResponseRedirect(b_url)
+#                expires = datetime.strftime(datetime.utcnow() + timedelta(days=365), "%a, %d-%b-%Y %H:%M:%S GMT")
+#                response.set_cookie('session_id', value=s_id, expires=expires)
+#                return response
+#    else:
+#        form = LoginForm(request=request)
+#    c['login_form'] = form
+    return render_to_response('login.html', c,
+        context_instance=RequestContext(request))
+
+
 @login_redirector
 def modify_environment(request):
     c = _prepare_context(request)

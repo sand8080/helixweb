@@ -9,39 +9,27 @@
 {% block content %}
 
 <form action="" method="post">{% csrf_token %}
-    <div style="display:block;padding-left:17%;" id="login_block">
-        <table class="bordered" style="padding:20px 10px 20px 10px;">
-            <tr class="menu_linked login_tab">
-                <td>{% trans "login" %}</td>
-                <td><a href="" onclick="$('#login_block').hide();  $('#reg_env_block').show(); return false">
-                    {% trans "create environment" %}</a>
-                </td>
-            </tr>
+
+    <div style="display:block;padding-left:17%;">
+        <table class="object_form bordered" style="padding:20px 10px 20px 10px;">
             {{ login_form.as_table }}
             <tr>
                 <td colspan="2" class="control">
                     <input type="submit" value={% trans "login" %} />
                 </td>
             </tr>
+            <tr>
+                <td colspan="2" style="text-align:center;">
+                    <br>
+                    {% blocktrans %}
+                        For beginning to use create
+                        <a href="/auth/add_environment">new environmet</a>.
+                    {% endblocktrans %}
+                </td>
+            </tr>
         </table>
     </div>
 
-    <div style="display:none;padding-left:17%;" id="reg_env_block">
-        <table class="bordered">
-            <tr class="menu_linked login_tab">
-                <td><a href="" onclick="$('#reg_env_block').hide();  $('#login_block').show(); return false">
-                    {% trans "login" %}</a>
-                </td>
-                <td>{% trans "create environment" %}</td>
-            </tr>
-            {{ reg_env_form.as_table }}
-            <tr>
-                <td colspan="2" class="control">
-                    <input type="submit" value={% trans "create environment" %} />
-                </td>
-            </tr>
-        </table>
-    </div>
 </form>
 
 {% endblock %}

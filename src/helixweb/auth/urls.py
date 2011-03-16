@@ -7,6 +7,7 @@ urlpatterns = patterns('',
     (r'^login/', 'auth.views.login'),
     (r'^logout/', 'auth.views.logout'),
 
+    (r'^add_environment/$', 'auth.views.add_environment'),
     (r'^modify_environment/$', 'auth.views.modify_environment'),
 
     (r'^modify_user_self/$', 'auth.views.modify_user_self'),
