@@ -2,11 +2,13 @@
 
 {% load i18n %}
 
-{% block title %}{% trans "login" %}{% endblock %}
+{% block title %}{% trans "create environment" %}{% endblock %}
 
 {% block sidebar %}{% endblock %}
 
 {% block content %}
+
+    {% load urlutils %}
 
     <form action="" method="post">{% csrf_token %}
 
@@ -16,7 +18,7 @@
                 <tr>
                     <td colspan="2">
                         <h2>
-                            <span class="menu_linked">{% trans "login" %}</span>
+                            <span class="menu_linked">{% trans "create environment" %}</span>
                         </h2>
                     </td>
                 </tr>
@@ -26,22 +28,15 @@
                 <tr><td colspan="2"><br></td></tr>
                 <tr>
                     <td colspan="2" class="control">
-                        <input type="submit" value={% trans "login" %} />
+                        <input type="submit" style="font-weight:bold;" value="{% trans 'create' %}" />
                     </td>
                 </tr>
-                <tr>
-                    <td colspan="2" style="text-align:center;">
-                        <br>
-                        {% blocktrans %}
-                            For beginning to use create
-                            <a href="/auth/add_environment">new environmet</a>.
-                        {% endblocktrans %}
-                    </td>
-                </tr>
+
             </table>
 
         </div>
 
     </form>
+
 
 {% endblock %}

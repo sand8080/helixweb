@@ -19,6 +19,11 @@ class LoginForm(HelixwebRequestForm):
         request.COOKIES['session_id'] = None
         super(LoginForm, self).__init__(*args, **kwargs)
 
+    def as_helix_request(self):
+        d = super(LoginForm, self).as_helix_request()
+        d.pop('session_id', None)
+        return d
+
 
 class LogoutForm(HelixwebRequestForm):
     action = 'logout'
@@ -81,6 +86,19 @@ class ModifyServiceForm(ServiceForm):
     def get_by_id_req(srv_id, request):
         return {'action': 'get_services', 'session_id': _get_session_id(request),
             'filter_params': {'ids': [int(srv_id)]}, 'paging_params':{}}
+
+
+class AddEnvironmentForm(HelixwebRequestForm):
+    action = 'add_environment'
+    name = forms.CharField(label=_('environment name'), max_length=32)
+    su_login = forms.CharField(label=_('super user login'), max_length=32)
+    su_password = forms.CharField(label=_('password'),
+        max_length=32, widget=forms.PasswordInput)
+
+    def as_helix_request(self):
+        d = super(AddEnvironmentForm, self).as_helix_request()
+        d.pop('session_id', None)
+        return d
 
 
 class ModifyEnvironmentForm(HelixwebRequestForm):

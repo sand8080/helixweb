@@ -16,7 +16,7 @@ from helixweb.core.forms import _get_session_id
 
 from helixweb.auth.forms import (LoginForm, AddServiceForm, ModifyServiceForm,
     ModifyEnvironmentForm, AddGroupForm, DeleteGroupForm, ModifyGroupForm,
-    ModifyUserSelfForm, AddUserForm, GroupForm, LogoutForm)
+    ModifyUserSelfForm, AddUserForm, GroupForm, LogoutForm, AddEnvironmentForm)
 from helixweb.auth.forms_filters import (FilterServiceForm, FilterGroupForm,
     FilterUserForm, FilterActionLogsForm, FilterActionLogsSelfForm)
 from helixweb.auth.security import get_rights
@@ -55,27 +55,34 @@ def _build_index(helix_resp, field):
     return ds_idx
 
 
+def _make_login(form, request):
+    if form.is_valid():
+        resp = helix_cli.notchecked_request(form.as_helix_request())
+        form.handle_errors(resp)
+        status = resp.get('status', None)
+        s_id = resp.get('session_id', None)
+        if status == 'ok' and s_id is not None:
+            # TODO: set secure cookie
+            b_url = _get_backurl(request)
+            response = HttpResponseRedirect(b_url)
+            expires = datetime.strftime(datetime.utcnow() + timedelta(days=365), "%a, %d-%b-%Y %H:%M:%S GMT")
+            response.set_cookie('session_id', value=s_id, expires=expires)
+            return response
+    return None
+
+
 def login(request):
     c = {}
     c.update(csrf(request))
     c.update(cur_lang(request))
     if request.method == 'POST':
         form = LoginForm(request.POST, request=request)
-        if form.is_valid():
-            resp = helix_cli.notchecked_request(form.as_helix_request())
-            form.handle_errors(resp)
-            status = resp.get('status', None)
-            s_id = resp.get('session_id', None)
-            if status == 'ok' and s_id is not None:
-                # TODO: set secure cookie
-                b_url = _get_backurl(request)
-                response = HttpResponseRedirect(b_url)
-                expires = datetime.strftime(datetime.utcnow() + timedelta(days=365), "%a, %d-%b-%Y %H:%M:%S GMT")
-                response.set_cookie('session_id', value=s_id, expires=expires)
-                return response
+        response = _make_login(form, request)
+        if response:
+            return response
     else:
         form = LoginForm(request=request)
-    c['login_form'] = form
+    c['form'] = form
     return render_to_response('login.html', c,
         context_instance=RequestContext(request))
 
@@ -159,29 +166,19 @@ def services(request):
         context_instance=RequestContext(request))
 
 
-
 def add_environment(request):
     c = {}
     c.update(csrf(request))
     c.update(cur_lang(request))
-#    if request.method == 'POST':
-#        form = LoginForm(request.POST, request=request)
-#        if form.is_valid():
-#            resp = helix_cli.notchecked_request(form.as_helix_request())
-#            form.handle_errors(resp)
-#            status = resp.get('status', None)
-#            s_id = resp.get('session_id', None)
-#            if status == 'ok' and s_id is not None:
-#                # TODO: set secure cookie
-#                b_url = _get_backurl(request)
-#                response = HttpResponseRedirect(b_url)
-#                expires = datetime.strftime(datetime.utcnow() + timedelta(days=365), "%a, %d-%b-%Y %H:%M:%S GMT")
-#                response.set_cookie('session_id', value=s_id, expires=expires)
-#                return response
-#    else:
-#        form = LoginForm(request=request)
-#    c['login_form'] = form
-    return render_to_response('login.html', c,
+    if request.method == 'POST':
+        form = AddEnvironmentForm(request.POST, request=request)
+        response = _make_login(form, request)
+        if response:
+            return response
+    else:
+        form = AddEnvironmentForm(request=request)
+    c['form'] = form
+    return render_to_response('environment/add.html', c,
         context_instance=RequestContext(request))
 
 
