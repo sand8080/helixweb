@@ -80,6 +80,7 @@
                 </tr>
 
                 <tr class="objects_fields">
+                    <th>{% trans "id" %}</th>
                     <th>{% trans "login" %}</th>
                     <th>{% trans "is active" %}</th>
                     <th>{% trans "groups" %}</th>
@@ -88,6 +89,13 @@
 
                 {% for u in users %}
                     <tr class="objects_data {% cycle 'row1' 'row2' %}">
+                        <td>
+                            {% allowedurl True %}
+                                /auth/modify_user/{{ u.id }}/
+                                {{ u.id }}
+                            {% endallowedurl %}
+                            <br>
+                        </td>
                         <td>
                             {% allowedurl True %}
                                 /auth/modify_user/{{ u.id }}/
