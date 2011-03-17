@@ -37,6 +37,7 @@ class HelixwebRequestForm(forms.Form):
         d['custom_actor_info'] = __package__
         if self.session_id not in d and self.session_id is not None:
             d['session_id'] = self.session_id
+        d['ordering_params'] = ['-id']
         return d
 
     def handle_errors(self, resp):

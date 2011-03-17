@@ -146,7 +146,6 @@ class AbstractFilterActionLogsForm(FilterAuthForm):
         self._strip_filter_param(d, 'sess_id', new_name='session_id')
         self._strip_from_date_param(d, 'from_request_date')
         self._strip_to_date_param(d, 'to_request_date')
-        d['ordering_params'] = ['-id']
         return d
 
 
