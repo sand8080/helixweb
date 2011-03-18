@@ -20,6 +20,7 @@ class FilterForm(object):
         d['filter_params'] = f_params
         d['paging_params'] = {'limit': self.pager.on_page,
             'offset': self.pager.offset}
+        d['ordering_params'] = ['-id']
         return d
 
     def update_total(self, helix_resp):
