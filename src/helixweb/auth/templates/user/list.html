@@ -89,19 +89,12 @@
 
                 {% for u in users %}
                     <tr class="objects_data {% cycle 'row1' 'row2' %}">
+                        <td>{{ u.id }}</td>
                         <td>
                             {% allowedurl True %}
-                                /auth/modify_user/{{ u.id }}/
-                                {{ u.id }}
-                            {% endallowedurl %}
-                            <br>
-                        </td>
-                        <td>
-                            {% allowedurl True %}
-                                /auth/modify_user/{{ u.id }}/
+                                /auth/modify_users/{{ u.id }}/
                                 {{ u.login }}
                             {% endallowedurl %}
-                            <br>
                         </td>
                         <td>
                             {% if u.is_active %}
