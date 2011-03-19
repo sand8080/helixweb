@@ -295,7 +295,6 @@ def _calculate_summary_user_rights(users, groups_idx):
 def modify_user_self(request):
     c = _prepare_context(request)
     if request.method == 'POST':
-        pass
         form = ModifyUserSelfForm(request.POST, request=request)
         if form.is_valid():
             resp = helix_cli.request(form.as_helix_request())
@@ -304,6 +303,21 @@ def modify_user_self(request):
         form = ModifyUserSelfForm(request=request)
     c['form'] = form
     return render_to_response('user/modify_user_self.html', c,
+        context_instance=RequestContext(request))
+
+
+@login_redirector
+def modify_users(request, user_id):
+    c = _prepare_context(request)
+    if request.method == 'POST':
+        form = ModifyUserSelfForm(request.POST, request=request)
+        if form.is_valid():
+            resp = helix_cli.request(form.as_helix_request())
+            form.handle_errors(resp)
+    else:
+        form = ModifyUserSelfForm(request=request)
+    c['form'] = form
+    return render_to_response('user/modify_users.html', c,
         context_instance=RequestContext(request))
 
 
