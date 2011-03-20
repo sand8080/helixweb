@@ -141,6 +141,42 @@ class AddUserForm(HelixwebRequestForm):
         return d
 
 
+class ModifyUsersForm(HelixwebRequestForm):
+    action = 'modify_users'
+    new_login = forms.CharField(label=_('login'), max_length=32)
+    new_password = forms.CharField(label=_('password'),
+        max_length=32, widget=forms.PasswordInput)
+    is_active = forms.BooleanField(label=_('is active'), initial=True,
+        required=False)
+
+    def __init__(self, *args, **kwargs):
+        groups = kwargs.pop('groups', [])
+        super(ModifyUsersForm, self).__init__(*args, **kwargs)
+        choices = [(g['id'], g['name']) for g in groups]
+        self.fields['new_groups_ids'] = forms.MultipleChoiceField(label=_('groups'),
+            required=False, choices=choices,
+            widget=forms.widgets.CheckboxSelectMultiple)
+
+    def as_helix_request(self):
+        d = super(AddUserForm, self).as_helix_request()
+        d['new_groups_ids'] = map(int, d['new_groups_ids'])
+        return d
+
+    @staticmethod
+    def get_users_req(user_id, request):
+        return {'action': 'get_users', 'session_id': _get_session_id(request),
+            'filter_params': {'ids': [int(user_id)]}, 'paging_params':{}}
+
+    @staticmethod
+    def from_get_helix_resp(helix_resp, request):
+        users = helix_resp.get('users', [])
+        u_d = users[0] if len(users) == 1 else {}
+        d = {}
+        for k in u_d.keys():
+            d['new_%s' % k] = u_d[k]
+        return ModifyUsersForm(d, request=request)
+
+
 class ModifyUserSelfForm(HelixwebRequestForm):
     action ='modify_user_self'
     old_password = forms.CharField(label=_('old password'),

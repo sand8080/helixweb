@@ -16,7 +16,8 @@ from helixweb.core.forms import _get_session_id
 
 from helixweb.auth.forms import (LoginForm, AddServiceForm, ModifyServiceForm,
     ModifyEnvironmentForm, AddGroupForm, DeleteGroupForm, ModifyGroupForm,
-    ModifyUserSelfForm, AddUserForm, GroupForm, LogoutForm, AddEnvironmentForm)
+    ModifyUserSelfForm, AddUserForm, GroupForm, LogoutForm, AddEnvironmentForm,
+    ModifyUsersForm)
 from helixweb.auth.forms_filters import (FilterServiceForm, FilterGroupForm,
     FilterUserForm, FilterActionLogsForm, FilterActionLogsSelfForm)
 from helixweb.auth.security import get_rights
@@ -307,15 +308,22 @@ def modify_user_self(request):
 
 
 @login_redirector
-def modify_users(request, user_id):
+def modify_users(request, id):
     c = _prepare_context(request)
     if request.method == 'POST':
-        form = ModifyUserSelfForm(request.POST, request=request)
+        form = ModifyUsersForm(request.POST, request=request)
         if form.is_valid():
             resp = helix_cli.request(form.as_helix_request())
             form.handle_errors(resp)
     else:
-        form = ModifyUserSelfForm(request=request)
+        resp = helix_cli.request(ModifyUsersForm.get_users_req(id, request))
+        c.update(process_helix_response(resp, 'users', 'users_error'))
+        form = ModifyUsersForm(request=request)
+        if 'users' in resp:
+            if len(resp['users']) != 1:
+                c['users_error'] = 'HELIXAUTH_USER_ACCESS_DENIED'
+            else:
+                form = ModifyUsersForm.from_get_helix_resp(resp, request)
     c['form'] = form
     return render_to_response('user/modify_users.html', c,
         context_instance=RequestContext(request))

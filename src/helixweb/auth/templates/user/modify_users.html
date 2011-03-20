@@ -1,0 +1,51 @@
+{% extends "base_auth.html" %}
+
+{% load i18n %}
+
+{% block title %}{% trans "modify users" %}{% endblock %}
+
+{% block content %}
+
+
+<form action="" method="post">{% csrf_token %}
+
+    <div class="bordered">
+
+        <table class="object_form center"  style="border-collapse:collapse;">
+            <tr>
+                <td colspan="2">
+                    <h2 class="menu_linked">
+                        {% trans "modify users" %}
+                    </h2>
+                </td>
+            </tr>
+
+            {% if users_error %}
+
+                <tr>
+                    <td colspan="2">
+                        <span class="errormessage">{% trans users_error %}</span>
+                    </td>
+                </tr>
+
+            {% else %}
+
+                {{ form.as_table }}
+
+                <tr class="control">
+                    <td colspan="2">
+                        <input type="submit" style="font-weight:bold;" value="{% trans "save" %}" />
+                    </td>
+                </tr>
+
+            {% endif %}
+
+        </table>
+
+        <br>
+
+    </div>
+
+</form>
+
+{% endblock %}
