@@ -25,6 +25,9 @@
             <tr class="control">
                 <td colspan="2">
                     <input type="submit" style="font-weight:bold;" value="{% trans "save" %}" />
+                    <input type="hidden" id="stay_here" name="stay_here" value=0 />
+                    <input type="submit" value="{% trans "save and continue editing" %}"
+                        onclick="var f = this.form; f.stay_here.value=1; f.submit()" />
                 </td>
             </tr>
         </table>

@@ -191,6 +191,9 @@ def modify_environment(request):
         if form.is_valid():
             resp = helix_cli.request(form.as_helix_request())
             form.handle_errors(resp)
+            if resp['status'] == 'ok':
+                if request.POST.get('stay_here', '0') != '1':
+                    return HttpResponseRedirect('/auth/')
     else:
         resp = helix_cli.request(ModifyEnvironmentForm.get_req(request))
         form = ModifyEnvironmentForm.from_get_helix_resp(resp, request)
