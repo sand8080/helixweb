@@ -15,6 +15,10 @@
                     {% trans "users" %}
                     <br>
                 {% endallowedurl %}
+
+                {% block user_submenu %}
+                {% endblock %}
+
                 {% allowedurl %}
                     /auth/add_user/
                     {% trans "add user" %}
