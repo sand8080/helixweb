@@ -97,10 +97,27 @@ def allowedurl(parser, token):
 
 
 @register.filter
+def is_urls_allowed(urls, rights):
+    '''
+    Usage:
+    urls|is_urls_allowed
+    urls - comma separated urls
+    Returns True or False
+    '''
+    checker = UrlAccessChecker()
+    us = filter(lambda x: len(x) > 0, map(unicode.strip, urls.split(',')))
+    for u in us:
+        res = checker.is_url_allowed(u, rights)
+        if res is False:
+            return False
+    return True
+
+
+@register.filter
 def is_url_allowed(url, rights):
     '''
     Usage:
-    url|is_url_allowed
+    urls|is_url_allowed
     Returns True or False
     '''
     checker = UrlAccessChecker()

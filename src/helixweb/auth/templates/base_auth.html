@@ -6,85 +6,99 @@
 {% load i18n %}
 
 <table class="left_menu bordered wide">
+    <tr><td></td></tr>
     <tr>
         <td>
             {% allowedurl %}
                 /auth/get_users/
-                <br>
                 {% trans "users" %}
+                <br>
             {% endallowedurl %}
-
             {% allowedurl %}
                 /auth/add_user/
-                <br>
                 {% trans "add user" %}
+                <br>
             {% endallowedurl %}
-            <br>
+            {% if "/auth/get_users/,/auth/add_user/"|is_urls_allowed:rights %}
+                <br>
+            {% endif %}
         </td>
     </tr>
     <tr>
         <td>
             {% allowedurl %}
                 /auth/get_groups/
-                <br>
                 {% trans "groups" %}
+                <br>
             {% endallowedurl %}
             {% allowedurl %}
                 /auth/add_group/
-                <br>
                 {% trans "add group" %}
+                <br>
             {% endallowedurl %}
-            <br>
+            {% if "/auth/get_groups/,/auth/add_group/"|is_urls_allowed:rights %}
+                <br>
+            {% endif %}
         </td>
     </tr>
     <tr>
         <td>
             {% allowedurl %}
                 /auth/get_services/
-                <br>
                 {% trans "services" %}
+                <br>
             {% endallowedurl %}
             {% allowedurl %}
                 /auth/add_service/
-                <br>
                 {% trans "add service" %}
+                <br>
             {% endallowedurl %}
-            <br>
+            {% if "/auth/get_services/,/auth/add_service/"|is_urls_allowed:rights %}
+                <br>
+            {% endif %}
         </td>
     </tr>
     <tr>
         <td>
             {% allowedurl %}
                 /auth/get_action_logs/
-                <br>
                 {% trans "action logs" %}
+                <br>
             {% endallowedurl %}
-            <br>
+            {% if "/auth/get_action_logs/"|is_urls_allowed:rights %}
+                <br>
+            {% endif %}
         </td>
     </tr>
     <tr>
         <td>
             {% allowedurl %}
                 /auth/modify_environment/
-                <br>
                 {% trans "environment" %}
+                <br>
             {% endallowedurl %}
-            <br>
+            {% if "/auth/modify_environment/"|is_urls_allowed:rights %}
+                <br>
+            {% endif %}
         </td>
     </tr>
     <tr>
         <td>
             {% allowedurl %}
                 /auth/modify_user_self/
-                <br>
                 {% trans "change password" %}
+                <br>
             {% endallowedurl %}
             {% allowedurl %}
                 /auth/get_action_logs_self/
-                <br>
                 {% trans "your action logs" %}
+                <br>
             {% endallowedurl %}
-            <br>
+
+            {% if "/auth/modify_user_self/,/auth/get_action_logs_self/"|is_urls_allowed:rights %}
+                <br>
+            {% endif %}
+
         </td>
     </tr>
     <tr><td>&nbsp;</td></tr>
