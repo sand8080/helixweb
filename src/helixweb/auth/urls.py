@@ -10,7 +10,7 @@ urlpatterns = patterns('',
     (r'^add_environment/$', 'auth.views.add_environment'),
     (r'^modify_environment/$', 'auth.views.modify_environment'),
 
-    (r'^modify_users/(?P<id>\d+)/$', 'auth.views.modify_users'),
+    (r'^modify_users/(?P<id>\d+)/$', 'auth.views.modify_user'),
     (r'^modify_user_self/$', 'auth.views.modify_user_self'),
     (r'^get_action_logs_self/$', 'auth.views.action_logs_self'),
 

@@ -16,8 +16,8 @@ from helixweb.core.forms import _get_session_id
 
 from helixweb.auth.forms import (LoginForm, AddServiceForm, ModifyServiceForm,
     ModifyEnvironmentForm, AddGroupForm, DeleteGroupForm, ModifyGroupForm,
-    ModifyUserSelfForm, AddUserForm, GroupForm, LogoutForm, AddEnvironmentForm,
-    ModifyUsersForm)
+    ModifyUserSelfForm, AddUserForm, LogoutForm, AddEnvironmentForm,
+    ModifyUserForm)
 from helixweb.auth.forms_filters import (FilterServiceForm, FilterGroupForm,
     FilterUserForm, FilterActionLogsForm, FilterActionLogsSelfForm)
 from helixweb.auth.security import get_rights
@@ -205,7 +205,7 @@ def modify_environment(request):
 @login_redirector
 def add_user(request):
     c = _prepare_context(request)
-    resp = helix_cli.request(GroupForm.get_active_groups_req(request))
+    resp = helix_cli.request(AddUserForm.get_active_groups_req(request))
     c.update(process_helix_response(resp, 'groups', 'groups_error'))
     groups = resp.get('groups', [])
     if request.method == 'POST':
@@ -308,22 +308,25 @@ def modify_user_self(request):
 
 
 @login_redirector
-def modify_users(request, id):
+def modify_user(request, id):
     c = _prepare_context(request)
+    resp = helix_cli.request(ModifyUserForm.get_active_groups_req(request))
+    c.update(process_helix_response(resp, 'groups', 'groups_error'))
+    groups = resp.get('groups', [])
     if request.method == 'POST':
-        form = ModifyUsersForm(request.POST, request=request)
+        form = ModifyUserForm(request.POST, groups=groups, request=request)
         if form.is_valid():
             resp = helix_cli.request(form.as_helix_request())
             form.handle_errors(resp)
     else:
-        resp = helix_cli.request(ModifyUsersForm.get_users_req(id, request))
+        resp = helix_cli.request(ModifyUserForm.get_users_req(id, request))
         c.update(process_helix_response(resp, 'users', 'users_error'))
-        form = ModifyUsersForm(request=request)
+        form = None
         if 'users' in resp:
             if len(resp['users']) != 1:
                 c['users_error'] = 'HELIXAUTH_USER_ACCESS_DENIED'
             else:
-                form = ModifyUsersForm.from_get_helix_resp(resp, request)
+                form = ModifyUserForm.from_get_helix_resp(resp, request, groups)
     c['form'] = form
     return render_to_response('user/modify_users.html', c,
         context_instance=RequestContext(request))

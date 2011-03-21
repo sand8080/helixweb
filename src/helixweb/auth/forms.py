@@ -141,24 +141,27 @@ class AddUserForm(HelixwebRequestForm):
         return d
 
 
-class ModifyUsersForm(HelixwebRequestForm):
+class ModifyUserForm(HelixwebRequestForm):
     action = 'modify_users'
+    id = forms.IntegerField(widget=forms.widgets.HiddenInput)
     new_login = forms.CharField(label=_('login'), max_length=32)
     new_password = forms.CharField(label=_('password'),
-        max_length=32, widget=forms.PasswordInput)
-    is_active = forms.BooleanField(label=_('is active'), initial=True,
+        max_length=32, widget=forms.PasswordInput, required=False)
+    new_is_active = forms.BooleanField(label=_('is active'), initial=True,
         required=False)
 
     def __init__(self, *args, **kwargs):
         groups = kwargs.pop('groups', [])
-        super(ModifyUsersForm, self).__init__(*args, **kwargs)
+        super(ModifyUserForm, self).__init__(*args, **kwargs)
         choices = [(g['id'], g['name']) for g in groups]
         self.fields['new_groups_ids'] = forms.MultipleChoiceField(label=_('groups'),
             required=False, choices=choices,
             widget=forms.widgets.CheckboxSelectMultiple)
 
     def as_helix_request(self):
-        d = super(AddUserForm, self).as_helix_request()
+        d = super(ModifyUserForm, self).as_helix_request()
+        id = d.pop('id')
+        d['ids'] = [id]
         d['new_groups_ids'] = map(int, d['new_groups_ids'])
         return d
 
@@ -168,13 +171,14 @@ class ModifyUsersForm(HelixwebRequestForm):
             'filter_params': {'ids': [int(user_id)]}, 'paging_params':{}}
 
     @staticmethod
-    def from_get_helix_resp(helix_resp, request):
+    def from_get_helix_resp(helix_resp, request, groups):
         users = helix_resp.get('users', [])
         u_d = users[0] if len(users) == 1 else {}
-        d = {}
+        id = u_d.pop('id', None)
+        d = {'id': id}
         for k in u_d.keys():
             d['new_%s' % k] = u_d[k]
-        return ModifyUsersForm(d, request=request)
+        return ModifyUserForm(d, request=request, groups=groups)
 
 
 class ModifyUserSelfForm(HelixwebRequestForm):

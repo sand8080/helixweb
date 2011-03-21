@@ -20,11 +20,16 @@
                 </td>
             </tr>
 
-            {% if users_error %}
+            {% if users_error or groups_error %}
 
                 <tr>
                     <td colspan="2">
                         <span class="errormessage">{% trans users_error %}</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <span class="errormessage">{% trans groups_error %}</span>
                     </td>
                 </tr>
 
