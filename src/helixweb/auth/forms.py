@@ -7,9 +7,9 @@ from helixweb.auth.widgets import ServicesSelectMultiple, ConstInput
 
 class LoginForm(HelixwebRequestForm):
     action = 'login'
-    environment_name = forms.CharField(label=_('environment name'),
+    environment_name = forms.CharField(label=_('environment'),
         max_length=32)
-    login = forms.CharField(label=_('user login'),
+    login = forms.CharField(label=_('login'),
         max_length=32)
     password = forms.CharField(label=_('password'),
         max_length=32, widget=forms.PasswordInput)
@@ -90,7 +90,7 @@ class ModifyServiceForm(ServiceForm):
 
 class AddEnvironmentForm(HelixwebRequestForm):
     action = 'add_environment'
-    name = forms.CharField(label=_('environment name'), max_length=32)
+    name = forms.CharField(label=_('environment'), max_length=32)
     su_login = forms.CharField(label=_('super user login'), max_length=32)
     su_password = forms.CharField(label=_('password'),
         max_length=32, widget=forms.PasswordInput)
