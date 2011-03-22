@@ -71,3 +71,8 @@ class HelixwebRequestForm(forms.Form):
     def get_active_groups_req(request):
         return {'action': 'get_groups', 'session_id': _get_session_id(request),
             'filter_params': {'is_active': True}, 'paging_params': {}}
+
+    @staticmethod
+    def get_users_req(request, ids):
+        return {'action': 'get_users', 'session_id': _get_session_id(request),
+            'filter_params': {'ids': ids}, 'paging_params': {}}

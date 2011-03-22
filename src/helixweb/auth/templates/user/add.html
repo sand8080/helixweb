@@ -6,9 +6,7 @@
 
 {% block content %}
 
-{% load urlutils %}
-
-
+    {% load urlutils %}
 
     <form action="" method="post">{% csrf_token %}
 
@@ -20,7 +18,7 @@
 
                         <h2>
                             {% allowedurl True %}
-                                /auth/get_users
+                                /auth/get_users/
                                 {% trans "users" %}
                             {% endallowedurl %}
                             &rarr;

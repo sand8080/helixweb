@@ -12,7 +12,7 @@ from helixweb.core.localization import cur_lang, cur_lang_value
 #from django.utils.translation import ugettext as _
 from helixweb.core.views import login_redirector, process_helix_response
 from helixweb.core.client import Client
-from helixweb.core.forms import _get_session_id
+from helixweb.core.forms import _get_session_id, HelixwebRequestForm
 
 from helixweb.auth.forms import (LoginForm, AddServiceForm, ModifyServiceForm,
     ModifyEnvironmentForm, AddGroupForm, DeleteGroupForm, ModifyGroupForm,
@@ -271,6 +271,19 @@ def users(request):
         context_instance=RequestContext(request))
 
 
+@login_redirector
+def user_info(request, id):
+    id = int(id)
+    c = _prepare_context(request)
+    resp = helix_cli.request(HelixwebRequestForm.get_users_req(request, [id]))
+    c.update(process_helix_response(resp, 'users', 'users_error'))
+    users = resp.get('users', [])
+    if len(users):
+        c['user'] = users[0]
+    return render_to_response('user/user_info.html', c,
+        context_instance=RequestContext(request))
+
+
 def _calculate_summary_user_rights(users, groups_idx):
     def _get_summary_service(rights, srv_id):
         for r in rights:
@@ -334,7 +347,7 @@ def modify_user(request, id):
             else:
                 form = ModifyUserForm.from_get_helix_resp(resp, request, groups)
     c['form'] = form
-    return render_to_response('user/modify_users.html', c,
+    return render_to_response('user/modify_user.html', c,
         context_instance=RequestContext(request))
 
 

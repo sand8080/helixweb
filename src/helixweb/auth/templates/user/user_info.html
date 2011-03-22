@@ -1,0 +1,72 @@
+{% extends "base_auth.html" %}
+
+{% load i18n %}
+
+{% block title %}{% trans "user information" %}{% endblock %}
+
+{% block content %}
+
+    {% load urlutils %}
+
+    <div class="bordered">
+
+        <table class="object_form center">
+            <tr>
+                <td colspan="2">
+                    <h2>
+                           {% allowedurl True %}
+                            /auth/get_users/
+                            {% trans "users" %}
+                        {% endallowedurl %}
+                        &rarr;
+                        <span class="menu_linked">{{ user.login }}</span>
+                    </h2>
+                </td>
+            </tr>
+
+            {% if users_error %}
+
+                <tr>
+                    <td>
+                        <span class="errormessage">{% trans users_error %}</span>
+                    </td>
+                </tr>
+
+            {% else %}
+
+                <tr>
+                    <td>
+                        {% if "/auth/modify_users/,/auth/get_action_logs/"|is_any_of_urls_allowed:rights %}
+
+                            {% if "/auth/modify_users/"|is_url_allowed:rights %}
+                                <a href="/auth/modify_users/{{ user.id }}/">
+                                    {% trans "modify user" %}
+                                </a>
+                                <br>
+                            {% endif %}
+
+                            {% if "/auth/get_action_logs/"|is_url_allowed:rights %}
+                                <a href="/auth/get_action_logs/{{ user.id }}/">
+                                    {% trans "user action logs" %}
+                                </a>
+                                <br>
+                            {% endif %}
+
+                        {% else %}
+
+                            {% trans "no available user operations" %}
+
+                        {% endif %}
+                    </td>
+                </tr>
+
+
+            {% endif %}
+
+        </table>
+
+        <br>
+
+    </div>
+
+{% endblock %}
