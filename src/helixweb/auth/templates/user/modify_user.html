@@ -2,10 +2,16 @@
 
 {% load i18n %}
 
-{% block title %}{% trans "modify users" %}{% endblock %}
+{% block title %}{% trans "modify user" %}{% endblock %}
+
+{% block user_submenu %}
+submenu items
+<br>
+{% endblock %}
 
 {% block content %}
 
+{% load urlutils %}
 
 <form action="" method="post">{% csrf_token %}
 
@@ -15,7 +21,14 @@
             <tr>
                 <td colspan="2">
                     <h2 class="menu_linked">
-                        {% trans "modify users" %}
+                        {% allowedurl True %}
+                            /auth/get_users/
+                            {% trans "users" %}
+                        {% endallowedurl %}
+
+                        &rarr;
+
+                        {% trans "modify user" %}
                     </h2>
                 </td>
             </tr>

@@ -91,10 +91,7 @@
                     <tr class="objects_data {% cycle 'row1' 'row2' %}">
                         <td>{{ u.id }}</td>
                         <td>
-                            {% allowedurl True %}
-                                /auth/modify_users/{{ u.id }}/
-                                {{ u.login }}
-                            {% endallowedurl %}
+                            <a href="/auth/user_info/{{ u.id }}/">{{ u.login }}</a>
                         </td>
                         <td>
                             {% if u.is_active %}

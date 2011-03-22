@@ -9,7 +9,6 @@ from django.template import RequestContext
 from django.core.context_processors import csrf
 
 from helixweb.core.localization import cur_lang, cur_lang_value
-#from django.utils.translation import ugettext as _
 from helixweb.core.views import login_redirector, process_helix_response
 from helixweb.core.client import Client
 from helixweb.core.forms import _get_session_id, HelixwebRequestForm
