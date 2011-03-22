@@ -1,6 +1,6 @@
 class Pager(object):
 
-    on_page_ranges = (2, 20, 50, 100, 250)
+    on_page_ranges = (20, 50, 100, 250)
 
     def __init__(self, offset, total, on_page):
         self.on_page = self._aligned_on_page(self._get_int_val(on_page))
