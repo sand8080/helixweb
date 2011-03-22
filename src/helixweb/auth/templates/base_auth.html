@@ -65,19 +65,6 @@
         </tr>
     {% endif %}
 
-    {% if "/auth/get_action_logs/"|is_any_of_urls_allowed:rights %}
-        <tr>
-            <td>
-                {% allowedurl %}
-                    /auth/get_action_logs/
-                    {% trans "action logs" %}
-                    <br>
-                {% endallowedurl %}
-                <br>
-            </td>
-        </tr>
-    {% endif %}
-
     {% if "/auth/modify_environment/"|is_any_of_urls_allowed:rights %}
     <tr>
         <td>
@@ -91,6 +78,20 @@
     </tr>
     {% endif %}
 
+    {% if "/auth/get_action_logs/"|is_any_of_urls_allowed:rights %}
+        <tr>
+            <td>
+                {% allowedurl %}
+                    /auth/get_action_logs/
+                    {% trans "all action logs" %}
+                    <br>
+                {% endallowedurl %}
+                <br>
+            </td>
+        </tr>
+    {% endif %}
+
+
     {% if "/auth/modify_user_self/,/auth/get_action_logs_self/"|is_any_of_urls_allowed:rights %}
         <tr>
             <td>
@@ -101,7 +102,7 @@
                 {% endallowedurl %}
                 {% allowedurl %}
                     /auth/get_action_logs_self/
-                    {% trans "your action logs" %}
+                    {% trans "action logs" %}
                     <br>
                 {% endallowedurl %}
                 <br>
