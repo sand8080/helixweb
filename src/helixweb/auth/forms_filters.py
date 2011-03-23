@@ -120,6 +120,7 @@ class AbstractFilterActionLogsForm(FilterAuthForm):
                 ('modify_group', _('modify group')),
                 ('delete_group', _('delete group')),
                 ('add_user', _('add user')),
+                ('modify_uses', _('modify users')),
                 ('modify_user_self', _('modify user self')),
             )))
         sess_id = forms.CharField(label=_('session'), max_length=40,
@@ -158,3 +159,15 @@ class FilterActionLogsSelfForm(AbstractFilterActionLogsForm):
     def __init__(self, *args, **kwargs):
         self.action = 'get_action_logs_self'
         super(FilterActionLogsSelfForm, self).__init__(*args, **kwargs)
+
+
+class FilterUserActionLogsForm(AbstractFilterActionLogsForm):
+    def __init__(self, *args, **kwargs):
+        self.action = 'get_action_logs'
+        self.user_id = int(kwargs.pop('id'))
+        super(FilterUserActionLogsForm, self).__init__(*args, **kwargs)
+
+    def as_helix_request(self):
+        d = super(FilterUserActionLogsForm, self).as_helix_request()
+        d['filter_params']['user_id'] = self.user_id
+        return d

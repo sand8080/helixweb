@@ -12,6 +12,7 @@ urlpatterns = patterns('',
 
     (r'^user_info/(?P<id>\d+)/$', 'auth.views.user_info'),
     (r'^modify_users/(?P<id>\d+)/$', 'auth.views.modify_user'),
+    (r'^get_action_logs/(?P<id>\d+)/$', 'auth.views.user_action_logs'),
     (r'^modify_user_self/$', 'auth.views.modify_user_self'),
     (r'^get_action_logs_self/$', 'auth.views.action_logs_self'),
 

@@ -18,7 +18,8 @@ from helixweb.auth.forms import (LoginForm, AddServiceForm, ModifyServiceForm,
     ModifyUserSelfForm, AddUserForm, LogoutForm, AddEnvironmentForm,
     ModifyUserForm)
 from helixweb.auth.forms_filters import (FilterServiceForm, FilterGroupForm,
-    FilterUserForm, FilterActionLogsForm, FilterActionLogsSelfForm)
+    FilterUserForm, FilterActionLogsForm, FilterActionLogsSelfForm,
+    FilterUserActionLogsForm)
 from helixweb.auth.security import get_rights
 from helixweb.auth import settings
 
@@ -363,6 +364,27 @@ def modify_user(request, id):
         form = ModifyUserForm.from_user_info(user, groups, request)
     c['form'] = form
     return render_to_response('user/modify_user.html', c,
+        context_instance=RequestContext(request))
+
+
+@login_redirector
+def user_action_logs(request, id):
+    c = _prepare_context(request)
+    user = _get_user_info(request, c, id)
+    c['user'] = user
+    if request.method == 'GET':
+        form = FilterUserActionLogsForm(request.GET, request=request, id=id)
+    else:
+        form = FilterUserActionLogsForm({}, request=request, id=id)
+    if form.is_valid():
+        resp = helix_cli.request(form.as_helix_request())
+        form.update_total(resp)
+        if 'action_logs' in resp:
+            resp['action_logs'] = map(_prepare_action_log, resp['action_logs'])
+        c.update(process_helix_response(resp, 'action_logs', 'action_logs_error'))
+        c['pager'] = form.pager
+    c['form'] = form
+    return render_to_response('user/user_action_logs.html', c,
         context_instance=RequestContext(request))
 
 
