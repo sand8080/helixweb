@@ -9,15 +9,7 @@ from helixweb.core.forms import HelixwebRequestForm
 
 class FilterAuthForm(FilterForm, HelixwebRequestForm):
     def _strip_filter_param(self, d, name, new_name=None):
-        if new_name is None:
-            new_name = name
-        f_params = d['filter_params']
-        if name in f_params:
-            p = f_params.pop(name, None)
-            if isinstance(p, (str, unicode)):
-                p = p.strip()
-            if p:
-                d[ 'filter_params'][new_name] = p
+        self._strip_param(d['filter_params'], name, new_name)
 
     def _strip_from_date_param(self, d, name):
         self._strip_filter_param(d, name)

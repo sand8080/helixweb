@@ -14,7 +14,7 @@
             <tr>
                 <td colspan="2">
                     <h2>
-                           {% allowedurl True %}
+                        {% allowedurl True %}
                             /auth/get_users/
                             {% trans "users" %}
                         {% endallowedurl %}
@@ -36,7 +36,7 @@
 
                 <tr>
                     <td>
-                        {% if "/auth/modify_users/,/auth/get_action_logs/"|is_any_of_urls_allowed:rights %}
+                        {% if user and "/auth/modify_users/,/auth/get_action_logs/"|is_any_of_urls_allowed:rights %}
 
                             {% if "/auth/modify_users/"|is_url_allowed:rights %}
                                 <a href="/auth/modify_users/{{ user.id }}/">

@@ -76,3 +76,13 @@ class HelixwebRequestForm(forms.Form):
     def get_users_req(request, ids):
         return {'action': 'get_users', 'session_id': _get_session_id(request),
             'filter_params': {'ids': ids}, 'paging_params': {}}
+
+    def _strip_param(self, d, name, new_name=None):
+        if new_name is None:
+            new_name = name
+        if name in d:
+            p = d.pop(name, None)
+            if isinstance(p, (str, unicode)):
+                p = p.strip()
+            if p:
+                d[new_name] = p

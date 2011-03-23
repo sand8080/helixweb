@@ -59,8 +59,8 @@ def _make_login(form, request):
     if form.is_valid():
         resp = helix_cli.notchecked_request(form.as_helix_request())
         form.handle_errors(resp)
-        status = resp.get('status', None)
-        s_id = resp.get('session_id', None)
+        status = resp.get('status')
+        s_id = resp.get('session_id')
         if status == 'ok' and s_id is not None:
             # TODO: set secure cookie
             b_url = _get_backurl(request)
@@ -270,15 +270,21 @@ def users(request):
         context_instance=RequestContext(request))
 
 
+def _extract_user(helix_resp):
+    users = helix_resp.get('users', [])
+    if len(users) == 1:
+        return dict(users[0])
+    else:
+        return {}
+
+
 @login_redirector
 def user_info(request, id):
     id = int(id)
     c = _prepare_context(request)
     resp = helix_cli.request(HelixwebRequestForm.get_users_req(request, [id]))
     c.update(process_helix_response(resp, 'users', 'users_error'))
-    users = resp.get('users', [])
-    if len(users):
-        c['user'] = users[0]
+    c['user'] = _extract_user(resp)
     return render_to_response('user/user_info.html', c,
         context_instance=RequestContext(request))
 
@@ -322,29 +328,39 @@ def modify_user_self(request):
         context_instance=RequestContext(request))
 
 
+def _get_user_info(request, c, id):
+    resp = helix_cli.request(ModifyUserForm.get_users_req(id, request))
+    c.update(process_helix_response(resp, 'users', 'users_error'))
+    user = {}
+    if 'users' in resp:
+        if len(resp['users']) != 1:
+            c['users_error'] = 'HELIXAUTH_USER_ACCESS_DENIED'
+        else:
+            user = resp['users'][0]
+    return user
+
+
 @login_redirector
 def modify_user(request, id):
     c = _prepare_context(request)
     resp = helix_cli.request(ModifyUserForm.get_active_groups_req(request))
     c.update(process_helix_response(resp, 'groups', 'groups_error'))
     groups = resp.get('groups', [])
+    user = _get_user_info(request, c, id)
+    c['user'] = user
     if request.method == 'POST':
         form = ModifyUserForm(request.POST, groups=groups, request=request)
         if form.is_valid():
             resp = helix_cli.request(form.as_helix_request())
             form.handle_errors(resp)
             if resp['status'] == 'ok':
+                new_login = request.POST.get('new_login')
+                if new_login:
+                    c['user']['login'] = new_login
                 if request.POST.get('stay_here', '0') != '1':
-                    return HttpResponseRedirect('/auth/get_users/')
+                    return HttpResponseRedirect('/auth/user_info/%s' % user['id'])
     else:
-        resp = helix_cli.request(ModifyUserForm.get_users_req(id, request))
-        c.update(process_helix_response(resp, 'users', 'users_error'))
-        form = None
-        if 'users' in resp:
-            if len(resp['users']) != 1:
-                c['users_error'] = 'HELIXAUTH_USER_ACCESS_DENIED'
-            else:
-                form = ModifyUserForm.from_get_helix_resp(resp, request, groups)
+        form = ModifyUserForm.from_user_info(user, groups, request)
     c['form'] = form
     return render_to_response('user/modify_user.html', c,
         context_instance=RequestContext(request))

@@ -144,7 +144,8 @@ class AddUserForm(HelixwebRequestForm):
 class ModifyUserForm(HelixwebRequestForm):
     action = 'modify_users'
     id = forms.IntegerField(widget=forms.widgets.HiddenInput)
-    new_login = forms.CharField(label=_('login'), max_length=32)
+    new_login = forms.CharField(label=_('login'), max_length=32,
+        required=False)
     new_password = forms.CharField(label=_('password'),
         max_length=32, widget=forms.PasswordInput, required=False)
     new_is_active = forms.BooleanField(label=_('is active'), initial=True,
@@ -163,6 +164,8 @@ class ModifyUserForm(HelixwebRequestForm):
         id = d.pop('id')
         d['ids'] = [id]
         d['new_groups_ids'] = map(int, d['new_groups_ids'])
+        self._strip_param(d, 'new_login')
+        self._strip_param(d, 'new_password')
         return d
 
     @staticmethod
@@ -171,9 +174,8 @@ class ModifyUserForm(HelixwebRequestForm):
             'filter_params': {'ids': [int(user_id)]}, 'paging_params':{}}
 
     @staticmethod
-    def from_get_helix_resp(helix_resp, request, groups):
-        users = helix_resp.get('users', [])
-        u_d = users[0] if len(users) == 1 else {}
+    def from_user_info(user_info, groups, request):
+        u_d = dict(user_info)
         id = u_d.pop('id', None)
         d = {'id': id}
         for k in u_d.keys():

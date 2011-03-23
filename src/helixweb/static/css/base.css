@@ -36,6 +36,8 @@ tr.objects_data {vertical-align:text-top;text-align:center;}
 .menu_linked {color:#2c9e1f;}
 .current_item {color:#2c9e1f;}
 
+.submenu {padding-left:20px;}
+
 a:link {color:#2f46c6;}
 a:visited {color:#2f46c6;}
 

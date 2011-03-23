@@ -5,68 +5,83 @@
 {% block title %}{% trans "modify user" %}{% endblock %}
 
 {% block user_submenu %}
-submenu items
-<br>
+
+    {% load urlutils %}
+
+    {% if "/auth/modify_users/"|is_url_allowed:rights %}
+        <div class="submenu">
+            <span class="menu_linked">{% trans "modify user" %}</span>
+        </div>
+    {% endif %}
+
+    {% if "/auth/get_action_logs/"|is_url_allowed:rights %}
+        <div class="submenu">
+            <a href="/auth/get_action_logs/{{ user.id }}/">
+                {% trans "user action logs" %}
+            </a>
+        </div>
+    {% endif %}
+
 {% endblock %}
 
 {% block content %}
 
-{% load urlutils %}
+    {% load urlutils %}
 
-<form action="" method="post">{% csrf_token %}
+    <form action="" method="post">{% csrf_token %}
 
-    <div class="bordered">
+        <div class="bordered">
 
-        <table class="object_form center"  style="border-collapse:collapse;">
-            <tr>
-                <td colspan="2">
-                    <h2 class="menu_linked">
-                        {% allowedurl True %}
-                            /auth/get_users/
-                            {% trans "users" %}
-                        {% endallowedurl %}
-
-                        &rarr;
-
-                        {% trans "modify user" %}
-                    </h2>
-                </td>
-            </tr>
-
-            {% if users_error or groups_error %}
-
+            <table class="object_form center"  style="border-collapse:collapse;">
                 <tr>
                     <td colspan="2">
-                        <span class="errormessage">{% trans users_error %}</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2">
-                        <span class="errormessage">{% trans groups_error %}</span>
-                    </td>
-                </tr>
-
-            {% else %}
-
-                {{ form.as_table }}
-
-                <tr class="control">
-                    <td colspan="2">
-                        <input type="submit" style="font-weight:bold;" value="{% trans "save" %}" />
-                        <input type="hidden" id="stay_here" name="stay_here" value=0 />
-                        <input type="submit" value="{% trans "save and continue editing" %}"
-                            onclick="var f = this.form; f.stay_here.value=1; f.submit()" />
+                        <h2 class="menu_linked">
+                            {% allowedurl True %}
+                                /auth/get_users/
+                                {% trans "users" %}
+                            {% endallowedurl %}
+                            &rarr;
+                            <a href="/auth/user_info/{{ user.id }}/">{{ user.login }}</a>
+                            &rarr;
+                            {% trans "modify user" %}
+                        </h2>
                     </td>
                 </tr>
 
-            {% endif %}
+                {% if users_error or groups_error %}
 
-        </table>
+                    <tr>
+                        <td colspan="2">
+                            <span class="errormessage">{% trans users_error %}</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <span class="errormessage">{% trans groups_error %}</span>
+                        </td>
+                    </tr>
 
-        <br>
+                {% else %}
 
-    </div>
+                    {{ form.as_table }}
 
-</form>
+                    <tr class="control">
+                        <td colspan="2">
+                            <input type="submit" style="font-weight:bold;" value="{% trans "save" %}" />
+                            <input type="hidden" id="stay_here" name="stay_here" value=0 />
+                            <input type="submit" value="{% trans "save and continue editing" %}"
+                                onclick="var f = this.form; f.stay_here.value=1; f.submit()" />
+                        </td>
+                    </tr>
+
+                {% endif %}
+
+            </table>
+
+            <br>
+
+        </div>
+
+    </form>
 
 {% endblock %}
