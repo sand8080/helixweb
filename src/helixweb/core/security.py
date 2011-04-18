@@ -1,4 +1,5 @@
-from helixweb.core.client import Client
+from helixcore.server.client import Client
+
 from helixweb.auth import settings
 
 
