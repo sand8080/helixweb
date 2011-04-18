@@ -1,0 +1,27 @@
+{% extends "base_billing.html" %}
+
+{% load i18n %}
+
+{% block title %}{% trans "helixbilling" %}{% endblock %}
+
+{% block content %}
+
+    <div class="bordered wide">
+
+        <table class="center">
+            <tr>
+                <td>
+                    <p>
+                    {% blocktrans %}
+                    Helixbilling is service for helixprojects users
+                    accounting.
+                    {% endblocktrans %}
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <br>
+
+    </div>
+
+{% endblock %}

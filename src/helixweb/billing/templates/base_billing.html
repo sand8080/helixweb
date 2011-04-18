@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block sidebar %}
+
+{% load urlutils %}
+{% load i18n %}
+
+<table class="left_menu bordered wide">
+    <tr><td></td></tr>
+    {% if "/billing/get_currencies/,/billing/get_users/"|is_any_of_urls_allowed:rights %}
+        <tr>
+            <td>
+                {% allowedurl %}
+                    /billing/get_currencies/
+                    {% trans "handled currencies" %}
+                    <br>
+                {% endallowedurl %}
+
+                {% allowedurl %}
+                    /billing/get_used_currencies/
+                    {% trans "available currencies" %}
+                    <br>
+                {% endallowedurl %}
+                <br>
+            </td>
+        </tr>
+
+    {% endif %}
+    <tr><td>&nbsp;</td></tr>
+</table>
+
+{% endblock %}

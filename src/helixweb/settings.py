@@ -124,4 +124,5 @@ INSTALLED_APPS = (
     # 'django.contrib.admindocs',
     'core',
     'auth',
+    'billing',
 )

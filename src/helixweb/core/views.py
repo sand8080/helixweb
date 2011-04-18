@@ -1,9 +1,14 @@
 import base64
 
+from django.core.context_processors import csrf
 from django.http import HttpResponseRedirect
 from django.utils.safestring import mark_safe
 
-from helixweb.error import UnauthorizedActivity
+from helixcore.error import UnauthorizedActivity
+
+from helixweb.core.forms import _get_session_id
+from helixweb.core.localization import cur_lang, cur_lang_value
+from helixweb.core.security import get_rights
 
 
 def login_redirector(func):
@@ -71,3 +76,32 @@ def elems_as_table(elems, col_num):
                 output.append(empty_elem)
         output.append(u'</tr>')
     return mark_safe(u'\n'.join(output))
+
+
+def _prepare_context(request, cur_service=None):
+    c = {}
+    c['rights'] = get_rights(_get_session_id(request))
+    c['logged_in'] = True
+    c['cur_service'] = cur_service
+    c.update(cur_lang(request))
+    c.update(csrf(request))
+    return c
+
+
+def get_backurl(request):
+    default_url = '/%s/auth/' % cur_lang_value(request)
+    if 'backurl' in request.GET:
+        try:
+            return base64.decodestring(request.GET['backurl'])
+        except Exception:
+            return default_url
+    else:
+        return default_url
+
+
+def build_index(helix_resp, field):
+    ds = helix_resp.get(field, [])
+    ds_idx = {}
+    for d in ds:
+        ds_idx[d['id']] = d
+    return ds_idx
