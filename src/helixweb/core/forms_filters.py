@@ -1,3 +1,6 @@
+import datetime
+import pytz
+
 from helixweb.core.pager import Pager
 
 
@@ -25,3 +28,26 @@ class FilterForm(object):
 
     def update_total(self, helix_resp):
         self.pager.update_total(helix_resp)
+
+    def _strip_filter_param(self, d, name, new_name=None):
+        self._strip_param(d['filter_params'], name, new_name)
+
+    def _strip_from_date_param(self, d, name):
+        self._strip_filter_param(d, name)
+        f_params = d['filter_params']
+        f_d = f_params.get(name, None)
+        if f_d:
+            res_f_d = datetime.datetime(year=f_d.year,
+                month=f_d.month, day=f_d.day, hour=0, minute=0,
+                second=0, tzinfo=pytz.utc)
+            f_params[name] = res_f_d.isoformat()
+
+    def _strip_to_date_param(self, d, name):
+        self._strip_filter_param(d, name)
+        f_params = d['filter_params']
+        f_d = f_params.get(name, None)
+        if f_d:
+            res_f_d = datetime.datetime(year=f_d.year,
+                month=f_d.month, day=f_d.day, hour=23, minute=59,
+                second=59, tzinfo=pytz.utc)
+            f_params[name] = res_f_d.isoformat()

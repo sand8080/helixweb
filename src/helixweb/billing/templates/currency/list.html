@@ -1,0 +1,49 @@
+{% extends "base_billing.html" %}
+
+{% load i18n %}
+
+{% block title %}{% trans "currencies list" %}{% endblock %}
+
+{% block content %}
+
+<form action="" method="get">
+
+    {% load urlutils %}
+
+    <table class="center wide bordered">
+
+        {% if currencies_error %}
+
+            <tr>
+                <td>
+                    <span class="errormessage">{% trans currencies_error %}</span>
+                </td>
+            </tr>
+
+        {% else %}
+
+            {% if currencies %}
+
+                {% load transform %}
+
+                <tr class="objects_fields">
+                    <th>{% trans "service name" %}</th>
+                    <th>{% trans "type" %}</th>
+                    <th>{% trans "is active" %}</th>
+                    <th>{% trans "functions" %}</th>
+                </tr>
+
+
+            {% else %}
+
+                <tr><th>{% trans "no currencies found" %}</th></tr>
+
+            {% endif %}
+
+        {% endif %}
+
+    </table>
+
+</form>
+
+{% endblock %}

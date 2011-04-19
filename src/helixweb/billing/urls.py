@@ -4,10 +4,7 @@ from django.conf.urls.defaults import patterns
 urlpatterns = patterns('',
     (r'^$', 'billing.views.description'),
 
-#    (r'^login/', 'auth.views.login'),
-#    (r'^logout/', 'auth.views.logout'),
-#
-#    (r'^add_environment/$', 'auth.views.add_environment'),
+    (r'^get_currencies/$', 'billing.views.currencies'),
 #    (r'^modify_environment/$', 'auth.views.modify_environment'),
 #
 #    (r'^user_info/(?P<id>\d+)/$', 'auth.views.user_info'),
