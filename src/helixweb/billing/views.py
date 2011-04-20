@@ -5,7 +5,7 @@ from django.template import RequestContext
 
 from helixcore.server.client import Client
 
-from helixweb.core.views import (login_redirector, _prepare_context)
+from helixweb.core.views import (login_redirector, _prepare_context, process_helix_response)
 
 from helixweb.billing import settings #@UnresolvedImport
 from helixweb.billing.forms import CurrenciesForm
@@ -28,15 +28,8 @@ def description(request):
 def currencies(request):
     c = prepare_context(request)
     form = CurrenciesForm({'ordering_params': ['-code']}, request=request)
-#    form = CurrenciesForm(request=request)
-
     if form.is_valid():
         resp = helix_cli.request(form.as_helix_request())
-        print '### resp', resp
-        form.handle_errors(resp)
-    else:
-        print '### form is invalid'
-#    c['currencies_form'] = form
+        c.update(process_helix_response(resp, 'currencies', 'currencies_error'))
     return render_to_response('currency/list.html', c,
         context_instance=RequestContext(request))
-
