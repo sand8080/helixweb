@@ -4,7 +4,6 @@ from django.conf.urls.defaults import patterns
 urlpatterns = patterns('',
     (r'^$', 'billing.views.description'),
 
-    (r'^get_currencies/$', 'billing.views.currencies'),
     (r'^get_used_currencies/$', 'billing.views.used_currencies'),
     (r'^modify_used_currencies/$', 'billing.views.modify_used_currencies'),
 #

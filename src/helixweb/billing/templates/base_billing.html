@@ -7,7 +7,7 @@
 
 <table class="left_menu bordered wide">
     <tr><td></td></tr>
-    {% if "/billing/get_currencies/,/billing/get_used_currencies/,/billing/modify_used_currencies/"|is_any_of_urls_allowed:rights %}
+    {% if "/billing/get_used_currencies/,/billing/modify_used_currencies/"|is_any_of_urls_allowed:rights %}
         <tr>
             <td>
                 {% if "/billing/get_currencies/"|is_url_allowed:rights %}

@@ -6,62 +6,62 @@
 
 {% block content %}
 
-{% load urlutils %}
+    {% load urlutils %}
 
-<div class="bordered">
-    <table class="filter_object center">
+    <div class="bordered">
+        <table class="filter_object center">
 
-        <tr>
-            <th>
-                <h2 class="menu_linked">{% trans "used currencies" %}</h2>
-            </th>
-            <td></td>
-        </tr>
-    </table>
-</div>
-
-<br>
-
-<table class="center wide bordered">
-
-    {% if currencies_error %}
-
-        <tr class="objects_data">
-            <td>
-                <span class="errormessage">{% trans currencies_error %}</span>
-            </td>
-        </tr>
-
-    {% else %}
-
-        {% if currencies %}
-
-            {% load transform %}
-
-            <tr class="objects_fields">
-                <th>{% trans "code" %}</th>
-                <th>{% trans "name" %}</th>
-                <th>{% trans "location" %}</th>
+            <tr>
+                <th>
+                    <h2 class="menu_linked">{% trans "used currencies" %}</h2>
+                </th>
+                <td></td>
             </tr>
+        </table>
+    </div>
 
-            {% for curr in currencies %}
+    <br>
 
-                <tr class="objects_data {% cycle 'row1' 'row2' %}">
-                    <td>{{ curr.code }}</td>
-                    <td width="30%">{{ curr.name }}</td>
-                    <td width="50%">{{ curr.location }}</td>
-                </tr>
+    <table class="center wide bordered">
 
-            {% endfor %}
+        {% if currencies_error %}
+
+            <tr class="objects_data">
+                <td>
+                    <span class="errormessage">{% trans currencies_error %}</span>
+                </td>
+            </tr>
 
         {% else %}
 
-            <tr><th>{% trans "no currencies found" %}</th></tr>
+            {% if currencies %}
+
+                {% load transform %}
+
+                <tr class="objects_fields">
+                    <th>{% trans "code" %}</th>
+                    <th>{% trans "name" %}</th>
+                    <th>{% trans "location" %}</th>
+                </tr>
+
+                {% for curr in currencies %}
+
+                    <tr class="objects_data {% cycle 'row1' 'row2' %}">
+                        <td>{{ curr.code }}</td>
+                        <td width="30%">{{ curr.name }}</td>
+                        <td width="50%">{{ curr.location }}</td>
+                    </tr>
+
+                {% endfor %}
+
+            {% else %}
+
+                <tr><th>{% trans "no currencies found" %}</th></tr>
+
+            {% endif %}
 
         {% endif %}
 
-    {% endif %}
-
-</table>
+    </table>
 
 {% endblock %}
