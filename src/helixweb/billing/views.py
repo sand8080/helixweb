@@ -9,7 +9,9 @@ from helixweb.core.views import (login_redirector, _prepare_context,
     process_helix_response)
 
 from helixweb.billing import settings #@UnresolvedImport
-from helixweb.billing.forms import CurrenciesForm, UsedCurrenciesForm
+from helixweb.billing.forms import CurrenciesForm, UsedCurrenciesForm,\
+    ModifyUsedCurrenciesForm
+from django.http import HttpResponseRedirect
 
 
 helix_cli = Client(settings.BILLING_SERVICE_URL)
@@ -44,4 +46,34 @@ def used_currencies(request):
         resp = helix_cli.request(form.as_helix_request())
         c.update(process_helix_response(resp, 'currencies', 'currencies_error'))
     return render_to_response('currency/used_list.html', c,
+        context_instance=RequestContext(request))
+
+
+@login_redirector
+def modify_used_currencies(request):
+    c = prepare_context(request)
+
+    resp = helix_cli.request(ModifyUsedCurrenciesForm.get_currencies_req(request))
+    c.update(process_helix_response(resp, 'currencies', 'currencies_error'))
+    currencies = resp.get('currencies', [])
+
+    if request.method == 'POST':
+        form = ModifyUsedCurrenciesForm(request.POST, currencies=currencies, request=request)
+        if form.is_valid():
+            resp = helix_cli.request(form.as_helix_request())
+            form.handle_errors(resp)
+            if resp['status'] == 'ok':
+                if request.POST.get('stay_here', '0') != '1':
+                    return HttpResponseRedirect('/billing/get_used_currencies/')
+    else:
+        resp = helix_cli.request(ModifyUsedCurrenciesForm.get_used_currencies_req(request))
+        c.update(process_helix_response(resp, 'currencies', 'used_currencies_error'))
+        used_currs = resp.get('currencies', [])
+        used_currs_ids = [c['id'] for c in used_currs]
+        d = {'new_currencies_ids': used_currs_ids}
+        form = ModifyUsedCurrenciesForm(d, currencies=currencies, request=request)
+        if form.is_valid():
+            form.handle_errors(resp)
+    c['form'] = form
+    return render_to_response('currency/modify_used_currencies.html', c,
         context_instance=RequestContext(request))

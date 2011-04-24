@@ -6,7 +6,7 @@ urlpatterns = patterns('',
 
     (r'^get_currencies/$', 'billing.views.currencies'),
     (r'^get_used_currencies/$', 'billing.views.used_currencies'),
-#    (r'^modify_environment/$', 'auth.views.modify_environment'),
+    (r'^modify_used_currencies/$', 'billing.views.modify_used_currencies'),
 #
 #    (r'^user_info/(?P<id>\d+)/$', 'auth.views.user_info'),
 #    (r'^modify_users/(?P<id>\d+)/$', 'auth.views.modify_user'),

@@ -7,26 +7,22 @@
 
 <table class="left_menu bordered wide">
     <tr><td></td></tr>
-    {% if "/billing/get_currencies/,/billing/get_used_currencies/"|is_any_of_urls_allowed:rights %}
+    {% if "/billing/get_currencies/,/billing/get_used_currencies/,/billing/modify_used_currencies/"|is_any_of_urls_allowed:rights %}
         <tr>
             <td>
-                {% allowedurl %}
-                    /billing/get_currencies/
-                    {% trans "currencies list" %}
-                    <br>
-                {% endallowedurl %}
+                {% if "/billing/get_currencies/"|is_url_allowed:rights %}
+                    {% allowedurl %}
+                        /billing/get_used_currencies/
+                        {% trans "currencies" %}
+                        <br>
+                    {% endallowedurl %}
 
-                {% allowedurl %}
-                    /billing/get_used_currencies/
-                    {% trans "used currencies" %}
-                    <br>
-                {% endallowedurl %}
-
-                {% allowedurl %}
-                    /billing/modify_used_currencies/
-                    {% trans "modify used currencies" %}
-                    <br>
-                {% endallowedurl %}
+                    {% allowedurl %}
+                        /billing/modify_used_currencies/
+                        {% trans "modify currencies" %}
+                        <br>
+                    {% endallowedurl %}
+                {% endif %}
                 <br>
             </td>
         </tr>
