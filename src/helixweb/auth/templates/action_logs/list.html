@@ -1,8 +1,17 @@
 {% extends "base_auth.html" %}
 
-{% load i18n %}
+    {% load i18n %}
+{% block title %}
+    {% trans "action logs list" %}
+{% endblock %}
 
-{% block title %}{% trans "action logs list" %}{% endblock %}
+{% block content %}
+    {% include "core_action_logs/list.html" %}
+{% endblock %}
+
+
+
+{% comment %}
 
 {% block content %}
 
@@ -42,6 +51,7 @@
         </div>
     </form>
 
-    {% include "action_logs/actions_list.html" %}
+    {% include "core_action_logs/actions_list.html" %}
 
 {% endblock %}
+{% endcomment %}
