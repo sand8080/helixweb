@@ -86,7 +86,7 @@ class AbstractFilterAllActionLogsForm(AbstractFilterActionLogsForm):
     def __init__(self, *args, **kwargs):
         self.action = 'get_action_logs'
         super(AbstractFilterAllActionLogsForm, self).__init__(*args, **kwargs)
-        user_id = forms.IntegerField(label=_('user id'), required=False)
+        user_id = forms.CharField(label=_('user id'), required=False)
         self.fields['user_id'] = user_id
 
     def as_helix_request(self):

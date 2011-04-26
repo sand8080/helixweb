@@ -26,7 +26,32 @@
                 <br>
             </td>
         </tr>
+    {% endif %}
 
+    {% if "/billing/get_action_logs/"|is_any_of_urls_allowed:rights %}
+        <tr>
+            <td>
+                {% allowedurl %}
+                    /billing/get_action_logs/
+                    {% trans "all action logs" %}
+                    <br>
+                {% endallowedurl %}
+                <br>
+            </td>
+        </tr>
+    {% endif %}
+
+    {% if "/billing/get_action_logs_self/"|is_any_of_urls_allowed:rights %}
+        <tr>
+            <td>
+                {% allowedurl %}
+                    /auth/get_action_logs_self/
+                    {% trans "action logs" %}
+                    <br>
+                {% endallowedurl %}
+                <br>
+            </td>
+        </tr>
     {% endif %}
     <tr><td>&nbsp;</td></tr>
 </table>

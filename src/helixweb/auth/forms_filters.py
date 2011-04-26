@@ -1,8 +1,9 @@
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
-from helixweb.core.forms_filters import FilterForm, AbstractFilterActionLogsForm,\
-    AbstractFilterAllActionLogsForm, AbstractFilterSelfActionLogsForm
+from helixweb.core.forms_filters import (FilterForm, AbstractFilterActionLogsForm,
+    AbstractFilterAllActionLogsForm, AbstractFilterSelfActionLogsForm,
+    AbstractFilterUserActionLogsForm)
 from helixweb.core.forms import HelixwebRequestForm
 
 
@@ -102,20 +103,15 @@ class AbstractAuthFilterActionLogsForm(AbstractFilterActionLogsForm, FilterAuthF
 
 
 class FilterAllActionLogsForm(AbstractAuthFilterActionLogsForm, AbstractFilterAllActionLogsForm):
-    pass
+    def __init__(self, *args, **kwargs):
+        super(FilterAllActionLogsForm, self).__init__(*args, **kwargs)
+        user_id = forms.IntegerField(label=_('user id'), required=False)
+        self.fields['user_id'] = user_id
 
 
 class FilterSelfActionLogsForm(AbstractAuthFilterActionLogsForm, AbstractFilterSelfActionLogsForm):
     pass
 
 
-class FilterUserActionLogsForm(AbstractAuthFilterActionLogsForm):
-    def __init__(self, *args, **kwargs):
-        self.action = 'get_action_logs'
-        self.user_id = int(kwargs.pop('id'))
-        super(FilterUserActionLogsForm, self).__init__(*args, **kwargs)
-
-    def as_helix_request(self):
-        d = super(FilterUserActionLogsForm, self).as_helix_request()
-        d['filter_params']['user_id'] = self.user_id
-        return d
+class FilterUserActionLogsForm(AbstractAuthFilterActionLogsForm, AbstractFilterUserActionLogsForm):
+    pass

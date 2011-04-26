@@ -6,12 +6,14 @@ from django.template import RequestContext
 from helixcore.server.client import Client
 
 from helixweb.core.views import (login_redirector, _prepare_context,
-    process_helix_response)
+    process_helix_response, _action_logs)
 
 from helixweb.billing import settings #@UnresolvedImport
-from helixweb.billing.forms import CurrenciesForm, UsedCurrenciesForm,\
-    ModifyUsedCurrenciesForm
+from helixweb.billing.forms import (CurrenciesForm, UsedCurrenciesForm,
+    ModifyUsedCurrenciesForm)
 from django.http import HttpResponseRedirect
+from helixweb.billing.forms_filters import (FilterAllActionLogsForm,
+    FilterSelfActionLogsForm)
 
 
 helix_cli = Client(settings.BILLING_SERVICE_URL)
@@ -82,15 +84,14 @@ def modify_used_currencies(request):
 @login_redirector
 def action_logs(request):
     c = prepare_context(request)
-    c = _action_logs(c, request, FilterActionLogsForm, helix_cli)
-    return render_to_response('action_logs/list.html', c,
+    _action_logs(c, request, FilterAllActionLogsForm, helix_cli)
+    return render_to_response('action_logs/billing_list.html', c,
         context_instance=RequestContext(request))
 
 
 @login_redirector
 def action_logs_self(request):
     c = prepare_context(request)
-    c = _action_logs(c, request, FilterActionLogsForm, helix_cli)
-    return render_to_response('action_logs/list.html', c,
+    _action_logs(c, request, FilterSelfActionLogsForm, helix_cli)
+    return render_to_response('action_logs/billing_list.html', c,
         context_instance=RequestContext(request))
-
