@@ -1,5 +1,3 @@
-import iso8601
-import cjson
 from functools import partial
 from datetime import datetime, timedelta
 
@@ -12,7 +10,8 @@ from helixcore.server.client import Client
 
 from helixweb.core.localization import cur_lang
 from helixweb.core.views import (login_redirector, process_helix_response,
-    build_index, get_backurl, _prepare_context)
+    build_index, get_backurl, _prepare_context, _prepare_action_log,
+    _action_logs)
 from helixweb.core.forms import HelixwebRequestForm
 
 from helixweb.auth.forms import (LoginForm, AddServiceForm, ModifyServiceForm,
@@ -20,8 +19,8 @@ from helixweb.auth.forms import (LoginForm, AddServiceForm, ModifyServiceForm,
     ModifyUserSelfForm, AddUserForm, LogoutForm, AddEnvironmentForm,
     ModifyUserForm)
 from helixweb.auth.forms_filters import (FilterServiceForm, FilterGroupForm,
-    FilterUserForm, FilterActionLogsForm, FilterActionLogsSelfForm,
-    FilterUserActionLogsForm)
+    FilterUserForm, FilterUserActionLogsForm, FilterAllActionLogsForm,
+    FilterSelfActionLogsForm)
 from helixweb.auth import settings
 
 
@@ -465,39 +464,17 @@ def modify_group(request, id):
         context_instance=RequestContext(request))
 
 
-def _prepare_action_log(a_log):
-    a_log['request_date'] = iso8601.parse_date(a_log['request_date'])
-    a_log['request'] = cjson.decode(a_log['request'])
-    a_log['response'] = cjson.decode(a_log['response'])
-    return a_log
-
-
-def _action_logs(request, al_form_cls):
-    c = prepare_context(request)
-    if request.method == 'GET':
-        form = al_form_cls(request.GET, request=request)
-    else:
-        form = al_form_cls({}, request=request)
-    if form.is_valid():
-        resp = helix_cli.request(form.as_helix_request())
-        form.update_total(resp)
-        if 'action_logs' in resp:
-            resp['action_logs'] = map(_prepare_action_log, resp['action_logs'])
-        c.update(process_helix_response(resp, 'action_logs', 'action_logs_error'))
-        c['pager'] = form.pager
-    c['form'] = form
-    return c
-
-
 @login_redirector
 def action_logs(request):
-    c = _action_logs(request, FilterActionLogsForm)
+    c = prepare_context(request)
+    _action_logs(c, request, FilterAllActionLogsForm, helix_cli)
     return render_to_response('action_logs/list.html', c,
         context_instance=RequestContext(request))
 
 
 @login_redirector
 def action_logs_self(request):
-    c = _action_logs(request, FilterActionLogsSelfForm)
+    c = prepare_context(request)
+    _action_logs(c, request, FilterSelfActionLogsForm, helix_cli)
     return render_to_response('action_logs/list.html', c,
         context_instance=RequestContext(request))

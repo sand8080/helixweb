@@ -1,6 +1,9 @@
 import datetime
 import pytz
 
+from django import forms
+from django.utils.translation import ugettext_lazy as _
+
 from helixweb.core.pager import Pager
 
 
@@ -51,3 +54,60 @@ class FilterForm(object):
                 month=f_d.month, day=f_d.day, hour=23, minute=59,
                 second=59, tzinfo=pytz.utc)
             f_params[name] = res_f_d.isoformat()
+
+
+class AbstractFilterActionLogsForm(object):
+    def __init__(self, *args, **kwargs):
+        choices = kwargs.pop('choices')
+        super(AbstractFilterActionLogsForm, self).__init__(*args, **kwargs)
+
+        action_name = forms.CharField(label=_('action name'), required=False,
+            widget=forms.widgets.Select(choices=choices))
+        sess_id = forms.CharField(label=_('session'), max_length=40,
+            required=False)
+        from_request_date = forms.DateField(label=_('from'), required=False)
+        to_request_date = forms.DateField(label=_('to'), required=False)
+
+        self.fields['action_name'] = action_name
+        self.fields['sess_id'] = sess_id
+        self.fields['from_request_date'] = from_request_date
+        self.fields['to_request_date'] = to_request_date
+
+    def as_helix_request(self):
+        d = super(AbstractFilterActionLogsForm, self).as_helix_request()
+        self._strip_filter_param(d, 'action_name', new_name='action')
+        self._strip_filter_param(d, 'sess_id', new_name='session_id')
+        self._strip_from_date_param(d, 'from_request_date')
+        self._strip_to_date_param(d, 'to_request_date')
+        return d
+
+
+class AbstractFilterAllActionLogsForm(AbstractFilterActionLogsForm):
+    def __init__(self, *args, **kwargs):
+        self.action = 'get_action_logs'
+        super(AbstractFilterAllActionLogsForm, self).__init__(*args, **kwargs)
+        user_id = forms.IntegerField(label=_('user id'), required=False)
+        self.fields['user_id'] = user_id
+
+    def as_helix_request(self):
+        d = super(AbstractFilterAllActionLogsForm, self).as_helix_request()
+        self._strip_filter_param(d, 'user_id')
+        return d
+
+
+class AbstractFilterSelfActionLogsForm(AbstractFilterActionLogsForm):
+    def __init__(self, *args, **kwargs):
+        self.action = 'get_action_logs_self'
+        super(AbstractFilterSelfActionLogsForm, self).__init__(*args, **kwargs)
+
+
+class AbstractFilterUserActionLogsForm(AbstractFilterActionLogsForm):
+    def __init__(self, *args, **kwargs):
+        self.action = 'get_action_logs'
+        self.user_id = int(kwargs.pop('id'))
+        super(AbstractFilterUserActionLogsForm, self).__init__(*args, **kwargs)
+
+    def as_helix_request(self):
+        d = super(AbstractFilterUserActionLogsForm, self).as_helix_request()
+        d['filter_params']['user_id'] = self.user_id
+        return d

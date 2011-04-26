@@ -79,33 +79,18 @@ def modify_used_currencies(request):
         context_instance=RequestContext(request))
 
 
-def _action_logs(request, al_form_cls):
-    c = prepare_context(request)
-    if request.method == 'GET':
-        form = al_form_cls(request.GET, request=request)
-    else:
-        form = al_form_cls({}, request=request)
-    if form.is_valid():
-        resp = helix_cli.request(form.as_helix_request())
-        form.update_total(resp)
-        if 'action_logs' in resp:
-            resp['action_logs'] = map(_prepare_action_log, resp['action_logs'])
-        c.update(process_helix_response(resp, 'action_logs', 'action_logs_error'))
-        c['pager'] = form.pager
-    c['form'] = form
-    return c
-
-
 @login_redirector
 def action_logs(request):
-    c = _action_logs(request, FilterActionLogsForm)
+    c = prepare_context(request)
+    c = _action_logs(c, request, FilterActionLogsForm, helix_cli)
     return render_to_response('action_logs/list.html', c,
         context_instance=RequestContext(request))
 
 
 @login_redirector
 def action_logs_self(request):
-    c = _action_logs(request, FilterActionLogsSelfForm)
+    c = prepare_context(request)
+    c = _action_logs(c, request, FilterActionLogsForm, helix_cli)
     return render_to_response('action_logs/list.html', c,
         context_instance=RequestContext(request))
 

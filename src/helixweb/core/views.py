@@ -1,11 +1,12 @@
 import base64
+import cjson
+import iso8601
 
 from django.core.context_processors import csrf
 from django.http import HttpResponseRedirect
 from django.utils.safestring import mark_safe
 
 from helixcore.error import UnauthorizedActivity
-
 from helixweb.core.forms import _get_session_id
 from helixweb.core.localization import cur_lang, cur_lang_value
 from helixweb.core.security import get_rights
@@ -33,6 +34,22 @@ def separate_elems_by_columns(total, col_num):
     for i in range(total % col_num):
         result[i] += 1
     return result
+
+
+def _action_logs(context, request, form_cls, helix_client):
+    if request.method == 'GET':
+        form = form_cls(request.GET, request=request)
+    else:
+        form = form_cls({}, request=request)
+    if form.is_valid():
+        resp = helix_client.request(form.as_helix_request())
+        form.update_total(resp)
+        if 'action_logs' in resp:
+            resp['action_logs'] = map(_prepare_action_log, resp['action_logs'])
+        context.update(process_helix_response(resp, 'action_logs', 'action_logs_error'))
+        context['pager'] = form.pager
+    context['form'] = form
+
 
 def elems_indexes_by_columns(total, col_num):
     el_in_cols = separate_elems_by_columns(total, col_num)
@@ -105,3 +122,10 @@ def build_index(helix_resp, field):
     for d in ds:
         ds_idx[d['id']] = d
     return ds_idx
+
+
+def _prepare_action_log(a_log):
+    a_log['request_date'] = iso8601.parse_date(a_log['request_date'])
+    a_log['request'] = cjson.decode(a_log['request'])
+    a_log['response'] = cjson.decode(a_log['response'])
+    return a_log

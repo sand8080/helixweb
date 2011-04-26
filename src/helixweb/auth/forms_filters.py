@@ -1,7 +1,8 @@
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
-from helixweb.core.forms_filters import FilterForm
+from helixweb.core.forms_filters import FilterForm, AbstractFilterActionLogsForm,\
+    AbstractFilterAllActionLogsForm, AbstractFilterSelfActionLogsForm
 from helixweb.core.forms import HelixwebRequestForm
 
 
@@ -82,63 +83,33 @@ class FilterUserForm(FilterAuthForm):
         return d
 
 
-class AbstractFilterActionLogsForm(FilterAuthForm):
+class AbstractAuthFilterActionLogsForm(AbstractFilterActionLogsForm, FilterAuthForm):
     def __init__(self, *args, **kwargs):
-        super(AbstractFilterActionLogsForm, self).__init__(*args, **kwargs)
-
-        action_name = forms.CharField(label=_('action name'), required=False,
-            widget=forms.widgets.Select(choices=(
-                ('', ''), ('login', _('login')), ('logout', _('logout')),
-                ('add_environment', _('add environment')),
-                ('modify_environment', _('modify environment')),
-                ('add_service', _('add service')),
-                ('modify_service', _('modify service')),
-                ('add_group', _('add group')),
-                ('modify_group', _('modify group')),
-                ('delete_group', _('delete group')),
-                ('add_user', _('add user')),
-                ('modify_uses', _('modify users')),
-                ('modify_user_self', _('modify user self')),
-            )))
-        sess_id = forms.CharField(label=_('session'), max_length=40,
-            required=False)
-        from_request_date = forms.DateField(label=_('from'), required=False)
-        to_request_date = forms.DateField(label=_('to'), required=False)
-
-        self.fields['action_name'] = action_name
-        self.fields['sess_id'] = sess_id
-        self.fields['from_request_date'] = from_request_date
-        self.fields['to_request_date'] = to_request_date
-
-    def as_helix_request(self):
-        d = super(AbstractFilterActionLogsForm, self).as_helix_request()
-        self._strip_filter_param(d, 'action_name', new_name='action')
-        self._strip_filter_param(d, 'sess_id', new_name='session_id')
-        self._strip_from_date_param(d, 'from_request_date')
-        self._strip_to_date_param(d, 'to_request_date')
-        return d
+        kwargs['choices'] = (
+            ('', ''), ('login', _('login')), ('logout', _('logout')),
+            ('add_environment', _('add environment')),
+            ('modify_environment', _('modify environment')),
+            ('add_service', _('add service')),
+            ('modify_service', _('modify service')),
+            ('add_group', _('add group')),
+            ('modify_group', _('modify group')),
+            ('delete_group', _('delete group')),
+            ('add_user', _('add user')),
+            ('modify_uses', _('modify users')),
+            ('modify_user_self', _('modify user self')),
+        )
+        super(AbstractAuthFilterActionLogsForm, self).__init__(*args, **kwargs)
 
 
-class FilterActionLogsForm(AbstractFilterActionLogsForm):
-    def __init__(self, *args, **kwargs):
-        self.action = 'get_action_logs'
-        super(FilterActionLogsForm, self).__init__(*args, **kwargs)
-        user_id = forms.IntegerField(label=_('user id'), required=False)
-        self.fields['user_id'] = user_id
-
-    def as_helix_request(self):
-        d = super(FilterActionLogsForm, self).as_helix_request()
-        self._strip_filter_param(d, 'user_id')
-        return d
+class FilterAllActionLogsForm(AbstractAuthFilterActionLogsForm, AbstractFilterAllActionLogsForm):
+    pass
 
 
-class FilterActionLogsSelfForm(AbstractFilterActionLogsForm):
-    def __init__(self, *args, **kwargs):
-        self.action = 'get_action_logs_self'
-        super(FilterActionLogsSelfForm, self).__init__(*args, **kwargs)
+class FilterSelfActionLogsForm(AbstractAuthFilterActionLogsForm, AbstractFilterSelfActionLogsForm):
+    pass
 
 
-class FilterUserActionLogsForm(AbstractFilterActionLogsForm):
+class FilterUserActionLogsForm(AbstractAuthFilterActionLogsForm):
     def __init__(self, *args, **kwargs):
         self.action = 'get_action_logs'
         self.user_id = int(kwargs.pop('id'))
