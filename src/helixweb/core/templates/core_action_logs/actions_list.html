@@ -57,10 +57,13 @@
                                 <tr>
                                     <td>{% trans "actor" %}</td>
                                     <td>
-                                        {% allowedurl True %}
-                                            /auth/get_users/?id={{ a_l.actor_user_id }}
+                                        {% if "/auth/get_users/"|is_url_allowed:rights %}
+                                            <a href="/auth/user_info/{{ a_l.actor_user_id }}/">
+                                                {{ a_l.actor_user_id }}
+                                            </a>
+                                        {% else %}
                                             {{ a_l.actor_user_id }}
-                                        {% endallowedurl %}
+                                        {% endif %}
                                     </td>
                                 </tr>
                             {% endif %}
@@ -70,7 +73,7 @@
                                     <td>{% trans "subjects" %}</td>
                                     <td>
                                         {% if '/auth/get_users/'|is_url_allowed:rights %}
-                                            {{ '/auth/get_users/?id='|gen_urls_list:a_l.subject_users_ids}}
+                                            {{ '/auth/user_info/'|gen_urls_list:a_l.subject_users_ids }}
                                         {% else %}
                                             {{ a_l.subject_users_ids|join:', ' }}
                                         {% endif %}
