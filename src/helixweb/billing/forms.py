@@ -32,12 +32,7 @@ class ModifyUsedCurrenciesForm(BillingForm):
     def __init__(self, *args, **kwargs):
         currencies = kwargs.pop('currencies', [])
         super(ModifyUsedCurrenciesForm, self).__init__(*args, **kwargs)
-        choices = [(c['id'], '%s (%s)' % (c['code'], c['name'])) for c in currencies]
-        self.fields['new_currencies_ids'] = forms.MultipleChoiceField(label=_('currencies'),
+        choices = [(c['code'], '%s (%s)' % (c['code'], c['name'])) for c in currencies]
+        self.fields['new_currencies_codes'] = forms.MultipleChoiceField(label=_('currencies'),
             required=False, choices=choices,
             widget=forms.widgets.CheckboxSelectMultiple)
-
-    def as_helix_request(self):
-        d = super(ModifyUsedCurrenciesForm, self).as_helix_request()
-        d['new_currencies_ids'] = map(int, d['new_currencies_ids'])
-        return d

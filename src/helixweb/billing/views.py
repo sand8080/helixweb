@@ -71,8 +71,8 @@ def modify_used_currencies(request):
         resp = helix_cli.request(ModifyUsedCurrenciesForm.get_used_currencies_req(request))
         c.update(process_helix_response(resp, 'currencies', 'used_currencies_error'))
         used_currs = resp.get('currencies', [])
-        used_currs_ids = [curr['id'] for curr in used_currs]
-        d = {'new_currencies_ids': used_currs_ids}
+        used_currs_codes = [curr['code'] for curr in used_currs]
+        d = {'new_currencies_codes': used_currs_codes}
         form = ModifyUsedCurrenciesForm(d, currencies=currencies, request=request)
         if form.is_valid():
             form.handle_errors(resp)
