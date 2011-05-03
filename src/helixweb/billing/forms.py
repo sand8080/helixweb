@@ -36,3 +36,7 @@ class ModifyUsedCurrenciesForm(BillingForm):
         self.fields['new_currencies_codes'] = forms.MultipleChoiceField(label=_('currencies'),
             required=False, choices=choices,
             widget=forms.widgets.CheckboxSelectMultiple)
+
+
+class BalanceSelfForm(BillingForm):
+    action = 'get_balance_self'

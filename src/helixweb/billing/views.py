@@ -10,7 +10,7 @@ from helixweb.core.views import (login_redirector, _prepare_context,
 
 from helixweb.billing import settings #@UnresolvedImport
 from helixweb.billing.forms import (CurrenciesForm, UsedCurrenciesForm,
-    ModifyUsedCurrenciesForm)
+    ModifyUsedCurrenciesForm, BalanceSelfForm)
 from django.http import HttpResponseRedirect
 from helixweb.billing.forms_filters import (FilterAllActionLogsForm,
     FilterSelfActionLogsForm)
@@ -94,4 +94,15 @@ def action_logs_self(request):
     c = prepare_context(request)
     _action_logs(c, request, FilterSelfActionLogsForm, helix_cli)
     return render_to_response('action_logs/billing_list.html', c,
+        context_instance=RequestContext(request))
+
+
+@login_redirector
+def balance_self(request):
+    c = prepare_context(request)
+    form = BalanceSelfForm(request=request)
+    if form.is_valid():
+        resp = helix_cli.request(form.as_helix_request())
+        c.update(process_helix_response(resp, 'balances', 'balances_error'))
+    return render_to_response('balance/balance_self.html', c,
         context_instance=RequestContext(request))

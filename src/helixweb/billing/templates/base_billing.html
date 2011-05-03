@@ -39,9 +39,14 @@
         </tr>
     {% endif %}
 
-    {% if "/billing/get_action_logs_self/"|is_any_of_urls_allowed:rights %}
+    {% if "/billing/get_action_logs_self/,/billing/get_balance_self"|is_any_of_urls_allowed:rights %}
         <tr>
             <td>
+                {% allowedurl %}
+                    /billing/get_balance_self/
+                    {% trans "balance" %}
+                    <br>
+                {% endallowedurl %}
                 {% allowedurl %}
                     /billing/get_action_logs_self/
                     {% trans "action logs" %}
