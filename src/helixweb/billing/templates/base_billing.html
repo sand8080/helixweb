@@ -26,6 +26,25 @@
         </tr>
     {% endif %}
 
+    {% if "/billing/get_balances/,/billing/add_balance/"|is_any_of_urls_allowed:rights %}
+        <tr>
+            <td>
+                {% allowedurl %}
+                    /billing/get_balances/
+                    {% trans "all balances" %}
+                    <br>
+                {% endallowedurl %}
+
+                {% allowedurl %}
+                    /billing/add_balance/
+                    {% trans "add balance" %}
+                    <br>
+                {% endallowedurl %}
+                <br>
+            </td>
+        </tr>
+    {% endif %}
+
     {% if "/billing/get_action_logs/"|is_any_of_urls_allowed:rights %}
         <tr>
             <td>

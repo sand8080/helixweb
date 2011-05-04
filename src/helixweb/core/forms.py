@@ -1,8 +1,9 @@
+from decimal import Decimal
+
 from django import forms
 from django.forms.forms import NON_FIELD_ERRORS
 from django.utils.translation import ugettext_lazy as _
 from django.forms.util import ErrorList
-
 from django.utils.encoding import force_unicode
 
 
@@ -84,5 +85,7 @@ class HelixwebRequestForm(forms.Form):
             p = d.pop(name, None)
             if isinstance(p, (str, unicode)):
                 p = p.strip()
+            elif isinstance(p, Decimal):
+                p = '%s' % p
             if p:
                 d[new_name] = p

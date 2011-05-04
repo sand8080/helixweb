@@ -13,7 +13,7 @@ from helixweb.billing.forms import (CurrenciesForm, UsedCurrenciesForm,
     ModifyUsedCurrenciesForm, BalanceSelfForm)
 from django.http import HttpResponseRedirect
 from helixweb.billing.forms_filters import (FilterAllActionLogsForm,
-    FilterSelfActionLogsForm)
+    FilterSelfActionLogsForm, FilterBalanceForm)
 
 
 helix_cli = Client(settings.BILLING_SERVICE_URL)
@@ -94,6 +94,25 @@ def action_logs_self(request):
     c = prepare_context(request)
     _action_logs(c, request, FilterSelfActionLogsForm, helix_cli)
     return render_to_response('action_logs/billing_list.html', c,
+        context_instance=RequestContext(request))
+
+
+@login_redirector
+def balances(request):
+    c = prepare_context(request)
+    if len(request.GET) == 0 or (len(request.GET) == 1 and 'pager_offset' in request.GET):
+        # setting default is_active value to True
+        form = FilterBalanceForm({'is_active': 'all'}, request=request)
+    else:
+        form = FilterBalanceForm(request.GET, request=request)
+
+    if form.is_valid():
+        resp = helix_cli.request(form.as_helix_request())
+        form.update_total(resp)
+        c.update(process_helix_response(resp, 'balances', 'balances_error'))
+        c['pager'] = form.pager
+    c['form'] = form
+    return render_to_response('balance/list.html', c,
         context_instance=RequestContext(request))
 
 
