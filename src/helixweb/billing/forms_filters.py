@@ -4,10 +4,10 @@ from django.utils.translation import ugettext_lazy as _
 from helixweb.core.forms_filters import (FilterForm, AbstractFilterActionLogsForm,
     AbstractFilterAllActionLogsForm, AbstractFilterSelfActionLogsForm,
     AbstractFilterUserActionLogsForm)
-from helixweb.core.forms import HelixwebRequestForm
+from helixweb.billing.forms import BillingForm
 
 
-class FilterBillingForm(FilterForm, HelixwebRequestForm):
+class FilterBillingForm(FilterForm, BillingForm):
     pass
 
 
@@ -33,31 +33,38 @@ class FilterUserActionLogsForm(AbstractBillingFilterActionLogsForm, AbstractFilt
 
 class FilterBalanceForm(FilterBillingForm):
     action = 'get_balances'
-    user_id = forms.CharField(label=_('user id'), max_length=32,
-        required=False)
-    is_active = forms.ChoiceField(label=_('is active'), required=False, widget=forms.widgets.RadioSelect(),
-        choices=(('all', _('all')), ('1', _('active')), ('0', _('inactive'))),
-        initial='all')
-    from_available_real_amount = forms.DecimalField(label=_('real amount from'),
-        required=False)
-    to_available_real_amount = forms.DecimalField(label=_('real amount to'),
-        required=False)
-    from_available_virtual_amount = forms.DecimalField(label=_('virtual amount from'),
-        required=False)
-    to_available_virtual_amount = forms.DecimalField(label=_('virtual amount to'),
-        required=False)
-    from_overdraft_limit = forms.DecimalField(label=_('overdraft limit from'),
-        required=False)
-    to_overdraft_limit = forms.DecimalField(label=_('overdraft limit to'),
-        required=False)
-    from_locked_amount = forms.DecimalField(label=_('locked amount from'),
-        required=False)
-    to_locked_amount = forms.DecimalField(label=_('locked amount to'),
-        required=False)
+
+    def __init__(self, *args, **kwargs):
+        currencies = kwargs.pop('currencies', [])
+        super(FilterBalanceForm, self).__init__(*args, **kwargs)
+
+        self.fields['user_id'] = forms.CharField(label=_('user id'), max_length=32,
+            required=False)
+        self.fields['currency_code'] = self._gen_currency_code(currencies, required=False)
+        self.fields['from_available_real_amount'] = forms.DecimalField(label=_('real amount from'),
+            required=False)
+        self.fields['to_available_real_amount'] = forms.DecimalField(label=_('real amount to'),
+            required=False)
+        self.fields['from_available_virtual_amount'] = forms.DecimalField(label=_('virtual amount from'),
+            required=False)
+        self.fields['to_available_virtual_amount'] = forms.DecimalField(label=_('virtual amount to'),
+            required=False)
+        self.fields['from_overdraft_limit'] = forms.DecimalField(label=_('overdraft limit from'),
+            required=False)
+        self.fields['to_overdraft_limit'] = forms.DecimalField(label=_('overdraft limit to'),
+            required=False)
+        self.fields['from_locked_amount'] = forms.DecimalField(label=_('locked amount from'),
+            required=False)
+        self.fields['to_locked_amount'] = forms.DecimalField(label=_('locked amount to'),
+            required=False)
+        self.fields['is_active'] = forms.ChoiceField(label=_('is active'), required=False, widget=forms.widgets.RadioSelect(),
+            choices=(('all', _('all')), ('1', _('active')), ('0', _('inactive'))),
+            initial='all')
 
     def as_helix_request(self):
         d = super(FilterBalanceForm, self).as_helix_request()
         self._strip_filter_param(d, 'user_id')
+        self._strip_filter_param(d, 'currency_code')
         self._strip_filter_param(d, 'from_available_real_amount')
         self._strip_filter_param(d, 'to_available_real_amount')
         self._strip_filter_param(d, 'from_available_virtual_amount')
