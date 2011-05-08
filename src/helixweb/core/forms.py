@@ -85,6 +85,8 @@ class HelixwebRequestForm(forms.Form):
             p = d.pop(name, None)
             if isinstance(p, (str, unicode)):
                 p = p.strip()
+                if p == 'None':
+                    p = None
             elif isinstance(p, Decimal):
                 p = '%s' % p
             if p:

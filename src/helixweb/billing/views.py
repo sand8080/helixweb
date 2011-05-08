@@ -100,11 +100,14 @@ def action_logs_self(request):
 @login_redirector
 def balances(request):
     c = prepare_context(request)
+    resp = helix_cli.request(FilterBalanceForm.get_used_currencies_req(request))
+    c.update(process_helix_response(resp, 'currencies', 'currencies_error'))
+    currencies = resp.get('currencies', [])
     if len(request.GET) == 0 or (len(request.GET) == 1 and 'pager_offset' in request.GET):
         # setting default is_active value to True
-        form = FilterBalanceForm({'is_active': 'all'}, request=request)
+        form = FilterBalanceForm({'is_active': 'all'}, currencies=currencies, request=request)
     else:
-        form = FilterBalanceForm(request.GET, request=request)
+        form = FilterBalanceForm(request.GET, currencies=currencies, request=request)
 
     if form.is_valid():
         resp = helix_cli.request(form.as_helix_request())
