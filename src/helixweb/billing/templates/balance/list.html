@@ -64,12 +64,54 @@
                 </tr>
 
                 <tr class="objects_fields">
-                    <th>{% trans "user_id" %}</th>
-                    <th>{% trans "login" %}</th>
+                    <th>{% trans "id" %}</th>
+                    <th>{% trans "user id" %}</th>
                     <th>{% trans "is active" %}</th>
-                    <th>{% trans "groups" %}</th>
-                    <th>{% trans "rights" %}</th>
+                    <th>{% trans "currency" %}</th>
+                    <th>{% trans "real" %}</th>
+                    <th>{% trans "virtual" %}</th>
+                    <th>{% trans "overdraft" %}</th>
+                    <th>{% trans "locked" %}</th>
+                    <th>{% trans "locking order" %}</th>
                 </tr>
+
+                {% for balance in balances %}
+
+                    <tr class="objects_data {% cycle 'row1' 'row2' %}">
+                        <td>
+                            {% allowedurl True %}
+                                /billing/modify_balance/{{ balance.id }}/
+                                {{ balance.id }}
+                            {% endallowedurl %}
+                        </td>
+                        <td>
+                            {% if "/auth/get_users/"|is_url_allowed:rights %}
+                                <a href="/auth/user_info/{{ balance.user_id }}/">{{ balance.user_id }}</a>
+                            {% else %}
+                                {{ balance.user_id }}
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if balance.is_active %}
+                                +
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
+                        <td>{{ balance.currency_code }}</td>
+                        <td>{{ balance.available_real_amount }}</td>
+                        <td>{{ balance.available_virtual_amount }}</td>
+                        <td>{{ balance.overdraft_limit }}</td>
+                        <td>{{ balance.locked_amount }}</td>
+                        <td>
+                            {% if balance.locking_order %}
+                                {{ balance.locking_order }}
+                            {% else %}
+                                {% trans "default order" %}
+                            {% endif %}
+                        </td>
+
+                {% endfor %}
 
                 <tr>
                     <td colspan="4">
