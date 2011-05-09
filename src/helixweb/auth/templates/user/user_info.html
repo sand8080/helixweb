@@ -19,7 +19,11 @@
                             {% trans "users" %}
                         {% endallowedurl %}
                         &rarr;
-                        <span class="menu_linked">{{ user.login }}</span>
+                        {% if user.login %}
+                            <span class="menu_linked">{{ user.login }}</span>
+                        {% else %}
+                            <span class="menu_linked">{% trans "user not found" %}</span>
+                        {% endif %}
                     </h2>
                 </td>
             </tr>
@@ -34,10 +38,13 @@
 
             {% else %}
 
-                <tr>
-                    <td>
-                        {% if user and "/auth/modify_users/,/auth/get_action_logs/"|is_any_of_urls_allowed:rights %}
+                {% if user %}
 
+                    {% if "/auth/modify_users/,/auth/get_action_logs/"|is_any_of_urls_allowed:rights %}
+
+                        <tr><td><hr></td></tr>
+                        <tr><td>{% trans "auth operations" %}</td></tr>
+                        <tr><td>
                             {% if "/auth/modify_users/"|is_url_allowed:rights %}
                                 <a href="/auth/modify_users/{{ user.id }}/">
                                     {% trans "modify user" %}
@@ -51,15 +58,37 @@
                                 </a>
                                 <br>
                             {% endif %}
+                        </td></tr>
 
-                        {% else %}
+                    {% endif %}
 
-                            {% trans "no available user operations" %}
+                    {% if "/billing/get_balances/,/billing/get_action_logs/"|is_any_of_urls_allowed:rights %}
 
-                        {% endif %}
-                    </td>
-                </tr>
+                        <tr><td><hr></td></tr>
+                        <tr><td>{% trans "billing operations" %}</td></tr>
+                        <tr><td>
+                            {% if "/billing/get_balances/"|is_url_allowed:rights %}
+                                <a href="/billing/get_balances/?user_id={{ user.id }}">
+                                    {% trans "user balance" %}
+                                </a>
+                                <br>
+                            {% endif %}
 
+                            {% if "/billing/get_action_logs/"|is_url_allowed:rights %}
+                                <a href="/billing/get_action_logs/?user_id={{ user.id }}">
+                                    {% trans "user billing action logs" %}
+                                </a>
+                                <br>
+                            {% endif %}
+                        </td></tr>
+
+                    {% endif %}
+
+                {% else %}
+
+                    <tr><td>{% trans "no available user operations" %}</td></tr>
+
+                {% endif %}
 
             {% endif %}
 
