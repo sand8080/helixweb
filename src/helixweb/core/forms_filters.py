@@ -61,6 +61,7 @@ class AbstractFilterActionLogsForm(object):
         choices = kwargs.pop('choices')
         super(AbstractFilterActionLogsForm, self).__init__(*args, **kwargs)
 
+        user_id = forms.IntegerField(label=_('user id'), required=False)
         action_name = forms.CharField(label=_('action name'), required=False,
             widget=forms.widgets.Select(choices=choices))
         sess_id = forms.CharField(label=_('session'), max_length=40,
@@ -69,6 +70,7 @@ class AbstractFilterActionLogsForm(object):
         to_request_date = forms.DateField(label=_('to'), required=False)
 
         self.fields['action_name'] = action_name
+        self.fields['user_id'] = user_id
         self.fields['sess_id'] = sess_id
         self.fields['from_request_date'] = from_request_date
         self.fields['to_request_date'] = to_request_date
@@ -79,6 +81,7 @@ class AbstractFilterActionLogsForm(object):
         self._strip_filter_param(d, 'sess_id', new_name='session_id')
         self._strip_from_date_param(d, 'from_request_date')
         self._strip_to_date_param(d, 'to_request_date')
+        self._strip_filter_param(d, 'user_id')
         return d
 
 
@@ -86,13 +89,6 @@ class AbstractFilterAllActionLogsForm(AbstractFilterActionLogsForm):
     def __init__(self, *args, **kwargs):
         self.action = 'get_action_logs'
         super(AbstractFilterAllActionLogsForm, self).__init__(*args, **kwargs)
-        user_id = forms.CharField(label=_('user id'), required=False)
-        self.fields['user_id'] = user_id
-
-    def as_helix_request(self):
-        d = super(AbstractFilterAllActionLogsForm, self).as_helix_request()
-        self._strip_filter_param(d, 'user_id')
-        return d
 
 
 class AbstractFilterSelfActionLogsForm(AbstractFilterActionLogsForm):

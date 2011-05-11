@@ -103,10 +103,7 @@ class AbstractAuthFilterActionLogsForm(AbstractFilterActionLogsForm, FilterAuthF
 
 
 class FilterAllActionLogsForm(AbstractAuthFilterActionLogsForm, AbstractFilterAllActionLogsForm):
-    def __init__(self, *args, **kwargs):
-        super(FilterAllActionLogsForm, self).__init__(*args, **kwargs)
-        user_id = forms.IntegerField(label=_('user id'), required=False)
-        self.fields['user_id'] = user_id
+    pass
 
 
 class FilterSelfActionLogsForm(AbstractAuthFilterActionLogsForm, AbstractFilterSelfActionLogsForm):
