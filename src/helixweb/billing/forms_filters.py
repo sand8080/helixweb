@@ -38,8 +38,7 @@ class FilterBalanceForm(FilterBillingForm):
         currencies = kwargs.pop('currencies', [])
         super(FilterBalanceForm, self).__init__(*args, **kwargs)
 
-        self.fields['user_id'] = forms.IntegerField(label=_('user id'), max_length=32,
-            required=False)
+        self.fields['user_id'] = forms.IntegerField(label=_('user id'), required=False)
         self.fields['currency_code'] = self._gen_currency_code(currencies, required=False)
         self.fields['from_available_real_amount'] = forms.DecimalField(label=_('real amount from'),
             required=False)

@@ -53,7 +53,7 @@ class AddBalanceForm(BillingForm):
     def __init__(self, *args, **kwargs):
         currencies = kwargs.pop('currencies', [])
         super(AddBalanceForm, self).__init__(*args, **kwargs)
-        self.fields['user_id'] = forms.IntegerField(label=_('user id'), max_length=32)
+        self.fields['user_id'] = forms.IntegerField(label=_('user id'))
         self.fields['currency_code'] = self._gen_currency_code(currencies)
         self.fields['overdraft_limit'] = forms.DecimalField(label=_('overdraft limit'),
             required=False)
@@ -66,6 +66,9 @@ class AddBalanceForm(BillingForm):
         self.fields['is_active'] = forms.ChoiceField(label=_('is active'),
             widget=forms.widgets.RadioSelect(), initial='1',
             choices=(('1', _('active')), ('0', _('inactive'))))
+        self.fields['check_user_exist'] = forms.ChoiceField(label=_('check user exist'),
+            widget=forms.widgets.RadioSelect(), initial='1',
+            choices=(('1', _('check')), ('0', _('not check'))))
 
     def as_helix_request(self):
         d = super(AddBalanceForm, self).as_helix_request()
@@ -73,4 +76,5 @@ class AddBalanceForm(BillingForm):
         self._strip_param(d, 'currency_code')
         self._strip_param(d, 'overdraft_limit')
         d['is_active'] = bool(int(d['is_active']))
+        d['check_user_exist'] = bool(int(d['check_user_exist']))
         return d
