@@ -13,8 +13,9 @@ class FilterBillingForm(FilterForm, BillingForm):
 
 class AbstractBillingFilterActionLogsForm(AbstractFilterActionLogsForm, FilterBillingForm):
     def __init__(self, *args, **kwargs):
-        kwargs['choices'] = (
-            ('', ''), ('modify_used_currencies', _('modify currencies')),
+        kwargs['choices'] = (('', ''),
+            ('add_balance', _('add balance')),
+            ('modify_used_currencies', _('modify currencies')),
         )
         super(AbstractBillingFilterActionLogsForm, self).__init__(*args, **kwargs)
 

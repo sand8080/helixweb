@@ -48,7 +48,11 @@
                     <td>{{ a_l.action }}</td>
                     <td>
                         <span style="white-space:nowrap;">
-                            {{ a_l.request_date|date:"Y-m-d H:i:s" }}
+                            {{ a_l.request_date|date:"Y-m-d" }}
+                        </span>
+                        <br>
+                        <span style="white-space:nowrap;">
+                            {{ a_l.request_date|date:"H:i:s" }}
                         </span>
                     </td>
                     <td align="left">

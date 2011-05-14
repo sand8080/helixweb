@@ -1,4 +1,4 @@
-table.main {width:75%;}
+table.main {width:85%;}
 table.main tr {vertical-align:top;}
 
 tr.row1 {background:white;}
@@ -47,7 +47,7 @@ table.filter_object td {vertical-align:top;}
 table.filter_object th {vertical-align:middle;text-align:right;}
 table.filter_object li {list-style-type:none;list-style-position:outside;}
 
-table.left_menu td {padding-left:30px;font-weight:bold;}
+table.left_menu td {padding-left:30px;padding-right:10px;font-weight:bold;}
 
 table.services_properties th {text-align:left;background:#EDE8E8;}
 table.services_properties td {text-align:left;}
