@@ -1,8 +1,8 @@
-{% extends "base_auth.html" %}
+{% extends "base_billing.html" %}
 
 {% load i18n %}
 
-{% block title %}{% trans "user information" %}{% endblock %}
+{% block title %}{% trans "billing user information" %}{% endblock %}
 
 {% block content %}
 
@@ -15,15 +15,11 @@
                 <td colspan="2">
                     <h2>
                         {% allowedurl True %}
-                            /auth/get_users/
-                            {% trans "users" %}
+                            /billing/get_balances/
+                            {% trans "balances" %}
                         {% endallowedurl %}
                         &rarr;
-                        {% if user.login %}
-                            <span class="menu_linked">{{ user.login }}</span>
-                        {% else %}
-                            <span class="menu_linked">{% trans "user not found" %}</span>
-                        {% endif %}
+                        <span class="menu_linked">{% trans "user id" %} {{ user_id }}</span>
                     </h2>
                 </td>
             </tr>
@@ -38,28 +34,28 @@
 
             {% else %}
 
-                {% if user %}
+                {% if user_id %}
 
-                    {% if "/auth/modify_users/,/auth/get_action_logs/"|is_any_of_urls_allowed:rights %}
+                    {% if "/billing/get_balances/,/billing/get_action_logs/"|is_any_of_urls_allowed:rights %}
 
                         <tr><td><hr></td></tr>
                         <tr><td>
                             {% allowedurl %}
-                                /auth/modify_users/{{ user.id }}/
-                                {% trans "modify user" %}
+                                /billing/get_balances/?user_id={{ user_id }}
+                                {% trans "user balance" %}
                                 <br>
                             {% endallowedurl %}
 
                             {% allowedurl %}
-                                /auth/get_action_logs/{{ user.id }}/
-                                {% trans "user action logs" %}
+                                /billing/get_action_logs/?user_id={{ user_id }}
+                                {% trans "user billing action logs" %}
                                 <br>
                             {% endallowedurl %}
                         </td></tr>
 
                     {% endif %}
 
-                    {% if "/billing/get_balances/,/billing/get_action_logs/"|is_any_of_urls_allowed:rights %}
+                    {% if "/auth/modify_users/,/auth/get_action_logs/"|is_any_of_urls_allowed:rights %}
 
                         <tr><td><hr></td></tr>
 
@@ -67,8 +63,8 @@
 
                         <tr>
                             <td>
-                                <a href="{{ '/billing/user_info/'|chlocale:cur_lang }}{{ user.id }}/">
-                                    {% trans "billing user info" %}
+                                <a href="{{ '/auth/user_info/'|chlocale:cur_lang }}{{ user_id }}/">
+                                    {% trans "auth user info" %}
                                 </a>
                             </td>
                         </tr>

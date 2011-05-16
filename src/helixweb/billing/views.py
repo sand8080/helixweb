@@ -151,3 +151,15 @@ def balance_self(request):
         c.update(process_helix_response(resp, 'balances', 'balances_error'))
     return render_to_response('balance/balance_self.html', c,
         context_instance=RequestContext(request))
+
+
+@login_redirector
+def user_info(request, id):
+    id = int(id)
+    c = prepare_context(request)
+    c['user_id'] = id
+#    resp = helix_cli.request(HelixwebRequestForm.get_users_req(request, [id]))
+#    c.update(process_helix_response(resp, 'users', 'users_error'))
+#    c['user'] = _extract_user(resp)
+    return render_to_response('user/billing_user_info.html', c,
+        context_instance=RequestContext(request))

@@ -7,6 +7,8 @@ urlpatterns = patterns('',
     (r'^get_used_currencies/$', 'billing.views.used_currencies'),
     (r'^modify_used_currencies/$', 'billing.views.modify_used_currencies'),
 
+    (r'^user_info/(?P<id>\d+)/$', 'billing.views.user_info'),
+
     (r'^get_balances/$', 'billing.views.balances'),
     (r'^add_balance/$', 'billing.views.add_balance'),
 
