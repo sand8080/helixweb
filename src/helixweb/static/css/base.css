@@ -7,7 +7,8 @@ tr.row2 {background:#DFDFDF;}
 table.login {padding:20px 10px 20px 10px;}
 div.login {padding-left:17%;}
 
-span.errormessage {color:red;}
+.errormessage {color:red;}
+.disabled {color:gray;}
 tr.errormessage {background-color:pink;}
 
 table.center {margin-left:auto;margin-right:auto;}
@@ -38,6 +39,8 @@ tr.objects_data {vertical-align:text-top;text-align:center;}
 
 .submenu {padding-left:20px;}
 
+.small_text {font-size:small;}
+
 a:link {color:#2f46c6;}
 a:visited {color:#2f46c6;}
 
@@ -51,6 +54,10 @@ table.left_menu td {padding-left:30px;padding-right:10px;font-weight:bold;}
 
 table.services_properties th {text-align:left;background:#EDE8E8;}
 table.services_properties td {text-align:left;}
+
+table.balance {padding:1px 2px 1px 2px;}
+table.balance th {text-align:left;background:#EFF3FF;}
+table.balance td {padding:2px 10px 2px 10px;}
 
 /*.marked {color:green;}*/
 .not_marked {color:red;}

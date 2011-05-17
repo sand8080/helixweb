@@ -6,14 +6,20 @@ from helixweb.core.forms import HelixwebRequestForm, _get_session_id
 
 class BillingForm(HelixwebRequestForm):
     @staticmethod
+    def _simple_req(action, request):
+        return {'action': action, 'session_id': _get_session_id(request)}
+
+    @staticmethod
     def get_currencies_req(request):
-        return {'action': 'get_currencies',
-            'session_id': _get_session_id(request)}
+        return BillingForm._simple_req('get_currencies', request)
 
     @staticmethod
     def get_used_currencies_req(request):
-        return {'action': 'get_used_currencies',
-            'session_id': _get_session_id(request)}
+        return BillingForm._simple_req('get_used_currencies', request)
+
+    @staticmethod
+    def get_balances_self_req(request):
+        return BillingForm._simple_req('get_balances_self', request)
 
     def _gen_currency_code(self, currencies, required=True):
         choices = [(None, '--')] + [(c['code'], c['code']) for c in currencies]
@@ -41,10 +47,6 @@ class ModifyUsedCurrenciesForm(BillingForm):
         self.fields['new_currencies_codes'] = forms.MultipleChoiceField(label=_('currencies'),
             required=False, choices=choices,
             widget=forms.widgets.CheckboxSelectMultiple)
-
-
-class BalanceSelfForm(BillingForm):
-    action = 'get_balance_self'
 
 
 class AddBalanceForm(BillingForm):
