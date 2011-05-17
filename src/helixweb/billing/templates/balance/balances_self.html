@@ -61,7 +61,7 @@
                                  <td>{{ balance.locked_amount }}</td>
                              </tr>
 
-                             {% if balance.overdraft_limit %}
+                             {% if balance.overdraft_limit != '0.0' or  balance.overdraft_limit != '0.00' or balance.overdraft_limit != '0.000' %}
                              <tr {% if not balance.is_active %}class="disabled"{% endif %}>
                                  <td>{% trans "overdraft limit" %}</td>
                                  <td>{{ balance.overdraft_limit }}</td>
