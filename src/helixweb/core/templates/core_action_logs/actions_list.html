@@ -61,8 +61,8 @@
                                 <tr>
                                     <td>{% trans "actor" %}</td>
                                     <td>
-                                        {% if "/auth/get_users/"|is_url_allowed:rights %}
-                                            <a href="/auth/user_info/{{ a_l.actor_user_id }}/">
+                                        {% if checking_url|is_url_allowed:rights %}
+                                            <a href="{{ user_info_url }}{{ a_l.actor_user_id }}/">
                                                 {{ a_l.actor_user_id }}
                                             </a>
                                         {% else %}
@@ -76,8 +76,10 @@
                                 <tr>
                                     <td>{% trans "subjects" %}</td>
                                     <td>
-                                        {% if '/auth/get_users/'|is_url_allowed:rights %}
-                                            {{ '/auth/user_info/'|gen_urls_list:a_l.subject_users_ids }}
+                                        {% if checking_url|is_url_allowed:rights %}
+                                            {% autoescape off %}
+                                            {{ user_info_url|gen_urls_list:a_l.subject_users_ids }}
+                                            {% endautoescape %}
                                         {% else %}
                                             {{ a_l.subject_users_ids|join:', ' }}
                                         {% endif %}

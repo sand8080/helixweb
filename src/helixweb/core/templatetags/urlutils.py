@@ -126,5 +126,5 @@ def is_url_allowed(url, rights):
 
 @register.filter
 def gen_urls_list(base_url, values):
-    return ', '.join(['<a href="%s%s">%s</a>' % (base_url, v, v) for v in values])
+    return ', '.join(['<a href="%s%s/">%s</a>' % (base_url, v, v) for v in values])
 gen_urls_list.is_safe = True

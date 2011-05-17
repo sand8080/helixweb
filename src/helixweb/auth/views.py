@@ -464,9 +464,16 @@ def modify_group(request, id):
         context_instance=RequestContext(request))
 
 
+def _prepare_action_logs_context(c):
+    params = {'checking_url': '/auth/get_users/',
+        'user_info_url': '/auth/get_user_info/'}
+    c.update(params)
+
+
 @login_redirector
 def action_logs(request):
     c = prepare_context(request)
+    _prepare_action_logs_context(c)
     _action_logs(c, request, FilterAllActionLogsForm, helix_cli)
     return render_to_response('action_logs/auth_list.html', c,
         context_instance=RequestContext(request))
