@@ -57,6 +57,8 @@
 
             {% if balances %}
 
+                {% load localeurl_tags %}
+
                 <tr>
                     <td colspan="5">
                         {% include "pager.html" %}
@@ -85,8 +87,10 @@
                             {% endallowedurl %}
                         </td>
                         <td>
-                            {% if "/auth/get_users/"|is_url_allowed:rights %}
-                                <a href="/auth/user_info/{{ balance.user_id }}/">{{ balance.user_id }}</a>
+                            {% if "/billing/get_balances/"|is_url_allowed:rights %}
+                                <a href="{{ '/billing/user_info/'|chlocale:cur_lang }}{{ balance.user_id }}/">
+                                    {{ balance.user_id }}
+                                </a>
                             {% else %}
                                 {{ balance.user_id }}
                             {% endif %}

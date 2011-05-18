@@ -21,6 +21,12 @@ class BillingForm(HelixwebRequestForm):
     def get_balances_self_req(request):
         return BillingForm._simple_req('get_balances_self', request)
 
+    @staticmethod
+    def get_user_balances_req(request, user_id):
+        return {'action': 'get_balances', 'session_id': _get_session_id(request),
+            'filter_params': {'user_id': int(user_id)}, 'paging_params': {},
+            'ordering_params': ['-currency_id']}
+
     def _gen_currency_code(self, currencies, required=True):
         choices = [(None, '--')] + [(c['code'], c['code']) for c in currencies]
         return forms.ChoiceField(label=_('currency'), choices=choices,
