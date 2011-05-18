@@ -344,6 +344,7 @@ def modify_user(request, id):
 @login_redirector
 def user_action_logs(request, id):
     c = prepare_context(request)
+    _prepare_action_logs_context(c)
     user = _get_user_info(request, c, id)
     c['user'] = user
     if request.method == 'GET':
@@ -466,7 +467,7 @@ def modify_group(request, id):
 
 def _prepare_action_logs_context(c):
     params = {'checking_url': '/auth/get_users/',
-        'user_info_url': '/auth/get_user_info/'}
+        'user_info_url': '/auth/user_info/'}
     c.update(params)
 
 
@@ -482,6 +483,7 @@ def action_logs(request):
 @login_redirector
 def action_logs_self(request):
     c = prepare_context(request)
+    _prepare_action_logs_context(c)
     _action_logs(c, request, FilterSelfActionLogsForm, helix_cli)
     return render_to_response('action_logs/auth_list.html', c,
         context_instance=RequestContext(request))

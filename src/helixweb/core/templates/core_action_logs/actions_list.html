@@ -56,13 +56,17 @@
                         </span>
                     </td>
                     <td align="left">
+
+                        {% load localeurl_tags %}
+
                         <table>
                             {% if a_l.actor_user_id %}
                                 <tr>
                                     <td>{% trans "actor" %}</td>
                                     <td>
                                         {% if checking_url|is_url_allowed:rights %}
-                                            <a href="{{ user_info_url }}{{ a_l.actor_user_id }}/">
+
+                                            <a href="{{ user_info_url|chlocale:cur_lang }}{{ a_l.actor_user_id }}/">
                                                 {{ a_l.actor_user_id }}
                                             </a>
                                         {% else %}
@@ -78,7 +82,7 @@
                                     <td>
                                         {% if checking_url|is_url_allowed:rights %}
                                             {% autoescape off %}
-                                            {{ user_info_url|gen_urls_list:a_l.subject_users_ids }}
+                                            {{ user_info_url|chlocale:cur_lang|gen_urls_list:a_l.subject_users_ids }}
                                             {% endautoescape %}
                                         {% else %}
                                             {{ a_l.subject_users_ids|join:', ' }}
