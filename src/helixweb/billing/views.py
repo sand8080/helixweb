@@ -132,6 +132,7 @@ def user_balances(request, user_id):
     c = prepare_context(request)
     resp = helix_cli.request(BillingForm.get_user_balances_req(request, user_id))
     c.update(process_helix_response(resp, 'balances', 'balances_error'))
+    c['user_id'] = user_id
     return render_to_response('balance/balances_self.html', c,
         context_instance=RequestContext(request))
 

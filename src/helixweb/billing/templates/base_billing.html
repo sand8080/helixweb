@@ -45,6 +45,13 @@
         </tr>
     {% endif %}
 
+    <tr>
+        <td>
+            {% block user_submenu %}
+            {% endblock %}
+        </td>
+    </tr>
+
     {% if "/billing/get_action_logs/"|is_any_of_urls_allowed:rights %}
         <tr>
             <td>

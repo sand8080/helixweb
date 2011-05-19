@@ -7,10 +7,11 @@
 {% block user_submenu %}
 
     {% load urlutils %}
+    {% load localeurl_tags %}
 
     {% if "/auth/modify_users/"|is_url_allowed:rights %}
         <div class="submenu">
-            <a href="/auth/modify_users/{{ user.id }}/">
+            <a href="{{ '/auth/modify_users/'|chlocale:cur_lang }}{{ user.id }}/">
                 {% trans "modify user" %}
             </a>
         </div>
