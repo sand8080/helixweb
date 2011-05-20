@@ -10,8 +10,10 @@ urlpatterns = patterns('',
     (r'^user_info/(?P<id>\d+)/$', 'billing.views.user_info'),
 
     (r'^get_balances/$', 'billing.views.balances'),
-    (r'^get_balances/(?P<user_id>\d+)/$', 'billing.views.user_balances'),
     (r'^add_balance/$', 'billing.views.add_balance'),
+
+    (r'^get_balances/(?P<user_id>\d+)/$', 'billing.views.user_balances'),
+    (r'^add_balance/(?P<user_id>\d+)/$', 'billing.views.user_add_balance'),
 
     (r'^get_action_logs/$', 'billing.views.action_logs'),
 

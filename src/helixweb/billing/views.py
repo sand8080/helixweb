@@ -137,14 +137,16 @@ def user_balances(request, user_id):
         context_instance=RequestContext(request))
 
 
-@login_redirector
-def add_balance(request):
+def _add_balance(request, template, redirect_url, user_id=None):
     c = prepare_context(request)
+    c['user_id'] = user_id
+    c['action'] = AddBalanceForm.action
     resp = helix_cli.request(AddBalanceForm.get_used_currencies_req(request))
     c.update(process_helix_response(resp, 'currencies', 'currencies_error'))
     currencies = resp.get('currencies', [])
     if request.method == 'POST':
-        form = AddBalanceForm(request.POST, currencies=currencies, request=request)
+        form = AddBalanceForm(request.POST, currencies=currencies, request=request,
+            user_id=user_id)
         if form.is_valid():
             resp = helix_cli.request(form.as_helix_request())
             form.handle_errors(resp)
@@ -152,12 +154,24 @@ def add_balance(request):
                 if request.POST.get('stay_here', '0') == '1':
                     return HttpResponseRedirect('.')
                 else:
-                    return HttpResponseRedirect('/billing/get_balances/')
+                    return HttpResponseRedirect(redirect_url)
     else:
-        form = AddBalanceForm(currencies=currencies, request=request)
+        form = AddBalanceForm(currencies=currencies, request=request, user_id=user_id)
     c['form'] = form
-    return render_to_response('balance/add.html', c,
+    return render_to_response(template, c,
         context_instance=RequestContext(request))
+
+
+@login_redirector
+def add_balance(request):
+    return _add_balance(request, 'balance/add.html',
+        '/billing/get_balances/')
+
+
+@login_redirector
+def user_add_balance(request, user_id):
+    return _add_balance(request, 'user/add_balance.html',
+        '/billing/user_info/%s/' % user_id, user_id=user_id)
 
 
 @login_redirector

@@ -5,31 +5,8 @@
 {% block title %}{% trans "billing user information" %}{% endblock %}
 
 {% block user_submenu %}
-
-    {% load urlutils %}
-    {% load localeurl_tags %}
-
-    <span class="menu_linked">{% trans "user id" %} {{ user_id }}</span>
-
-    {% if "/billing/get_balances/"|is_url_allowed:rights %}
-        <div class="submenu">
-            <a href="{{ '/billing/get_balances/'|chlocale:cur_lang }}{{ user_id }}/">
-                <span style="white-space:nowrap;">{% trans "balances" %}</span>
-            </a>
-        </div>
-    {% endif %}
-
-    {% if "/billing/get_action_logs/"|is_url_allowed:rights %}
-        <div class="submenu">
-            <a href="{{ '/billing/get_action_logs/'|chlocale:cur_lang }}{{ user_id }}/">
-                <span style="white-space:nowrap;">{% trans "action logs" %}</span>
-            </a>
-        </div>
-    {% endif %}
-    <br>
-
+    {% include "user/billing_sumbmenu.html" %}
 {% endblock %}
-
 
 {% block content %}
 
@@ -41,7 +18,11 @@
             <tr>
                 <td colspan="2">
                     <h2>
-                        <span class="menu_linked">{% trans "user id" %} {{ user_id }}</span>
+                        <span class="menu_linked">
+                            {% blocktrans %}
+                                user id #{{ user_id }}
+                            {% endblocktrans %}
+                        </span>
                     </h2>
                 </td>
             </tr>
@@ -58,19 +39,25 @@
 
                 {% if user_id %}
 
-                    {% if "/billing/get_balances/,/billing/get_action_logs/"|is_any_of_urls_allowed:rights %}
+                    {% if "/billing/add_balance/,/billing/get_balances/,/billing/get_action_logs/"|is_any_of_urls_allowed:rights %}
 
                         <tr><td><hr></td></tr>
                         <tr><td>
                             {% allowedurl %}
+                                /billing/add_balance/{{ user_id }}/
+                                {% trans "add balance" %}
+                                <br>
+                            {% endallowedurl %}
+
+                            {% allowedurl %}
                                 /billing/get_balances/{{ user_id }}/
-                                {% trans "user balances" %}
+                                {% trans "balances" %}
                                 <br>
                             {% endallowedurl %}
 
                             {% allowedurl %}
                                 /billing/get_action_logs/?user_id={{ user_id }}
-                                {% trans "user billing action logs" %}
+                                {% trans "billing action logs" %}
                                 <br>
                             {% endallowedurl %}
                         </td></tr>
@@ -86,7 +73,7 @@
                         <tr>
                             <td>
                                 <a href="{{ '/auth/user_info/'|chlocale:cur_lang }}{{ user_id }}/">
-                                    {% trans "auth user info" %}
+                                    {% trans "auth info" %}
                                 </a>
                             </td>
                         </tr>

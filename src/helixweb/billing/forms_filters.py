@@ -39,6 +39,7 @@ class FilterBalanceForm(FilterBillingForm):
         currencies = kwargs.pop('currencies', [])
         super(FilterBalanceForm, self).__init__(*args, **kwargs)
 
+        self.fields['id'] = forms.IntegerField(label=_('balance id'), required=False)
         self.fields['user_id'] = forms.IntegerField(label=_('user id'), required=False)
         self.fields['currency_code'] = self._gen_currency_code(currencies, required=False)
         self.fields['from_available_real_amount'] = forms.DecimalField(label=_('real amount from'),
@@ -63,6 +64,7 @@ class FilterBalanceForm(FilterBillingForm):
 
     def as_helix_request(self):
         d = super(FilterBalanceForm, self).as_helix_request()
+        self._strip_filter_param(d, 'id')
         self._strip_filter_param(d, 'user_id')
         self._strip_filter_param(d, 'currency_code')
         self._strip_filter_param(d, 'from_available_real_amount')

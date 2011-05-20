@@ -1,0 +1,38 @@
+{% load i18n %}
+{% load urlutils %}
+{% load localeurl_tags %}
+
+<span class="menu_linked">
+    {% blocktrans %}
+        user id #{{ user_id }}
+    {% endblocktrans %}
+</span>
+
+{% if "/billing/add_balance/"|is_url_allowed:rights %}
+    <div class="submenu">
+        {% if action == 'add_balance' %}
+            <span class="menu_linked">{% trans "add balance" %}</span>
+        {% else %}
+            <a href="{{ '/billing/add_balance/'|chlocale:cur_lang }}{{ user_id }}/">
+                <span style="white-space:nowrap;">{% trans "add balance" %}</span>
+            </a>
+        {% endif %}
+    </div>
+{% endif %}
+
+{% if "/billing/get_balances/"|is_url_allowed:rights %}
+    <div class="submenu">
+        <a href="{{ '/billing/get_balances/'|chlocale:cur_lang }}{{ user_id }}/">
+            <span style="white-space:nowrap;">{% trans "balances" %}</span>
+        </a>
+    </div>
+{% endif %}
+
+{% if "/billing/get_action_logs/"|is_url_allowed:rights %}
+    <div class="submenu">
+        <a href="{{ '/billing/get_action_logs/'|chlocale:cur_lang }}{{ user_id }}/">
+            <span style="white-space:nowrap;">{% trans "action logs" %}</span>
+        </a>
+    </div>
+{% endif %}
+<br>

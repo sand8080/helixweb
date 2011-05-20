@@ -60,8 +60,11 @@ class AddBalanceForm(BillingForm):
 
     def __init__(self, *args, **kwargs):
         currencies = kwargs.pop('currencies', [])
+        user_id = kwargs.pop('user_id', None)
         super(AddBalanceForm, self).__init__(*args, **kwargs)
-        self.fields['user_id'] = forms.IntegerField(label=_('user id'))
+        user_id_widget = forms.widgets.HiddenInput if user_id else forms.widgets.TextInput
+        self.fields['user_id'] = forms.IntegerField(label=_('user id'), initial=user_id,
+            widget=user_id_widget)
         self.fields['currency_code'] = self._gen_currency_code(currencies)
         self.fields['overdraft_limit'] = forms.DecimalField(label=_('overdraft limit'),
             required=False)
