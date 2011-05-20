@@ -82,9 +82,16 @@
                     <tr class="objects_data {% cycle 'row1' 'row2' %}">
                         <td>
                             {% allowedurl True %}
-                                /billing/modify_balance/{{ balance.id }}/
+                                /billing/modify_balances/{{ balance.id }}/
                                 {{ balance.id }}
                             {% endallowedurl %}
+                            <br>
+                            {% allowedurl True %}
+                                /billing/modify_balances/{{ balance.id }}/
+                                <span class="small_text">{% trans "modify" %}</span>
+                            {% endallowedurl %}
+                            <br>
+                            <span class="small_text">{% trans "further details" %}</span>
                         </td>
                         <td>
                             {% if "/billing/get_balances/"|is_url_allowed:rights %}
