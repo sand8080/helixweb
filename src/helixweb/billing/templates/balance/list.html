@@ -60,7 +60,7 @@
                 {% load localeurl_tags %}
 
                 <tr>
-                    <td colspan="5">
+                    <td colspan="9">
                         {% include "pager.html" %}
                     </td>
                 </tr>
@@ -84,11 +84,6 @@
                             {% allowedurl True %}
                                 /billing/modify_balances/{{ balance.id }}/
                                 {{ balance.id }}
-                            {% endallowedurl %}
-                            <br>
-                            {% allowedurl True %}
-                                /billing/modify_balances/{{ balance.id }}/
-                                <span class="small_text">{% trans "modify" %}</span>
                             {% endallowedurl %}
                             <br>
                             <span class="small_text">{% trans "further details" %}</span>
@@ -125,7 +120,7 @@
                 {% endfor %}
 
                 <tr>
-                    <td colspan="4">
+                    <td colspan="9">
                         {% include "pager.html" %}
                     </td>
                 </tr>

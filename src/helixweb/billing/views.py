@@ -10,7 +10,7 @@ from helixweb.core.views import (login_redirector, _prepare_context,
 
 from helixweb.billing import settings #@UnresolvedImport
 from helixweb.billing.forms import (CurrenciesForm, UsedCurrenciesForm,
-    ModifyUsedCurrenciesForm, AddBalanceForm, BillingForm)
+    ModifyUsedCurrenciesForm, AddBalanceForm, BillingForm, ModifyBalanceForm)
 from django.http import HttpResponseRedirect
 from helixweb.billing.forms_filters import (FilterAllActionLogsForm,
     FilterSelfActionLogsForm, FilterBalanceForm)
@@ -172,6 +172,32 @@ def add_balance(request):
 def user_add_balance(request, user_id):
     return _add_balance(request, 'user/add_balance.html',
         '/billing/user_info/%s/' % user_id, user_id=user_id)
+
+
+#@login_redirector
+#def modify_balance(request, balance_id):
+#    c = prepare_context(request)
+#    c['action'] = ModifyBalanceForm.action
+#    if request.method == 'POST':
+#        form = ModifyBalanceForm(request.POST)
+#        if form.is_valid():
+#            resp = helix_cli.request(form.as_helix_request())
+#            form.handle_errors(resp)
+#            if resp['status'] == 'ok':
+#                if request.POST.get('stay_here', '0') == '1':
+#                    return HttpResponseRedirect('.')
+#                else:
+#                    return HttpResponseRedirect(redirect_url)
+#    else:
+#        balance = _get_user_info(request, c, id)
+#        form = ModifyBalanceForm.from_balance_info(balance, request)
+#        form = AddBalanceForm(currencies=currencies, request=request, user_id=user_id)
+#    c['form'] = form
+#    return render_to_response(template, c,
+#        context_instance=RequestContext(request))
+#
+#    return _add_balance(request, 'balance/add.html',
+#        '/billing/get_balances/')
 
 
 @login_redirector
