@@ -25,7 +25,7 @@ class BillingForm(HelixwebRequestForm):
     def get_user_balances_req(request, user_id):
         return {'action': 'get_balances', 'session_id': _get_session_id(request),
             'filter_params': {'user_id': int(user_id)}, 'paging_params': {},
-            'ordering_params': ['-currency_id']}
+            'ordering_params': ['currency_id']}
 
     def _gen_currency_code(self, currencies, required=True):
         choices = [(None, '--')] + [(c['code'], c['code']) for c in currencies]
@@ -55,7 +55,33 @@ class ModifyUsedCurrenciesForm(BillingForm):
             widget=forms.widgets.CheckboxSelectMultiple)
 
 
-class AddBalanceForm(BillingForm):
+class BalanceForm(BillingForm):
+    @staticmethod
+    def locking_choices():
+        return ((0, _('only real')), (1, _('only virtual')),
+            (2, _('real, virtual')), (3, _('virtual, real')),)
+
+    def _strip_locking_order(self, d):
+        f_name = 'locking_order'
+        self._strip_param(d, f_name)
+        if f_name in d:
+            choice = int(d[f_name])
+            if choice == 0:
+                d[f_name] = ['available_real_amount']
+            elif choice == 1:
+                d[f_name] = ['available_virtual_amount']
+            elif choice == 3:
+                d[f_name] = ['available_virtual_amount', 'available_virtual_amount']
+            elif choice == 4:
+                d[f_name] = ['available_virtual_amount', 'available_virtual_amount']
+
+    def as_helix_request(self):
+        d = super(BillingForm, self).as_helix_request()
+        self._strip_locking_order(d)
+        return d
+
+
+class AddBalanceForm(BalanceForm):
     action = 'add_balance'
 
     def __init__(self, *args, **kwargs):
@@ -68,12 +94,11 @@ class AddBalanceForm(BillingForm):
         self.fields['currency_code'] = self._gen_currency_code(currencies)
         self.fields['overdraft_limit'] = forms.DecimalField(label=_('overdraft limit'),
             required=False)
-        # TODO: implement locking order
-#        locking_choices = [('available_real_amount', 'real'),
-#            ('available_virtual_amount', 'virtual')]
-#        self.fields['locking_order'] = forms.MultipleChoiceField(label=_('locking order'),
-#            required=False, choices=locking_choices,
-#            widget=forms.widgets.CheckboxSelectMultiple)
+
+        self.fields['locking_order'] = forms.ChoiceField(label=_('locking order'),
+            required=False, choices=self.locking_choices(),
+            widget=forms.widgets.RadioSelect, initial='None')
+
         self.fields['is_active'] = forms.ChoiceField(label=_('is active'),
             widget=forms.widgets.RadioSelect(), initial='1',
             choices=(('1', _('active')), ('0', _('inactive'))))
