@@ -88,9 +88,7 @@ def add_service(request):
             resp = helix_cli.request(form.as_helix_request())
             form.handle_errors(resp)
             if resp['status'] == 'ok':
-                if request.POST.get('stay_here', '0') == '1':
-                    return HttpResponseRedirect('.')
-                else:
+                if request.POST.get('stay_here', '0') != '1':
                     return HttpResponseRedirect('/auth/get_services/')
     else:
         form = AddServiceForm(request=request)
@@ -191,9 +189,7 @@ def add_user(request):
             resp = helix_cli.request(form.as_helix_request())
             form.handle_errors(resp)
             if resp['status'] == 'ok':
-                if request.POST.get('stay_here', '0') == '1':
-                    return HttpResponseRedirect('.')
-                else:
+                if request.POST.get('stay_here', '0') != '1':
                     return HttpResponseRedirect('/auth/get_users/')
     else:
         form = AddUserForm(groups=groups, request=request)
@@ -406,9 +402,7 @@ def add_group(request):
             form.handle_errors(resp)
             if resp['status'] == 'ok':
                 if request.POST.get('stay_here', '0') != '1':
-                    return HttpResponseRedirect('../get_groups/')
-                else:
-                    return HttpResponseRedirect('')
+                    return HttpResponseRedirect('/auth/get_groups/')
     else:
         form = AddGroupForm(services=services, request=request)
 

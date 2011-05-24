@@ -151,9 +151,7 @@ def _add_balance(request, template, redirect_url, user_id=None):
             resp = helix_cli.request(form.as_helix_request())
             form.handle_errors(resp)
             if resp['status'] == 'ok':
-                if request.POST.get('stay_here', '0') == '1':
-                    return HttpResponseRedirect('.')
-                else:
+                if request.POST.get('stay_here', '0') != '1':
                     return HttpResponseRedirect(redirect_url)
     else:
         form = AddBalanceForm(currencies=currencies, request=request, user_id=user_id)
@@ -174,30 +172,28 @@ def user_add_balance(request, user_id):
         '/billing/user_info/%s/' % user_id, user_id=user_id)
 
 
-#@login_redirector
-#def modify_balance(request, balance_id):
-#    c = prepare_context(request)
-#    c['action'] = ModifyBalanceForm.action
-#    if request.method == 'POST':
-#        form = ModifyBalanceForm(request.POST)
-#        if form.is_valid():
-#            resp = helix_cli.request(form.as_helix_request())
-#            form.handle_errors(resp)
-#            if resp['status'] == 'ok':
-#                if request.POST.get('stay_here', '0') == '1':
-#                    return HttpResponseRedirect('.')
-#                else:
-#                    return HttpResponseRedirect(redirect_url)
-#    else:
-#        balance = _get_user_info(request, c, id)
-#        form = ModifyBalanceForm.from_balance_info(balance, request)
-#        form = AddBalanceForm(currencies=currencies, request=request, user_id=user_id)
-#    c['form'] = form
-#    return render_to_response(template, c,
-#        context_instance=RequestContext(request))
-#
-#    return _add_balance(request, 'balance/add.html',
-#        '/billing/get_balances/')
+@login_redirector
+def modify_balance(request, balance_id):
+    c = prepare_context(request)
+    c['action'] = ModifyBalanceForm.action
+    if request.method == 'POST':
+        form = ModifyBalanceForm(request.POST, request=request)
+        if form.is_valid():
+            resp = helix_cli.request(form.as_helix_request())
+            form.handle_errors(resp)
+            if resp['status'] == 'ok':
+                if request.POST.get('stay_here', '0') != '1':
+                    return HttpResponseRedirect('/billing/get_balances/')
+    else:
+        resp = helix_cli.request(ModifyBalanceForm.get_balance_req(balance_id, request))
+        c.update(process_helix_response(resp, 'balances', 'balances_error'))
+        balance_info = {}
+        if resp['status'] == 'ok' and len(resp['balances']) > 0:
+            balance_info = resp['balances'][0]
+        form = ModifyBalanceForm.from_balance_info(balance_info, request)
+    c['form'] = form
+    return render_to_response('balance/modify.html', c,
+        context_instance=RequestContext(request))
 
 
 @login_redirector

@@ -25,7 +25,7 @@ td.service_sel {background:#FAFAC8;}
 
 table.object_form td {vertical-align:top;}
 table.object_form th {vertical-align:top;text-align:right;}
-table.object_form ul {list-style:none;}
+table.object_form ul {list-style:none;padding-left:0px;}
 
 
 tr.objects_fields {background:#EFF3FF;}

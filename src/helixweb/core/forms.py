@@ -91,3 +91,10 @@ class HelixwebRequestForm(forms.Form):
                 p = '%s' % p
             if p:
                 d[new_name] = p
+
+    def _strip_bool_param(self, d, name, new_name=None):
+        if new_name is None:
+            new_name = name
+        self._strip_param(d, name, new_name=new_name)
+        if new_name in d:
+            d[new_name] = bool(int(d[new_name]))
