@@ -85,6 +85,7 @@ class FilterUserForm(FilterAuthForm):
 
 
 class AbstractAuthFilterActionLogsForm(AbstractFilterActionLogsForm, FilterAuthForm):
+    action = 'get_action_logs'
     def __init__(self, *args, **kwargs):
         kwargs['choices'] = (
             ('', ''), ('login', _('login')), ('logout', _('logout')),

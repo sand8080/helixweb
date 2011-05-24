@@ -5,24 +5,7 @@
 {% block title %}{% trans "user action logs" %}{% endblock %}
 
 {% block user_submenu %}
-
-    {% load urlutils %}
-    {% load localeurl_tags %}
-
-    {% if "/auth/modify_users/"|is_url_allowed:rights %}
-        <div class="submenu">
-            <a href="{{ '/auth/modify_users/'|chlocale:cur_lang }}{{ user.id }}/">
-                {% trans "modify user" %}
-            </a>
-        </div>
-    {% endif %}
-
-    {% if "/auth/get_action_logs/"|is_url_allowed:rights %}
-        <div class="submenu">
-            <span class="menu_linked">{% trans "user action logs" %}</span>
-        </div>
-    {% endif %}
-
+    {% include "user/auth_sumbmenu.html" %}
 {% endblock %}
 
 {% block content %}

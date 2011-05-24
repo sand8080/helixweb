@@ -3,9 +3,7 @@
 {% load localeurl_tags %}
 
 <span class="menu_linked">
-    {% blocktrans %}
-        user id #{{ user_id }}
-    {% endblocktrans %}
+    {% trans "user id #" %}{{ user_id }}
 </span>
 
 {% if "/billing/add_balance/"|is_url_allowed:rights %}

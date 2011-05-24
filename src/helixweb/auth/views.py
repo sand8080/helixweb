@@ -314,6 +314,7 @@ def _get_user_info(request, c, id):
 @login_redirector
 def modify_user(request, id):
     c = prepare_context(request)
+    c['action'] = ModifyUserForm.action
     resp = helix_cli.request(ModifyUserForm.get_active_groups_req(request))
     c.update(process_helix_response(resp, 'groups', 'groups_error'))
     groups = resp.get('groups', [])
@@ -340,6 +341,7 @@ def modify_user(request, id):
 @login_redirector
 def user_action_logs(request, id):
     c = prepare_context(request)
+    c['action'] = FilterUserActionLogsForm.action
     _prepare_action_logs_context(c)
     user = _get_user_info(request, c, id)
     c['user'] = user

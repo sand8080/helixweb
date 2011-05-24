@@ -2,7 +2,11 @@
 
 {% load i18n %}
 
-{% block title %}{% trans "user information" %}{% endblock %}
+{% block title %}{% trans "auth user information" %}{% endblock %}
+
+{% block user_submenu %}
+    {% include "user/auth_sumbmenu.html" %}
+{% endblock %}
 
 {% block content %}
 
