@@ -16,6 +16,8 @@ urlpatterns = patterns('',
     (r'^add_balance/(?P<user_id>\d+)/$', 'billing.views.user_add_balance'),
 
     (r'^modify_balances/(?P<balance_id>\d+)/$', 'billing.views.modify_balance'),
+    (r'^modify_balances/(?P<user_id>\d+)/(?P<balance_id>\d+)/$',
+        'billing.views.user_modify_balance'),
 
     (r'^get_action_logs/$', 'billing.views.action_logs'),
 

@@ -130,10 +130,11 @@ def balances(request):
 @login_redirector
 def user_balances(request, user_id):
     c = prepare_context(request)
+    c['action'] = 'get_balances'
+    c['user_id'] = user_id
     resp = helix_cli.request(BillingForm.get_user_balances_req(request, user_id))
     c.update(process_helix_response(resp, 'balances', 'balances_error'))
-    c['user_id'] = user_id
-    return render_to_response('balance/balances_self.html', c,
+    return render_to_response('user/balances.html', c,
         context_instance=RequestContext(request))
 
 
@@ -173,9 +174,10 @@ def user_add_balance(request, user_id):
 
 
 @login_redirector
-def modify_balance(request, balance_id):
+def _modify_balance(request, template, redirect_url, balance_id, user_id=None):
     c = prepare_context(request)
     c['action'] = ModifyBalanceForm.action
+    c['user_id'] = user_id
     if request.method == 'POST':
         form = ModifyBalanceForm(request.POST, request=request)
         if form.is_valid():
@@ -183,7 +185,7 @@ def modify_balance(request, balance_id):
             form.handle_errors(resp)
             if resp['status'] == 'ok':
                 if request.POST.get('stay_here', '0') != '1':
-                    return HttpResponseRedirect('/billing/get_balances/')
+                    return HttpResponseRedirect(redirect_url)
     else:
         resp = helix_cli.request(ModifyBalanceForm.get_balance_req(balance_id, request))
         c.update(process_helix_response(resp, 'balances', 'balances_error'))
@@ -192,8 +194,20 @@ def modify_balance(request, balance_id):
             balance_info = resp['balances'][0]
         form = ModifyBalanceForm.from_balance_info(balance_info, request)
     c['form'] = form
-    return render_to_response('balance/modify.html', c,
+    return render_to_response(template, c,
         context_instance=RequestContext(request))
+
+
+@login_redirector
+def modify_balance(request, balance_id):
+    return _modify_balance(request, 'balance/modify.html',
+        '/billing/get_balances/', balance_id)
+
+
+@login_redirector
+def user_modify_balance(request, user_id, balance_id):
+    return _modify_balance(request, 'user/modify_balance.html',
+        '/billing/get_balances/%s/' % user_id, balance_id, user_id=user_id)
 
 
 @login_redirector
@@ -210,8 +224,5 @@ def user_info(request, id):
     id = int(id)
     c = prepare_context(request)
     c['user_id'] = id
-#    resp = helix_cli.request(HelixwebRequestForm.get_users_req(request, [id]))
-#    c.update(process_helix_response(resp, 'users', 'users_error'))
-#    c['user'] = _extract_user(resp)
     return render_to_response('user/billing_user_info.html', c,
         context_instance=RequestContext(request))

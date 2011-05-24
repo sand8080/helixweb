@@ -4,7 +4,7 @@
 
 {% block title %}
     {% blocktrans %}
-        add balance to user #{{ user_id }}
+        modify balance of user #{{ user_id }}
     {% endblocktrans %}
 {% endblock %}
 
@@ -33,16 +33,21 @@
                                 {% trans "user id #" %}{{ user_id }}
                             {% endif %}
                             &rarr;
-                            {% trans "add balance" %}
+                            {% allowedurl True %}
+                                /billing/get_balances/{{ user_id }}/
+                                {% trans "balances" %}
+                            {% endallowedurl %}
+                            &rarr;
+                            {% trans "modify balance" %}
                         </h2>
                     </td>
                 </tr>
 
-                {% if currencies_error %}
+                {% if balances_error %}
 
                     <tr>
                         <td>
-                            <span class="errormessage">{% trans currencies_error %}</span>
+                            <span class="errormessage">{% trans balances_error %}</span>
                         </td>
                     </tr>
 
@@ -50,11 +55,11 @@
 
                     {{ form.as_table }}
 
-                    <tr>
-                        <td colspan="2" class="control">
-                            <input type="submit" style="font-weight:bold;" value="{% trans 'create' %}" />
+                    <tr class="control">
+                        <td colspan="2">
+                            <input type="submit" style="font-weight:bold;" value="{% trans "save" %}" />
                             <input type="hidden" id="stay_here" name="stay_here" value=0 />
-                            <input type="submit" value="{% trans 'create and add another' %}"
+                            <input type="submit" value="{% trans "save and continue editing" %}"
                                 onclick="var f = this.form; f.stay_here.value=1; f.submit()" />
                         </td>
                     </tr>
