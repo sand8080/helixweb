@@ -5,7 +5,7 @@ from django.template import RequestContext
 
 from helixweb.core.forms import _get_user_id
 from helixweb.core.views import (login_redirector, _prepare_context,
-    process_helix_response, _action_logs)
+    process_helix_response, _action_logs, _prepare_action_log)
 from helixcore.server.client import Client
 
 from helixweb.billing import settings #@UnresolvedImport
@@ -14,7 +14,7 @@ from helixweb.billing.forms import (CurrenciesForm, UsedCurrenciesForm,
     BalanceForm)
 from django.http import HttpResponseRedirect
 from helixweb.billing.forms_filters import (FilterAllActionLogsForm,
-    FilterSelfActionLogsForm, FilterBalanceForm)
+    FilterSelfActionLogsForm, FilterBalanceForm, FilterUserActionLogsForm)
 
 
 helix_cli = Client(settings.BILLING_SERVICE_URL)
@@ -103,6 +103,28 @@ def action_logs_self(request):
     _prepare_action_logs_context(c)
     _action_logs(c, request, FilterSelfActionLogsForm, helix_cli)
     return render_to_response('action_logs/billing_list.html', c,
+        context_instance=RequestContext(request))
+
+
+@login_redirector
+def user_action_logs(request, user_id):
+    c = prepare_context(request)
+    c['action'] = FilterUserActionLogsForm.action
+    c['user_id'] = user_id
+    _prepare_action_logs_context(c)
+    if request.method == 'GET':
+        form = FilterUserActionLogsForm(request.GET, request=request, id=user_id)
+    else:
+        form = FilterUserActionLogsForm({}, request=request, id=user_id)
+    if form.is_valid():
+        resp = helix_cli.request(form.as_helix_request())
+        form.update_total(resp)
+        if 'action_logs' in resp:
+            resp['action_logs'] = map(_prepare_action_log, resp['action_logs'])
+        c.update(process_helix_response(resp, 'action_logs', 'action_logs_error'))
+        c['pager'] = form.pager
+    c['form'] = form
+    return render_to_response('user/billing_user_action_logs.html', c,
         context_instance=RequestContext(request))
 
 

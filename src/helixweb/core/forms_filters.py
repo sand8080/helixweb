@@ -61,9 +61,9 @@ class AbstractFilterActionLogsForm(object):
         choices = kwargs.pop('choices')
         super(AbstractFilterActionLogsForm, self).__init__(*args, **kwargs)
 
-        user_id = forms.IntegerField(label=_('user id'), required=False)
         action_name = forms.CharField(label=_('action name'), required=False,
             widget=forms.widgets.Select(choices=choices))
+        user_id = forms.IntegerField(label=_('user id'), required=False)
         sess_id = forms.CharField(label=_('session'), max_length=40,
             required=False)
         from_request_date = forms.DateField(label=_('from'), required=False)
@@ -102,6 +102,7 @@ class AbstractFilterUserActionLogsForm(AbstractFilterActionLogsForm):
         self.action = 'get_action_logs'
         self.user_id = int(kwargs.pop('id'))
         super(AbstractFilterUserActionLogsForm, self).__init__(*args, **kwargs)
+        del self.fields['user_id']
 
     def as_helix_request(self):
         d = super(AbstractFilterUserActionLogsForm, self).as_helix_request()
