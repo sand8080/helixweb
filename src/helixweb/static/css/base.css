@@ -41,6 +41,9 @@ tr.objects_data {vertical-align:text-top;text-align:center;}
 
 .small_text {font-size:small;}
 
+.user_id_info span {font-size:small;color:#2c9e1f;font-weight:bold;}
+td.user_id_info {vertical-align:middle;text-align:right;}
+
 a:link {color:#2f46c6;}
 a:visited {color:#2f46c6;}
 

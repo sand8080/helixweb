@@ -3,14 +3,15 @@ from functools import partial
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 
-from helixcore.server.client import Client
-
+from helixweb.core.forms import _get_user_id
 from helixweb.core.views import (login_redirector, _prepare_context,
     process_helix_response, _action_logs)
+from helixcore.server.client import Client
 
 from helixweb.billing import settings #@UnresolvedImport
 from helixweb.billing.forms import (CurrenciesForm, UsedCurrenciesForm,
-    ModifyUsedCurrenciesForm, AddBalanceForm, BillingForm, ModifyBalanceForm)
+    ModifyUsedCurrenciesForm, AddBalanceForm, ModifyBalanceForm,
+    BalanceForm)
 from django.http import HttpResponseRedirect
 from helixweb.billing.forms_filters import (FilterAllActionLogsForm,
     FilterSelfActionLogsForm, FilterBalanceForm)
@@ -121,10 +122,25 @@ def balances(request):
         resp = helix_cli.request(form.as_helix_request())
         form.update_total(resp)
         c.update(process_helix_response(resp, 'balances', 'balances_error'))
+        balances = resp.get('balances', [])
+        _prepare_balances_info(balances)
         c['pager'] = form.pager
     c['form'] = form
     return render_to_response('balance/list.html', c,
         context_instance=RequestContext(request))
+
+
+def _locking_order_as_text(locking_order):
+    try:
+        idx = BalanceForm.locking_choices_billing_values.index(locking_order)
+        return BalanceForm.locking_choices_sel_names[idx]
+    except ValueError:
+        return None
+
+
+def _prepare_balances_info(balances):
+    for b in balances:
+        b['locking_order'] = _locking_order_as_text(b['locking_order'])
 
 
 @login_redirector
@@ -132,9 +148,23 @@ def user_balances(request, user_id):
     c = prepare_context(request)
     c['action'] = 'get_balances'
     c['user_id'] = user_id
-    resp = helix_cli.request(BillingForm.get_user_balances_req(request, user_id))
+    resp = helix_cli.request(BalanceForm.get_user_balances_req(request, user_id))
     c.update(process_helix_response(resp, 'balances', 'balances_error'))
+    balances = resp.get('balances', [])
+    _prepare_balances_info(balances)
     return render_to_response('user/balances.html', c,
+        context_instance=RequestContext(request))
+
+
+@login_redirector
+def balances_self(request):
+    c = prepare_context(request)
+    c['user_id'] = _get_user_id(request)
+    resp = helix_cli.request(BalanceForm.get_balances_self_req(request))
+    c.update(process_helix_response(resp, 'balances', 'balances_error'))
+    balances = resp.get('balances', [])
+    _prepare_balances_info(balances)
+    return render_to_response('balance/balances_self.html', c,
         context_instance=RequestContext(request))
 
 
@@ -208,15 +238,6 @@ def modify_balance(request, balance_id):
 def user_modify_balance(request, user_id, balance_id):
     return _modify_balance(request, 'user/modify_balance.html',
         '/billing/get_balances/%s/' % user_id, balance_id, user_id=user_id)
-
-
-@login_redirector
-def balances_self(request):
-    c = prepare_context(request)
-    resp = helix_cli.request(BillingForm.get_balances_self_req(request))
-    c.update(process_helix_response(resp, 'balances', 'balances_error'))
-    return render_to_response('balance/balances_self.html', c,
-        context_instance=RequestContext(request))
 
 
 @login_redirector

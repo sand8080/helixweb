@@ -36,12 +36,14 @@ def _make_login(form, request):
         form.handle_errors(resp)
         status = resp.get('status')
         s_id = resp.get('session_id')
+        user_id = resp.get('user_id')
         if status == 'ok' and s_id is not None:
             # TODO: set secure cookie
             b_url = get_backurl(request)
             response = HttpResponseRedirect(b_url)
             expires = datetime.strftime(datetime.utcnow() + timedelta(days=365), "%a, %d-%b-%Y %H:%M:%S GMT")
             response.set_cookie('session_id', value=s_id, expires=expires)
+            response.set_cookie('user_id', value=user_id, expires=expires)
             return response
     return None
 
@@ -69,6 +71,7 @@ def logout(request):
         helix_cli.request(form.as_helix_request())
     resp = HttpResponseRedirect('/auth/login/')
     resp.delete_cookie('session_id')
+    resp.delete_cookie('user_id')
     return resp
 
 

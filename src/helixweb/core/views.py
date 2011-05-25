@@ -7,7 +7,7 @@ from django.http import HttpResponseRedirect
 from django.utils.safestring import mark_safe
 
 from helixcore.error import UnauthorizedActivity
-from helixweb.core.forms import _get_session_id
+from helixweb.core.forms import _get_session_id, _get_user_id
 from helixweb.core.localization import cur_lang, cur_lang_value
 from helixweb.core.security import get_rights
 
@@ -100,6 +100,7 @@ def _prepare_context(request, cur_service=None):
     c['rights'] = get_rights(_get_session_id(request))
     c['logged_in'] = True
     c['cur_service'] = cur_service
+    c['logged_user_id'] = _get_user_id(request)
     c.update(cur_lang(request))
     c.update(csrf(request))
     return c

@@ -2,7 +2,7 @@ from django import forms
 from django.utils.translation import ugettext_lazy as _
 
 from helixweb.core.forms import HelixwebRequestForm, _get_session_id
-from helixweb.auth.widgets import ServicesSelectMultiple, ConstInput
+from helixweb.core.widgets import ServicesSelectMultiple, ConstInput
 
 
 class LoginForm(HelixwebRequestForm):

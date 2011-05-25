@@ -11,6 +11,10 @@ def _get_session_id(request):
     return request.COOKIES.get('session_id', '')
 
 
+def _get_user_id(request):
+    return request.COOKIES.get('user_id')
+
+
 class ErrorFieldMaker(ErrorList):
     """
     A collection of errors that knows how to display itself in various formats.

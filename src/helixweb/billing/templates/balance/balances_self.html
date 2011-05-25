@@ -3,90 +3,31 @@
 {% load i18n %}
 
 {% block title %}
-    {% trans "balance" %}
+    {% trans "balances" %}
 {% endblock %}
 
 {% block content %}
 
-<div class="bordered">
-    <table class="filter_object center">
+    {% load i18n %}
+    {% load urlutils %}
+    {% load localeurl_tags %}
 
-        <tr>
-            <th>
-                <h2 class="menu_linked">{% trans "balances" %}</h2>
-            </th>
-            <td></td>
-        </tr>
-    </table>
-</div>
+    <div class="bordered">
 
-<br>
-
-<table class="center wide bordered">
-
-    {% if balances_error %}
-
-        <tr class="objects_data">
-            <td>
-                <span class="errormessage">{% trans balances_error %}</span>
-            </td>
-        </tr>
-
-    {% else %}
-
-        {% if balances %}
+        <table class="filter_object center">
             <tr>
-                <td>
-                    <table class="center balance">
-                        {% for balance in balances %}
-                            <tr>
-                                <th colspan="2">
-                                    {{ balance.currency_code }}
-
-                                    {% if not balance.is_active %}
-                                    <span class="small_text">(balance disabled)</span>
-                                    {% endif %}
-                                </th>
-                             </tr>
-                             <tr {% if not balance.is_active %}class="disabled"{% endif %}>
-                                 <td>{% trans "real amount" %}</td>
-                                 <td>{{ balance.available_real_amount }}</td>
-                             </tr>
-                             <tr {% if not balance.is_active %}class="disabled"{% endif %}>
-                                 <td>{% trans "virtual amount" %}</td>
-                                 <td>{{ balance.available_virtual_amount }}</td>
-                             </tr>
-                             <tr {% if not balance.is_active %}class="disabled"{% endif %}>
-                                 <td>{% trans "locked amount" %}</td>
-                                 <td>{{ balance.locked_amount }}</td>
-                             </tr>
-
-                             {% if balance.overdraft_limit != '0.0' or  balance.overdraft_limit != '0.00' or balance.overdraft_limit != '0.000' %}
-                             <tr {% if not balance.is_active %}class="disabled"{% endif %}>
-                                 <td>{% trans "overdraft limit" %}</td>
-                                 <td>{{ balance.overdraft_limit }}</td>
-                             </tr>
-                             {% endif %}
-                             {% if balance.locking_order %}
-                             <tr {% if not balance.is_active %}class="disabled"{% endif %}>
-                                 <td>{% trans "locking order" %}</td>
-                                 <td>{{ balance.locking_order }}</td>
-                             </tr>
-                             {% endif %}
-                             <tr><td></td></tr>
-                         {% endfor %}
-                    </table>
+                <td class="menu_linked">
+                    <h2>
+                        {% trans "balances" %}
+                    </h2>
                 </td>
             </tr>
+        </table>
 
-        {% else %}
+        <br>
 
-            <tr><th>{% trans "no balances found" %}</th></tr>
+        {% include "balance/pretty_balances.html" %}
 
-        {% endif %}
-
-    {% endif %}
-
-</table>
+    </div>
 
 {% endblock %}

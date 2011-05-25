@@ -41,10 +41,17 @@
         </tr>
         {% if logged_in %}
         <tr>
-            <td colspan="2">
+            <td style="padding-left:0px">
                 {% load service_switcher %}
                 {% service_switcher %}
-            <td>
+            </td>
+            <td class="user_id_info">
+                <span>
+                    {% blocktrans %}
+                        logged as user id #{{ logged_user_id }}
+                    {% endblocktrans %}
+                </span>
+            </td>
         </tr>
         {% endif %}
         <tr>
