@@ -60,10 +60,10 @@ class BalanceForm(BillingForm):
     locking_choices_sel_values = (0, 1, 2, 3)
     locking_choices_sel_names = ('only real', 'only virtual', 'real, virtual',
         'virtual, real')
-    locking_choices_billing_values = (['available_real_amount'],
-        ['available_virtual_amount'],
-        ['available_real_amount', 'available_virtual_amount'],
-        ['available_virtual_amount', 'available_real_amount'])
+    locking_choices_billing_values = (['real_amount'],
+        ['virtual_amount'],
+        ['real_amount', 'virtual_amount'],
+        ['virtual_amount', 'real_amount'])
 
     @staticmethod
     def locking_choices():

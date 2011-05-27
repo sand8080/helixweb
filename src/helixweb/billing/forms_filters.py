@@ -43,13 +43,13 @@ class FilterBalanceForm(FilterBillingForm):
         self.fields['id'] = forms.IntegerField(label=_('balance id'), required=False)
         self.fields['user_id'] = forms.IntegerField(label=_('user id'), required=False)
         self.fields['currency_code'] = self._gen_currency_code(currencies, required=False)
-        self.fields['from_available_real_amount'] = forms.DecimalField(label=_('real amount from'),
+        self.fields['from_real_amount'] = forms.DecimalField(label=_('real amount from'),
             required=False)
-        self.fields['to_available_real_amount'] = forms.DecimalField(label=_('real amount to'),
+        self.fields['to_real_amount'] = forms.DecimalField(label=_('real amount to'),
             required=False)
-        self.fields['from_available_virtual_amount'] = forms.DecimalField(label=_('virtual amount from'),
+        self.fields['from_virtual_amount'] = forms.DecimalField(label=_('virtual amount from'),
             required=False)
-        self.fields['to_available_virtual_amount'] = forms.DecimalField(label=_('virtual amount to'),
+        self.fields['to_virtual_amount'] = forms.DecimalField(label=_('virtual amount to'),
             required=False)
         self.fields['from_overdraft_limit'] = forms.DecimalField(label=_('overdraft limit from'),
             required=False)
@@ -68,10 +68,10 @@ class FilterBalanceForm(FilterBillingForm):
         self._strip_filter_param(d, 'id')
         self._strip_filter_param(d, 'user_id')
         self._strip_filter_param(d, 'currency_code')
-        self._strip_filter_param(d, 'from_available_real_amount')
-        self._strip_filter_param(d, 'to_available_real_amount')
-        self._strip_filter_param(d, 'from_available_virtual_amount')
-        self._strip_filter_param(d, 'to_available_virtual_amount')
+        self._strip_filter_param(d, 'from_real_amount')
+        self._strip_filter_param(d, 'to_real_amount')
+        self._strip_filter_param(d, 'from_virtual_amount')
+        self._strip_filter_param(d, 'to_virtual_amount')
         self._strip_filter_param(d, 'from_overdraft_limit')
         self._strip_filter_param(d, 'to_overdraft_limit')
         self._strip_filter_param(d, 'from_locked_amount')
