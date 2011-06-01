@@ -6,18 +6,6 @@
     {% trans "user id #" %}{{ user_id }}
 </span>
 
-{% if "/billing/add_balance/"|is_url_allowed:rights %}
-    <div class="submenu">
-        {% if action == 'add_balance' %}
-            <span class="menu_linked">{% trans "add balance" %}</span>
-        {% else %}
-            <a href="{{ '/billing/add_balance/'|chlocale:cur_lang }}{{ user_id }}/">
-                <span style="white-space:nowrap;">{% trans "add balance" %}</span>
-            </a>
-        {% endif %}
-    </div>
-{% endif %}
-
 {% if "/billing/get_balances/"|is_url_allowed:rights %}
     <div class="submenu">
         {% if action == 'get_balances' %}
@@ -25,6 +13,18 @@
         {% else %}
             <a href="{{ '/billing/get_balances/'|chlocale:cur_lang }}{{ user_id }}/">
                 <span style="white-space:nowrap;">{% trans "balances" %}</span>
+            </a>
+        {% endif %}
+    </div>
+{% endif %}
+
+{% if "/billing/add_balance/"|is_url_allowed:rights %}
+    <div class="submenu">
+        {% if action == 'add_balance' %}
+            <span class="menu_linked">{% trans "add balance" %}</span>
+        {% else %}
+            <a href="{{ '/billing/add_balance/'|chlocale:cur_lang }}{{ user_id }}/">
+                <span style="white-space:nowrap;">{% trans "add balance" %}</span>
             </a>
         {% endif %}
     </div>
