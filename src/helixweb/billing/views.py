@@ -11,7 +11,7 @@ from helixcore.server.client import Client
 from helixweb.billing import settings #@UnresolvedImport
 from helixweb.billing.forms import (CurrenciesForm, UsedCurrenciesForm,
     ModifyUsedCurrenciesForm, AddBalanceForm, ModifyBalanceForm,
-    BalanceForm)
+    BalanceForm, AddReceiptForm)
 from django.http import HttpResponseRedirect
 from helixweb.billing.forms_filters import (FilterAllActionLogsForm,
     FilterSelfActionLogsForm, FilterBalanceForm, FilterUserActionLogsForm)
@@ -225,7 +225,6 @@ def user_add_balance(request, user_id):
         '/billing/user_info/%s/' % user_id, user_id=user_id)
 
 
-@login_redirector
 def _modify_balance(request, template, redirect_url, balance_id, user_id=None):
     c = prepare_context(request)
     c['action'] = ModifyBalanceForm.action
@@ -239,7 +238,7 @@ def _modify_balance(request, template, redirect_url, balance_id, user_id=None):
                 if request.POST.get('stay_here', '0') != '1':
                     return HttpResponseRedirect(redirect_url)
     else:
-        resp = helix_cli.request(ModifyBalanceForm.get_balance_req(balance_id, request))
+        resp = helix_cli.request(ModifyBalanceForm.get_balance_req(request, balance_id))
         c.update(process_helix_response(resp, 'balances', 'balances_error'))
         balance_info = {}
         if resp['status'] == 'ok' and len(resp['balances']) > 0:
@@ -269,3 +268,38 @@ def user_info(request, id):
     c['user_id'] = id
     return render_to_response('user/billing_user_info.html', c,
         context_instance=RequestContext(request))
+
+
+def _add_receipt(request, template, redirect_url, user_id, balance_id):
+    c = prepare_context(request)
+    c['action'] = AddReceiptForm.action
+    c['user_id'] = user_id
+    resp = helix_cli.request(AddReceiptForm.get_balance_req(request, balance_id))
+    c.update(process_helix_response(resp, 'balances', 'balances_error'))
+    if resp['total'] != 1:
+        balance = {}
+    else:
+        balance = resp['balances'][0]
+    c['balance'] = balance
+    currency_code = balance.get('currency_code')
+    if request.method == 'POST':
+        form = AddReceiptForm(request.POST, request=request)
+        if form.is_valid():
+            resp = helix_cli.request(form.as_helix_request())
+            form.handle_errors(resp)
+            if resp['status'] == 'ok':
+                if request.POST.get('stay_here', '0') != '1':
+                    return HttpResponseRedirect(redirect_url)
+    else:
+        form = AddReceiptForm({'user_id': user_id, 'currency_code': currency_code,
+            'amount': 0}, request=request)
+    c['form'] = form
+    return render_to_response(template, c,
+        context_instance=RequestContext(request))
+
+
+@login_redirector
+def user_add_receipt(request, user_id, balance_id):
+    return _add_receipt(request, 'user/add_balance.html',
+        '/billing/get_balances/%s/' % user_id, balance_id, user_id)
+

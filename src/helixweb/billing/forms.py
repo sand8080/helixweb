@@ -28,6 +28,17 @@ class BillingForm(HelixwebRequestForm):
             'filter_params': {'user_id': int(user_id)}, 'paging_params': {},
             'ordering_params': ['currency_id']}
 
+    @staticmethod
+    def get_user_balance_req(request, balance_id):
+        return {'action': 'get_balances', 'session_id': _get_session_id(request),
+            'filter_params': {'id': int(balance_id)}, 'paging_params': {},
+            'ordering_params': ['currency_id']}
+
+    @staticmethod
+    def get_balance_req(request, balance_id):
+        return {'action': 'get_balances', 'session_id': _get_session_id(request),
+            'filter_params': {'id': int(balance_id)}, 'paging_params':{}}
+
     def _gen_currency_code(self, currencies, required=True):
         choices = [(None, '--')] + [(c['code'], c['code']) for c in currencies]
         return forms.ChoiceField(label=_('currency'), choices=choices,
@@ -96,11 +107,6 @@ class BalanceForm(BillingForm):
         d = super(BillingForm, self).as_helix_request()
         self._strip_locking_order(d)
         return d
-
-    @staticmethod
-    def get_balance_req(balance_id, request):
-        return {'action': 'get_balances', 'session_id': _get_session_id(request),
-            'filter_params': {'id': int(balance_id)}, 'paging_params':{}}
 
 
 class AddBalanceForm(BalanceForm):
@@ -180,3 +186,20 @@ class ModifyBalanceForm(BalanceForm):
 
         return d
 
+
+class AddReceiptForm(BillingForm):
+    action = 'add_receipt'
+
+    user_id = forms.IntegerField(label=_('user id'), widget=ConstInput)
+    currency_code = forms.CharField(label=_('currency'), widget=ConstInput)
+    amount = forms.DecimalField(label=_('amount'))
+
+    def __init__(self, *args, **kwargs):
+        super(AddReceiptForm, self).__init__(*args, **kwargs)
+
+    def as_helix_request(self):
+        d = super(AddReceiptForm, self).as_helix_request()
+#        self._strip_param(d, 'user_id')
+#        self._strip_param(d, 'currency_code')
+        self._strip_param(d, 'amount')
+        return d

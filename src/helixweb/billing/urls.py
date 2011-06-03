@@ -18,6 +18,8 @@ urlpatterns = patterns('',
     (r'^get_balances/(?P<user_id>\d+)/$', 'billing.views.user_balances'),
     (r'^modify_balances/(?P<user_id>\d+)/(?P<balance_id>\d+)/$',
         'billing.views.user_modify_balance'),
+    (r'^add_receipt/(?P<user_id>\d+)/(?P<balance_id>\d+)/$',
+        'billing.views.user_add_receipt'),
     (r'^get_action_logs/(?P<user_id>\d+)/$', 'billing.views.user_action_logs'),
 
     (r'^get_balances_self/$', 'billing.views.balances_self'),
