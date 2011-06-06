@@ -162,7 +162,7 @@ def _locking_order_as_text(locking_order):
 
 def _prepare_balances_info(balances):
     for b in balances:
-        b['locking_order'] = _locking_order_as_text(b['locking_order'])
+        b['locking_order_text'] = _locking_order_as_text(b['locking_order'])
 
 
 @login_redirector
