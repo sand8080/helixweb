@@ -33,7 +33,10 @@
                                 {% trans "user id #" %}{{ user_id }}
                             {% endif %}
                             &rarr;
-                            {% trans "balance #" %}{{ balance_id }}
+                            {% allowedurl True %}
+                                /billing/get_balances/{{ user_id }}/
+                                {% trans "balances" %}
+                            {% endallowedurl %}
                             &rarr;
                             {% trans "add receipt" %}
                         </h2>

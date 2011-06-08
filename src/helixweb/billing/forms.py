@@ -190,16 +190,19 @@ class ModifyBalanceForm(BalanceForm):
 class AddReceiptForm(BillingForm):
     action = 'add_receipt'
 
-    user_id = forms.IntegerField(label=_('user id'), widget=ConstInput)
-    currency_code = forms.CharField(label=_('currency'), widget=ConstInput)
-    amount = forms.DecimalField(label=_('amount'))
-
     def __init__(self, *args, **kwargs):
+        balance_id = kwargs.pop('balance_id')
+        currency_code = kwargs.pop('currency_code')
         super(AddReceiptForm, self).__init__(*args, **kwargs)
+        self.fields['balance_id'] = forms.IntegerField(label=_('balance id'), widget=ConstInput,
+            initial=balance_id)
+        self.fields['currency_code'] = forms.CharField(label=_('currency'), widget=ConstInput,
+            initial=currency_code)
+        self.fields['amount'] = forms.DecimalField(label=_('amount'))
 
     def as_helix_request(self):
         d = super(AddReceiptForm, self).as_helix_request()
-#        self._strip_param(d, 'user_id')
-#        self._strip_param(d, 'currency_code')
+        self._strip_param(d, 'balance_id')
+        d.pop('currency_code')
         self._strip_param(d, 'amount')
         return d

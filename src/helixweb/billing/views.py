@@ -283,7 +283,8 @@ def _add_receipt(request, template, redirect_url, user_id, balance_id):
     c['balance'] = balance
     currency_code = balance.get('currency_code')
     if request.method == 'POST':
-        form = AddReceiptForm(request.POST, request=request)
+        form = AddReceiptForm(request.POST, request=request,
+            balance_id=balance_id, currency_code=currency_code)
         if form.is_valid():
             resp = helix_cli.request(form.as_helix_request())
             form.handle_errors(resp)
@@ -291,8 +292,8 @@ def _add_receipt(request, template, redirect_url, user_id, balance_id):
                 if request.POST.get('stay_here', '0') != '1':
                     return HttpResponseRedirect(redirect_url)
     else:
-        form = AddReceiptForm({'user_id': user_id, 'currency_code': currency_code,
-            'amount': 0}, request=request)
+        form = AddReceiptForm(balance_id=balance_id, currency_code=currency_code,
+            request=request)
     c['form'] = form
     return render_to_response(template, c,
         context_instance=RequestContext(request))
@@ -300,6 +301,6 @@ def _add_receipt(request, template, redirect_url, user_id, balance_id):
 
 @login_redirector
 def user_add_receipt(request, user_id, balance_id):
-    return _add_receipt(request, 'user/add_balance.html',
-        '/billing/get_balances/%s/' % user_id, balance_id, user_id)
+    return _add_receipt(request, 'user/add_receipt.html',
+        '/billing/get_balances/%s/' % user_id, user_id, balance_id)
 
