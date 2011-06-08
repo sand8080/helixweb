@@ -11,7 +11,7 @@ from helixcore.server.client import Client
 from helixweb.billing import settings #@UnresolvedImport
 from helixweb.billing.forms import (CurrenciesForm, UsedCurrenciesForm,
     ModifyUsedCurrenciesForm, AddBalanceForm, ModifyBalanceForm,
-    BalanceForm, AddReceiptForm)
+    BalanceForm, AddReceiptForm, AddBonusForm)
 from django.http import HttpResponseRedirect
 from helixweb.billing.forms_filters import (FilterAllActionLogsForm,
     FilterSelfActionLogsForm, FilterBalanceForm, FilterUserActionLogsForm)
@@ -270,11 +270,11 @@ def user_info(request, id):
         context_instance=RequestContext(request))
 
 
-def _add_receipt(request, template, redirect_url, user_id, balance_id):
+def _add_money(request, form_cls, template, redirect_url, user_id, balance_id):
     c = prepare_context(request)
-    c['action'] = AddReceiptForm.action
+    c['action'] = form_cls.action
     c['user_id'] = user_id
-    resp = helix_cli.request(AddReceiptForm.get_balance_req(request, balance_id))
+    resp = helix_cli.request(form_cls.get_balance_req(request, balance_id))
     c.update(process_helix_response(resp, 'balances', 'balances_error'))
     if resp['total'] != 1:
         balance = {}
@@ -283,7 +283,7 @@ def _add_receipt(request, template, redirect_url, user_id, balance_id):
     c['balance'] = balance
     currency_code = balance.get('currency_code')
     if request.method == 'POST':
-        form = AddReceiptForm(request.POST, request=request,
+        form = form_cls(request.POST, request=request,
             balance_id=balance_id, currency_code=currency_code)
         if form.is_valid():
             resp = helix_cli.request(form.as_helix_request())
@@ -292,7 +292,7 @@ def _add_receipt(request, template, redirect_url, user_id, balance_id):
                 if request.POST.get('stay_here', '0') != '1':
                     return HttpResponseRedirect(redirect_url)
     else:
-        form = AddReceiptForm(balance_id=balance_id, currency_code=currency_code,
+        form = form_cls(balance_id=balance_id, currency_code=currency_code,
             request=request)
     c['form'] = form
     return render_to_response(template, c,
@@ -301,6 +301,12 @@ def _add_receipt(request, template, redirect_url, user_id, balance_id):
 
 @login_redirector
 def user_add_receipt(request, user_id, balance_id):
-    return _add_receipt(request, 'user/add_receipt.html',
+    return _add_money(request, AddReceiptForm, 'user/add_receipt.html',
+        '/billing/get_balances/%s/' % user_id, user_id, balance_id)
+
+
+@login_redirector
+def user_add_bonus(request, user_id, balance_id):
+    return _add_money(request, AddBonusForm, 'user/add_bonus.html',
         '/billing/get_balances/%s/' % user_id, user_id, balance_id)
 
