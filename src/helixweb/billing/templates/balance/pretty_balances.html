@@ -44,7 +44,16 @@
                             </tr>
                             <tr {% if not balance.is_active %}class="disabled"{% endif %}>
                                 <td>{% trans "locked amount" %}</td>
-                                <td>{{ balance.locked_amount }}</td>
+                                <td>
+                                    {% if "/billing/{{ action }}/"|is_url_allowed:rights %}
+                                    <a href="/billing/{{ action }}/{{ user_id }}/{{ balance.id }}/">
+                                        {{ balance.locked_amount }}
+                                        <span class="small_text">({% trans "locks details" %})</span>
+                                    </a>
+                                    {% else %}
+                                        {{ balance.locked_amount }}
+                                    {% endif %}
+                                </td>
                             </tr>
 
                             {% if balance.overdraft_limit != '0.0' or  balance.overdraft_limit != '0.00' or balance.overdraft_limit != '0.000' %}
@@ -80,6 +89,14 @@
                                         {% endallowedurl %}
                                     </td>
                                 </tr>
+                            {% endif %}
+
+                            {% if "/billing/lock/"|is_url_allowed:rights %}
+                                <tr><td>
+                                    <a href="/billing/lock/{{ user_id }}/{{ balance.id }}/">
+                                        <span class="small_text">({% trans "lock" %})</span>
+                                    </a>
+                                </td></tr>
                             {% endif %}
 
                             <tr><td colspan="2"><hr></td></tr>
