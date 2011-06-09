@@ -197,12 +197,19 @@ class AddMoneyForm(BillingForm):
         self.fields['currency_code'] = forms.CharField(label=_('currency'), widget=ConstInput,
             initial=currency_code)
         self.fields['amount'] = forms.DecimalField(label=_('amount'))
+        self.fields['description'] = forms.CharField(label=_('description'),
+            widget=forms.widgets.Textarea({'rows': 3, 'cols': 20}), required=False)
 
     def as_helix_request(self):
         d = super(AddMoneyForm, self).as_helix_request()
         self._strip_param(d, 'balance_id')
         d.pop('currency_code')
         self._strip_param(d, 'amount')
+        self._strip_param(d, 'description')
+        info = {}
+        if 'description' in d:
+            info['description'] = d.pop('description')
+        d['info'] = info
         return d
 
 
