@@ -45,13 +45,26 @@
                             <tr {% if not balance.is_active %}class="disabled"{% endif %}>
                                 <td>{% trans "locked amount" %}</td>
                                 <td>
-                                    {% if "/billing/{{ action }}/"|is_url_allowed:rights %}
-                                    <a href="/billing/{{ action }}/{{ user_id }}/{{ balance.id }}/">
-                                        {{ balance.locked_amount }}
-                                        <span class="small_text">({% trans "locks details" %})</span>
-                                    </a>
+                                    {% if action == "get_balances" %}
+
+                                        {% allowedurl True %}
+                                            /billing/get_locks/
+                                            {{ balance.locked_amount }}
+                                            <span class="small_text">({% trans "more details" %})</span>
+                                        {% endallowedurl %}
+
                                     {% else %}
-                                        {{ balance.locked_amount }}
+
+                                        {% if action == "get_balances_self" %}
+
+                                            {% allowedurl True %}
+                                                /billing/get_locks_self/
+                                                {{ balance.locked_amount }}
+                                                <span class="small_text">({% trans "furture details" %})</span>
+                                            {% endallowedurl %}
+
+                                        {% endif %}
+
                                     {% endif %}
                                 </td>
                             </tr>
