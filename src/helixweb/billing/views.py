@@ -11,7 +11,7 @@ from helixcore.server.client import Client
 from helixweb.billing import settings #@UnresolvedImport
 from helixweb.billing.forms import (CurrenciesForm, UsedCurrenciesForm,
     ModifyUsedCurrenciesForm, AddBalanceForm, ModifyBalanceForm,
-    BalanceForm, AddReceiptForm, AddBonusForm)
+    BalanceForm, AddReceiptForm, AddBonusForm, LockForm)
 from django.http import HttpResponseRedirect
 from helixweb.billing.forms_filters import (FilterAllActionLogsForm,
     FilterSelfActionLogsForm, FilterBalanceForm, FilterUserActionLogsForm)
@@ -308,5 +308,11 @@ def user_add_receipt(request, user_id, balance_id):
 @login_redirector
 def user_add_bonus(request, user_id, balance_id):
     return _add_money(request, AddBonusForm, 'user/add_bonus.html',
+        '/billing/get_balances/%s/' % user_id, user_id, balance_id)
+
+
+@login_redirector
+def user_lock(request, user_id, balance_id):
+    return _add_money(request, LockForm, 'user/lock.html',
         '/billing/get_balances/%s/' % user_id, user_id, balance_id)
 

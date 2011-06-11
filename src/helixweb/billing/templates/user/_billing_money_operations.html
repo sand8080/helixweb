@@ -1,0 +1,54 @@
+{% extends "base_billing.html" %}
+
+{% load i18n %}
+
+{% block content %}
+
+    {% load urlutils %}
+
+    <form action="" method="post">{% csrf_token %}
+
+        <div class="bordered">
+
+            <table class="object_form center">
+                <tr>
+                    <td colspan="2">
+                        <h2 class="menu_linked">
+
+                            {% block money_bread_crumbs %}{% endblock %}
+
+                        </h2>
+                    </td>
+                </tr>
+
+                {% if balances_error %}
+
+                    <tr>
+                        <td>
+                            <span class="errormessage">{% trans balances_error %}</span>
+                        </td>
+                    </tr>
+
+                {% else %}
+
+                    {{ form.as_table }}
+
+                    <tr>
+                        <td colspan="2" class="control">
+                            <input type="submit" style="font-weight:bold;" value="{% trans 'create' %}" />
+                            <input type="hidden" id="stay_here" name="stay_here" value=0 />
+                            <input type="submit" value="{% trans 'create and add another' %}"
+                                onclick="var f = this.form; f.stay_here.value=1; f.submit()" />
+                        </td>
+                    </tr>
+
+                {% endif %}
+
+            </table>
+            <br>
+        </div>
+
+    </form>
+
+
+{% endblock %}

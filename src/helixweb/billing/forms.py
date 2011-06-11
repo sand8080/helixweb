@@ -187,11 +187,11 @@ class ModifyBalanceForm(BalanceForm):
         return d
 
 
-class AddMoneyForm(BillingForm):
+class MoneyForm(BillingForm):
     def __init__(self, *args, **kwargs):
         balance_id = kwargs.pop('balance_id')
         currency_code = kwargs.pop('currency_code')
-        super(AddMoneyForm, self).__init__(*args, **kwargs)
+        super(MoneyForm, self).__init__(*args, **kwargs)
         self.fields['balance_id'] = forms.IntegerField(label=_('balance id'), widget=ConstInput,
             initial=balance_id)
         self.fields['currency_code'] = forms.CharField(label=_('currency'), widget=ConstInput,
@@ -201,7 +201,7 @@ class AddMoneyForm(BillingForm):
             widget=forms.widgets.Textarea({'rows': 3, 'cols': 20}), required=False)
 
     def as_helix_request(self):
-        d = super(AddMoneyForm, self).as_helix_request()
+        d = super(MoneyForm, self).as_helix_request()
         self._strip_param(d, 'balance_id')
         d.pop('currency_code')
         self._strip_param(d, 'amount')
@@ -213,9 +213,13 @@ class AddMoneyForm(BillingForm):
         return d
 
 
-class AddReceiptForm(AddMoneyForm):
+class AddReceiptForm(MoneyForm):
     action = 'add_receipt'
 
 
-class AddBonusForm(AddMoneyForm):
+class AddBonusForm(MoneyForm):
     action = 'add_bonus'
+
+
+class LockForm(MoneyForm):
+    action = 'lock'
