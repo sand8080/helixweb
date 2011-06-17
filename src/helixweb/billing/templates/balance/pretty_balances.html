@@ -48,7 +48,7 @@
                                     {% if action == "get_balances" %}
 
                                         {% allowedurl True %}
-                                            /billing/get_locks/
+                                            /billing/get_locks/{{ balance.user_id }}/{{ balance.id }}/
                                             {{ balance.locked_amount }}
                                             <span class="small_text">({% trans "more details" %})</span>
                                         {% endallowedurl %}
@@ -60,7 +60,7 @@
                                             {% allowedurl True %}
                                                 /billing/get_locks_self/
                                                 {{ balance.locked_amount }}
-                                                <span class="small_text">({% trans "furture details" %})</span>
+                                                <span class="small_text">({% trans "details" %})</span>
                                             {% endallowedurl %}
 
                                         {% endif %}

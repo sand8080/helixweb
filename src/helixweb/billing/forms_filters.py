@@ -1,6 +1,7 @@
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
+from helixweb.core.widgets import ConstInput
 from helixweb.core.forms_filters import (FilterForm, AbstractFilterActionLogsForm,
     AbstractFilterAllActionLogsForm, AbstractFilterSelfActionLogsForm,
     AbstractFilterUserActionLogsForm)
@@ -82,4 +83,23 @@ class FilterBalanceForm(FilterBillingForm):
         else:
             val = bool(int(d['filter_params']['is_active']))
             d['filter_params']['is_active'] = val
+        return d
+
+
+class FilterUserLocksForm(FilterBillingForm):
+    action = 'get_locks'
+
+    user_id = forms.IntegerField(label=_('user id'),
+        widget=ConstInput, required=False)
+    balance_id = forms.IntegerField(label=_('balance id'),
+        widget=ConstInput, required=False)
+    from_creation_date = forms.DateField(label=_('from'), required=False)
+    to_creation_date = forms.DateField(label=_('to'), required=False)
+
+    def as_helix_request(self):
+        d = super(FilterUserLocksForm, self).as_helix_request()
+        self._strip_filter_param(d, 'user_id')
+        self._strip_filter_param(d, 'balance_id')
+        self._strip_from_date_param(d, 'from_creation_date')
+        self._strip_to_date_param(d, 'to_creation_date')
         return d

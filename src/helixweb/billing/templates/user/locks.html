@@ -1,0 +1,139 @@
+{% extends "base_billing.html" %}
+
+{% load i18n %}
+
+{% block title %}
+    {% blocktrans %}locks of user #{{ user_id }} on balance #{{ balance_id }}{% endblocktrans %}
+{% endblock %}
+
+{% block user_submenu %}
+    {% include "user/billing_sumbmenu.html" %}
+{% endblock %}
+
+{% block content %}
+
+    {% load i18n %}
+    {% load urlutils %}
+    {% load localeurl_tags %}
+
+    <div class="bordered">
+
+        <form action="" method="get">{% csrf_token %}
+
+            <table class="filter_object center">
+                <tr>
+                    <td class="menu_linked" colspan="2">
+                        <h2>
+                            {% if "/billing/get_balances/"|is_url_allowed:rights %}
+                                <a href="{{ '/billing/user_info/'|chlocale:cur_lang }}{{ user_id }}/">
+                                    {% trans "user id #" %}{{ user_id }}
+                                </a>
+                            {% else %}
+                                {% trans "user id #" %}{{ user_id }}
+                            {% endif %}
+                            &rarr;
+                            {% allowedurl True %}
+                                /billing/get_balances/{{ user_id }}/
+                                {% trans "balances" %}
+                            {% endallowedurl %}
+                            &rarr;
+                            {% trans "balance id #" %}{{ balance_id }}
+                            &rarr;
+                            {% trans "locks" %}
+                        </h2>
+
+                    </td>
+                </tr>
+
+                {{ form.as_table }}
+
+                <tr>
+                    <td colspan="2" class="control">
+                        <input type="submit" value={% trans "filter" %} />
+                    </td>
+                </tr>
+
+            </table>
+
+            <br>
+
+            <script type="text/javascript" src="/static/js/jquery-ui.js"></script>
+            <script type="text/javascript" src="/static/js/jquery.url.min.js"></script>
+            <script type="text/javascript" src="/static/js/i18n/jquery-ui-i18n.js"></script>
+            <script type="text/javascript" src="/static/js/calendar.js"></script>
+            <link rel="stylesheet" type="text/css" href="/static/css/jquery-ui/overcast/jquery-ui.custom.css" />
+
+            <script type="text/javascript">
+                calendar("from_creation_date")
+                calendar("to_creation_date")
+            </script>
+
+        </form>
+    </div>
+
+    <br>
+
+    <div>
+        {% trans "total locks" %}: {{ pager.total }} &nbsp;
+    </div>
+
+    <br>
+
+    <table class="center wide bordered">
+
+        {% if locks_error %}
+
+            <tr class="objects_data">
+                <td>
+                    <span class="errormessage">{% trans locks_error %}</span>
+                </td>
+            </tr>
+
+        {% else %}
+
+            {% if locks %}
+
+                <tr>
+                    <td colspan="6">
+                        {% include "pager.html" %}
+                    </td>
+                </tr>
+
+                <tr class="objects_fields">
+                    <th>{% trans "id" %}</th>
+                    <th>{% trans "currency" %}</th>
+                    <th>{% trans "creation date" %}</th>
+                    <th>{% trans "real" %}</th>
+                    <th>{% trans "virtual" %}</th>
+                    <th>{% trans "info" %}</th>
+                </tr>
+
+                {% for lock in locks %}
+                    <tr>
+                        <td>{{ lock.id }}</td>
+                        <td>{{ lock.currency_code }}</td>
+                        <td>{{ lock.creation_date }}</td>
+                        <td>{{ lock.real_amount }}</td>
+                        <td>{{ lock.virtual_amount }}</td>
+                        <td>{{ lock.info }}</td>
+                    </tr>
+                {% endfor %}
+
+                <tr>
+                    <td colspan="6">
+                        {% include "pager.html" %}
+                    </td>
+                </tr>
+
+
+            {% else %}
+
+                <tr><th>{% trans "no locks found" %}</th></tr>
+
+            {% endif %}
+
+        {% endif %}
+
+    </table>
+
+{% endblock %}

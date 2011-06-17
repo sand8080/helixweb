@@ -14,7 +14,8 @@ from helixweb.billing.forms import (CurrenciesForm, UsedCurrenciesForm,
     BalanceForm, AddReceiptForm, AddBonusForm, LockForm)
 from django.http import HttpResponseRedirect
 from helixweb.billing.forms_filters import (FilterAllActionLogsForm,
-    FilterSelfActionLogsForm, FilterBalanceForm, FilterUserActionLogsForm)
+    FilterSelfActionLogsForm, FilterBalanceForm, FilterUserActionLogsForm,
+    FilterUserLocksForm)
 
 
 helix_cli = Client(settings.BILLING_SERVICE_URL)
@@ -316,3 +317,26 @@ def user_lock(request, user_id, balance_id):
     return _add_money(request, LockForm, 'user/lock.html',
         '/billing/get_balances/%s/' % user_id, user_id, balance_id)
 
+
+@login_redirector
+def user_get_locks(request, user_id, balance_id):
+    c = prepare_context(request)
+    c['action'] = FilterUserLocksForm.action
+    c['user_id'] = user_id
+    c['balance_id'] = balance_id
+
+    if len(request.GET) == 0 or (len(request.GET) == 1 and 'pager_offset' in request.GET):
+        form = FilterUserLocksForm({'user_id': user_id, 'balance_id': balance_id},
+            request=request)
+    else:
+        form = FilterUserLocksForm(request.GET, request=request)
+
+    if form.is_valid():
+        resp = helix_cli.request(form.as_helix_request())
+        form.update_total(resp)
+        c.update(process_helix_response(resp, 'locks', 'locks_error'))
+        c['locks'] = resp.get('locks', [])
+        c['pager'] = form.pager
+    c['form'] = form
+    return render_to_response('user/locks.html', c,
+        context_instance=RequestContext(request))

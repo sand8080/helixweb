@@ -24,6 +24,9 @@ urlpatterns = patterns('',
         'billing.views.user_add_bonus'),
     (r'^lock/(?P<user_id>\d+)/(?P<balance_id>\d+)/$',
         'billing.views.user_lock'),
+    (r'^get_locks/(?P<user_id>\d+)/(?P<balance_id>\d+)/$',
+        'billing.views.user_get_locks'),
+
     (r'^get_action_logs/(?P<user_id>\d+)/$', 'billing.views.user_action_logs'),
 
     (r'^get_balances_self/$', 'billing.views.balances_self'),
