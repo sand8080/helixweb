@@ -60,7 +60,7 @@
                 {% load localeurl_tags %}
 
                 <tr>
-                    <td colspan="9">
+                    <td colspan="8">
                         {% include "pager.html" %}
                     </td>
                 </tr>
@@ -74,7 +74,6 @@
                     <th>{% trans "virtual" %}</th>
                     <th>{% trans "overdraft" %}</th>
                     <th>{% trans "locked" %}</th>
-                    <th>{% trans "locking order" %}</th>
                 </tr>
 
                 {% for balance in balances %}
@@ -109,18 +108,11 @@
                         <td>{{ balance.virtual_amount }}</td>
                         <td>{{ balance.overdraft_limit }}</td>
                         <td>{{ balance.locked_amount }}</td>
-                        <td>
-                            {% if balance.locking_order %}
-                                {{ balance.locking_order }}
-                            {% else %}
-                                {% trans "by default" %}
-                            {% endif %}
-                        </td>
 
                 {% endfor %}
 
                 <tr>
-                    <td colspan="9">
+                    <td colspan="8">
                         {% include "pager.html" %}
                     </td>
                 </tr>

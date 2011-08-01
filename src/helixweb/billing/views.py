@@ -146,7 +146,6 @@ def balances(request):
         form.update_total(resp)
         c.update(process_helix_response(resp, 'balances', 'balances_error'))
         balances = resp.get('balances', [])
-        _prepare_balances_info(balances)
         c['pager'] = form.pager
     c['form'] = form
     return render_to_response('balance/list.html', c,
@@ -161,11 +160,6 @@ def _locking_order_as_text(locking_order):
         return None
 
 
-def _prepare_balances_info(balances):
-    for b in balances:
-        b['locking_order_text'] = _locking_order_as_text(b['locking_order'])
-
-
 @login_redirector
 def user_balances(request, user_id):
     c = prepare_context(request)
@@ -174,7 +168,6 @@ def user_balances(request, user_id):
     resp = helix_cli.request(BalanceForm.get_user_balances_req(request, user_id))
     c.update(process_helix_response(resp, 'balances', 'balances_error'))
     balances = resp.get('balances', [])
-    _prepare_balances_info(balances)
     return render_to_response('user/balances.html', c,
         context_instance=RequestContext(request))
 

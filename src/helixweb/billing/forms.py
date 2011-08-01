@@ -68,45 +68,9 @@ class ModifyUsedCurrenciesForm(BillingForm):
 
 
 class BalanceForm(BillingForm):
-    locking_choices_sel_values = (0, 1, 2, 3)
-    locking_choices_sel_names = ('only real', 'only virtual', 'real, virtual',
-        'virtual, real')
-    locking_choices_billing_values = (['real_amount'],
-        ['virtual_amount'],
-        ['real_amount', 'virtual_amount'],
-        ['virtual_amount', 'real_amount'])
-
-    @staticmethod
-    def locking_choices():
-        return zip(BalanceForm.locking_choices_sel_values,
-            BalanceForm.locking_choices_sel_names)
-
-    @staticmethod
-    def locking_choice_by_locking_order(locking_order):
-        result = None
-        try:
-            idx = BalanceForm.locking_choices_billing_values.index(locking_order)
-            result = BalanceForm.locking_choices_sel_values[idx]
-        except ValueError:
-            pass
-        return result
-
     @staticmethod
     def is_active_choices():
         return (('1', _('active')), ('0', _('inactive')))
-
-    def _strip_locking_order(self, d, name='locking_order'):
-        self._strip_param(d, name)
-        if name in d:
-            choice = int(d[name])
-            choices = dict(zip(self.locking_choices_sel_values,
-                self.locking_choices_billing_values))
-            d[name] = choices[choice]
-
-    def as_helix_request(self):
-        d = super(BillingForm, self).as_helix_request()
-        self._strip_locking_order(d)
-        return d
 
 
 class AddBalanceForm(BalanceForm):
@@ -122,9 +86,6 @@ class AddBalanceForm(BalanceForm):
         self.fields['currency_code'] = self._gen_currency_code(currencies)
         self.fields['overdraft_limit'] = forms.DecimalField(label=_('overdraft limit'),
             required=False)
-        self.fields['locking_order'] = forms.ChoiceField(label=_('locking order'),
-            required=False, choices=self.locking_choices(),
-            widget=forms.widgets.RadioSelect)
         self.fields['is_active'] = forms.ChoiceField(label=_('is active'),
             widget=forms.widgets.RadioSelect(), initial='1',
             choices=self.is_active_choices())
@@ -156,9 +117,9 @@ class ModifyBalanceForm(BalanceForm):
             initial=kwargs.get('currency_code'), widget=ConstInput)
         self.fields['new_overdraft_limit'] = forms.DecimalField(label=_('overdraft limit'),
             required=False)
-        self.fields['new_locking_order'] = forms.ChoiceField(label=_('locking order'),
-            required=False, choices=self.locking_choices(),
-            widget=forms.widgets.RadioSelect)
+#        self.fields['new_locking_order'] = forms.ChoiceField(label=_('locking order'),
+#            required=False, choices=self.locking_choices(),
+#            widget=forms.widgets.RadioSelect)
         self.fields['new_is_active'] = forms.ChoiceField(label=_('is active'),
             widget=forms.widgets.RadioSelect(), choices=self.is_active_choices(),
             initial=kwargs.get('new_is_active'))
@@ -168,9 +129,9 @@ class ModifyBalanceForm(BalanceForm):
         d = dict(balance_info)
         d['new_is_active'] = int(d['is_active'])
         d['new_overdraft_limit'] = d['overdraft_limit']
-        new_lo_choice = ModifyBalanceForm.locking_choice_by_locking_order(
-            d['locking_order'])
-        d['new_locking_order'] = new_lo_choice
+#        new_lo_choice = ModifyBalanceForm.locking_choice_by_locking_order(
+#            d['locking_order'])
+#        d['new_locking_order'] = new_lo_choice
         return ModifyBalanceForm(d, request=request)
 
     def as_helix_request(self):
@@ -182,7 +143,7 @@ class ModifyBalanceForm(BalanceForm):
         d['ids'] = [id]
         self._strip_bool_param(d, 'new_is_active')
         self._strip_param(d, 'new_overdraft_limit')
-        self._strip_locking_order(d, 'new_locking_order')
+#        self._strip_locking_order(d, 'new_locking_order')
 
         return d
 
@@ -223,3 +184,46 @@ class AddBonusForm(MoneyForm):
 
 class LockForm(MoneyForm):
     action = 'lock'
+
+    locking_choices_sel_values = (0, 1, 2, 3)
+    locking_choices_sel_names = ('only real', 'only virtual', 'real, virtual',
+        'virtual, real')
+    locking_choices_billing_values = (['real_amount'],
+        ['virtual_amount'],
+        ['real_amount', 'virtual_amount'],
+        ['virtual_amount', 'real_amount'])
+
+    def __init__(self, *args, **kwargs):
+        super(LockForm, self).__init__(*args, **kwargs)
+        self.fields['locking_order'] = forms.ChoiceField(label=_('locking order'),
+            required=False, choices=self.locking_choices(),
+            widget=forms.widgets.RadioSelect)
+
+    @classmethod
+    def locking_choices(cls):
+        return zip(cls.locking_choices_sel_values,
+            cls.locking_choices_sel_names)
+
+    @classmethod
+    def locking_choice_by_locking_order(cls, locking_order):
+        result = None
+        try:
+            idx = cls.locking_choices_billing_values.index(locking_order)
+            result = cls.locking_choices_sel_values[idx]
+        except ValueError:
+            pass
+        return result
+
+    def _strip_locking_order(self, d, name='locking_order'):
+        self._strip_param(d, name)
+        if name in d:
+            choice = int(d[name])
+            choices = dict(zip(self.locking_choices_sel_values,
+                self.locking_choices_billing_values))
+            d[name] = choices[choice]
+
+    def as_helix_request(self):
+        d = super(LockForm, self).as_helix_request()
+        self._strip_locking_order(d)
+        return d
+
