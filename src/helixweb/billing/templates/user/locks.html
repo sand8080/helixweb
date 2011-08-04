@@ -112,7 +112,7 @@
                     <tr>
                         <td>{{ lock.id }}</td>
                         <td>{{ lock.currency_code }}</td>
-                        <td>{{ lock.creation_date }}</td>
+                        <td>{{ lock.creation_date|date:"Y-m-d H:i:s" }}</td>
                         <td>{{ lock.real_amount }}</td>
                         <td>{{ lock.virtual_amount }}</td>
                         <td>{{ lock.info }}</td>
