@@ -125,8 +125,13 @@ def build_index(helix_resp, field):
     return ds_idx
 
 
+def _prepare_date(d, field_name):
+    if field_name in d:
+        d[field_name] = iso8601.parse_date(d[field_name])
+
+
 def _prepare_action_log(a_log):
-    a_log['request_date'] = iso8601.parse_date(a_log['request_date'])
+    _prepare_date(a_log, 'request_date')
     a_log['request'] = cjson.decode(a_log['request'])
     a_log['response'] = cjson.decode(a_log['response'])
     return a_log

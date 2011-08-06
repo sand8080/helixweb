@@ -5,7 +5,7 @@ from django.template import RequestContext
 
 from helixweb.core.forms import _get_user_id
 from helixweb.core.views import (login_redirector, _prepare_context,
-    process_helix_response, _action_logs, _prepare_action_log)
+    process_helix_response, _action_logs, _prepare_action_log, _prepare_date)
 from helixcore.server.client import Client
 
 from helixweb.billing import settings #@UnresolvedImport
@@ -16,6 +16,7 @@ from django.http import HttpResponseRedirect
 from helixweb.billing.forms_filters import (FilterAllActionLogsForm,
     FilterSelfActionLogsForm, FilterBalanceForm, FilterUserActionLogsForm,
     FilterUserLocksForm)
+import iso8601
 
 
 helix_cli = Client(settings.BILLING_SERVICE_URL)
@@ -154,8 +155,8 @@ def balances(request):
 
 def _locking_order_as_text(locking_order):
     try:
-        idx = BalanceForm.locking_choices_billing_values.index(locking_order)
-        return BalanceForm.locking_choices_sel_names[idx]
+        idx = LockForm.locking_choices_billing_values.index(locking_order)
+        return LockForm.locking_choices_sel_names[idx]
     except ValueError:
         return None
 
@@ -328,7 +329,10 @@ def user_get_locks(request, user_id, balance_id):
         resp = helix_cli.request(form.as_helix_request())
         form.update_total(resp)
         c.update(process_helix_response(resp, 'locks', 'locks_error'))
-        c['locks'] = resp.get('locks', [])
+        locks = resp.get('locks', [])
+        for lock in locks:
+            _prepare_date(lock, 'creation_date')
+        c['locks'] = locks
         c['pager'] = form.pager
     c['form'] = form
     return render_to_response('user/locks.html', c,
