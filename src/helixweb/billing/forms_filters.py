@@ -86,20 +86,40 @@ class FilterBalanceForm(FilterBillingForm):
         return d
 
 
-class FilterUserLocksForm(FilterBillingForm):
+class AbstractFilterLocksForm(FilterBillingForm):
     action = 'get_locks'
 
-    user_id = forms.IntegerField(label=_('user id'),
-        widget=ConstInput, required=False)
-    balance_id = forms.IntegerField(label=_('balance id'),
-        widget=ConstInput, required=False)
-    from_creation_date = forms.DateField(label=_('from'), required=False)
-    to_creation_date = forms.DateField(label=_('to'), required=False)
+    def _add_common_fields(self):
+        self.fields['order_id'] = forms.CharField(label=_('order id'),
+            max_length=64, required=False)
+        self.fields['from_creation_date'] = forms.DateField(label=_('from'), required=False)
+        self.fields['to_creation_date'] = forms.DateField(label=_('to'), required=False)
 
     def as_helix_request(self):
-        d = super(FilterUserLocksForm, self).as_helix_request()
+        d = super(AbstractFilterLocksForm, self).as_helix_request()
         self._strip_filter_param(d, 'user_id')
+        self._strip_filter_param(d, 'order_id')
         self._strip_filter_param(d, 'balance_id')
         self._strip_from_date_param(d, 'from_creation_date')
         self._strip_to_date_param(d, 'to_creation_date')
         return d
+
+
+class FilterLocksForm(AbstractFilterLocksForm):
+    def __init__(self, *args, **kwargs):
+        super(FilterLocksForm, self).__init__(*args, **kwargs)
+        self.fields['user_id'] = forms.IntegerField(label=_('user id'),
+            required=False)
+        self.fields['balance_id'] = forms.IntegerField(label=_('balance id'),
+            required=False)
+        self._add_common_fields()
+
+
+class FilterUserLocksForm(AbstractFilterLocksForm):
+    def __init__(self, *args, **kwargs):
+        super(FilterUserLocksForm, self).__init__(*args, **kwargs)
+        self.fields['user_id'] = forms.IntegerField(label=_('user id'),
+            widget=ConstInput, required=False)
+        self.fields['balance_id'] = forms.IntegerField(label=_('balance id'),
+            widget=ConstInput, required=False)
+        self._add_common_fields()

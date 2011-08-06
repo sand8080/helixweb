@@ -1,0 +1,75 @@
+{% load i18n %}
+{% load urlutils %}
+{% load localeurl_tags %}
+
+<div>
+    {% trans "total locks" %}: {{ pager.total }} &nbsp;
+</div>
+
+<br>
+
+<table class="center wide bordered">
+
+    {% if locks_error %}
+
+        <tr class="objects_data">
+            <td>
+                <span class="errormessage">{% trans locks_error %}</span>
+            </td>
+        </tr>
+
+    {% else %}
+
+        {% if locks %}
+
+            <tr>
+                <td colspan="6">
+                    {% include "pager.html" %}
+                </td>
+            </tr>
+
+            <tr class="objects_fields">
+                <th>{% trans "id" %}</th>
+                <th>{% trans "currency" %}</th>
+                <th>{% trans "order id" %}</th>
+                <th>{% trans "creation date" %}</th>
+                <th>{% trans "real" %}</th>
+                <th>{% trans "virtual" %}</th>
+                <th>{% trans "info" %}</th>
+            </tr>
+
+            {% for lock in locks %}
+                <tr>
+                    <td>{{ lock.id }}</td>
+                    <td>
+                        <span style="white-space:nowrap;">
+                            {{ lock.creation_date|date:"Y-m-d" }}
+                        </span>
+                        <span style="white-space:nowrap;">
+                            {{ lock.creation_date|date:"H:i:s" }}
+                        </span>
+                    </td>
+                    <td>{{ lock.currency_code }}</td>
+                    <td>{{ lock.order_id }}</td>
+                    <td>{{ lock.real_amount }}</td>
+                    <td>{{ lock.virtual_amount }}</td>
+                    <td>{{ lock.info }}</td>
+                </tr>
+            {% endfor %}
+
+            <tr>
+                <td colspan="6">
+                    {% include "pager.html" %}
+                </td>
+            </tr>
+
+
+        {% else %}
+
+            <tr><th>{% trans "no locks found" %}</th></tr>
+
+        {% endif %}
+
+    {% endif %}
+
+</table>

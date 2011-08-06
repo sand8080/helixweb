@@ -195,9 +195,12 @@ class LockForm(MoneyForm):
 
     def __init__(self, *args, **kwargs):
         super(LockForm, self).__init__(*args, **kwargs)
+        self.fields['order_id'] =  forms.CharField(label=_('order id'), max_length=64,
+            required=False)
+        forms.ChoiceField(label=_('locking order'),
+            choices=self.locking_choices(), widget=forms.widgets.RadioSelect)
         self.fields['locking_order'] = forms.ChoiceField(label=_('locking order'),
-            required=False, choices=self.locking_choices(),
-            widget=forms.widgets.RadioSelect)
+            choices=self.locking_choices(), widget=forms.widgets.RadioSelect)
 
     @classmethod
     def locking_choices(cls):

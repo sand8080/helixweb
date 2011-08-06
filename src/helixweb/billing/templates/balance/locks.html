@@ -3,11 +3,7 @@
 {% load i18n %}
 
 {% block title %}
-    {% blocktrans %}locks of user #{{ user_id }} on balance #{{ balance_id }}{% endblocktrans %}
-{% endblock %}
-
-{% block user_submenu %}
-    {% include "user/billing_sumbmenu.html" %}
+    {% blocktrans %}locks{% endblocktrans %}
 {% endblock %}
 
 {% block content %}
@@ -24,24 +20,8 @@
                 <tr>
                     <td class="menu_linked" colspan="2">
                         <h2>
-                            {% if "/billing/get_balances/"|is_url_allowed:rights %}
-                                <a href="{{ '/billing/user_info/'|chlocale:cur_lang }}{{ user_id }}/">
-                                    {% trans "user id #" %}{{ user_id }}
-                                </a>
-                            {% else %}
-                                {% trans "user id #" %}{{ user_id }}
-                            {% endif %}
-                            &rarr;
-                            {% allowedurl True %}
-                                /billing/get_balances/{{ user_id }}/
-                                {% trans "balances" %}
-                            {% endallowedurl %}
-                            &rarr;
-                            {% trans "balance id #" %}{{ balance_id }}
-                            &rarr;
                             {% trans "locks" %}
                         </h2>
-
                     </td>
                 </tr>
 

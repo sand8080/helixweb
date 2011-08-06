@@ -26,15 +26,9 @@
         </tr>
     {% endif %}
 
-    {% if "/billing/get_balances/,/billing/add_balance/"|is_any_of_urls_allowed:rights %}
+    {% if "/billing/add_balance/"|is_any_of_urls_allowed:rights %}
         <tr>
             <td>
-                {% allowedurl %}
-                    /billing/get_balances/
-                    <span style="white-space:nowrap;">{% trans "all balances" %}</span>
-                    <br>
-                {% endallowedurl %}
-
                 {% allowedurl %}
                     /billing/add_balance/
                     <span style="white-space:nowrap;">{% trans "add balance" %}</span>
@@ -52,9 +46,21 @@
         </td>
     </tr>
 
-    {% if "/billing/get_action_logs/"|is_any_of_urls_allowed:rights %}
+    {% if "/billing/get_balances/,/billing/get_action_logs/,/billing/get_locks/"|is_any_of_urls_allowed:rights %}
         <tr>
             <td>
+                {% allowedurl %}
+                    /billing/get_balances/
+                    <span style="white-space:nowrap;">{% trans "all balances" %}</span>
+                    <br>
+                {% endallowedurl %}
+
+                {% allowedurl %}
+                    /billing/get_locks/
+                    <span style="white-space:nowrap;">{% trans "all locks" %}</span>
+                    <br>
+                {% endallowedurl %}
+
                 {% allowedurl %}
                     /billing/get_action_logs/
                     <span style="white-space:nowrap;">{% trans "all action logs" %}</span>

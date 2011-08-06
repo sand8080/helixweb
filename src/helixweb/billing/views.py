@@ -15,12 +15,10 @@ from helixweb.billing.forms import (CurrenciesForm, UsedCurrenciesForm,
 from django.http import HttpResponseRedirect
 from helixweb.billing.forms_filters import (FilterAllActionLogsForm,
     FilterSelfActionLogsForm, FilterBalanceForm, FilterUserActionLogsForm,
-    FilterUserLocksForm)
-import iso8601
+    FilterUserLocksForm, FilterLocksForm)
 
 
 helix_cli = Client(settings.BILLING_SERVICE_URL)
-
 
 prepare_context = partial(_prepare_context, cur_service='billing')
 
@@ -176,11 +174,12 @@ def user_balances(request, user_id):
 @login_redirector
 def balances_self(request):
     c = prepare_context(request)
+    c['action'] = 'get_balances_self'
     c['user_id'] = _get_user_id(request)
     resp = helix_cli.request(BalanceForm.get_balances_self_req(request))
     c.update(process_helix_response(resp, 'balances', 'balances_error'))
     balances = resp.get('balances', [])
-    _prepare_balances_info(balances)
+#    _prepare_balances_info(balances)
     return render_to_response('balance/balances_self.html', c,
         context_instance=RequestContext(request))
 
@@ -312,18 +311,17 @@ def user_lock(request, user_id, balance_id):
         '/billing/get_balances/%s/' % user_id, user_id, balance_id)
 
 
-@login_redirector
-def user_get_locks(request, user_id, balance_id):
+def _locks(request, form_cls, template, user_id, balance_id):
     c = prepare_context(request)
     c['action'] = FilterUserLocksForm.action
     c['user_id'] = user_id
     c['balance_id'] = balance_id
 
     if len(request.GET) == 0 or (len(request.GET) == 1 and 'pager_offset' in request.GET):
-        form = FilterUserLocksForm({'user_id': user_id, 'balance_id': balance_id},
+        form = form_cls({'user_id': user_id, 'balance_id': balance_id},
             request=request)
     else:
-        form = FilterUserLocksForm(request.GET, request=request)
+        form = form_cls(request.GET, request=request)
 
     if form.is_valid():
         resp = helix_cli.request(form.as_helix_request())
@@ -335,5 +333,16 @@ def user_get_locks(request, user_id, balance_id):
         c['locks'] = locks
         c['pager'] = form.pager
     c['form'] = form
-    return render_to_response('user/locks.html', c,
+    return render_to_response(template, c,
         context_instance=RequestContext(request))
+
+
+@login_redirector
+def locks(request):
+    return _locks(request, FilterLocksForm, 'balance/locks.html',
+        None, None)
+
+@login_redirector
+def user_locks(request, user_id, balance_id):
+    return _locks(request, FilterUserLocksForm, 'user/locks.html',
+        user_id, balance_id)
