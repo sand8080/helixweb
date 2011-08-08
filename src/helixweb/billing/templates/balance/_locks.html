@@ -30,9 +30,15 @@
 
             <tr class="objects_fields">
                 <th>{% trans "id" %}</th>
+                {% if "/billing/modify_balances/"|is_url_allowed:rights %}
+                    <th>{% trans "balance id" %}</th>
+                {% endif %}
+                {% if "/billing/get_balances/"|is_url_allowed:rights %}
+                    <th>{% trans "user id" %}</th>
+                {% endif %}
                 <th>{% trans "currency" %}</th>
-                <th>{% trans "order id" %}</th>
                 <th>{% trans "creation date" %}</th>
+                <th>{% trans "order id" %}</th>
                 <th>{% trans "real" %}</th>
                 <th>{% trans "virtual" %}</th>
                 <th>{% trans "info" %}</th>
@@ -41,6 +47,23 @@
             {% for lock in locks %}
                 <tr>
                     <td>{{ lock.id }}</td>
+
+                    {% if "/billing/modify_balances/"|is_url_allowed:rights %}
+                        <td><a href="{{ '/billing/modify_balances/'|chlocale:cur_lang}}{{ lock.user_id }}/{{ lock.balance_id }}/">
+                                {{ lock.balance_id }}
+                            </a>
+                        </td>
+                    {% endif %}
+
+                    {% if "/billing/get_balances/"|is_url_allowed:rights %}
+                        <td>
+                            <a href="{{ '/billing/user_info/'|chlocale:cur_lang }}{{ lock.user_id }}/">
+                                {{ lock.user_id }}
+                            </a>
+                        </td>
+                    {% endif %}
+
+                    <td>{{ lock.currency_code }}</td>
                     <td>
                         <span style="white-space:nowrap;">
                             {{ lock.creation_date|date:"Y-m-d" }}
@@ -49,7 +72,6 @@
                             {{ lock.creation_date|date:"H:i:s" }}
                         </span>
                     </td>
-                    <td>{{ lock.currency_code }}</td>
                     <td>{{ lock.order_id }}</td>
                     <td>{{ lock.real_amount }}</td>
                     <td>{{ lock.virtual_amount }}</td>
