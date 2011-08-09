@@ -34,7 +34,6 @@ def _make_login(form, request):
         status = resp.get('status')
         s_id = resp.get('session_id')
         user_id = resp.get('user_id')
-        print '### login resp', resp
         if status == 'ok' and s_id is not None:
             # TODO: set secure cookie
             b_url = get_backurl(request)

@@ -22,7 +22,8 @@ def _access_to_billing_user_info(c):
 
 def auth_access_info(request):
     c = {}
-    if request.path_info.startswith('/auth/add_environment'):
+    if request.path_info.startswith(('/auth/add_environment',
+        '/auth/login')):
         c['logged_in'] = False
         c['rights'] = {}
         c['logged_user_id'] = None
