@@ -15,18 +15,23 @@ urlpatterns = patterns('',
     (r'^get_action_logs/$', 'billing.views.action_logs'),
 
     (r'^user_info/(?P<id>\d+)/$', 'billing.views.user_info'),
+
     (r'^add_balance/(?P<user_id>\d+)/$', 'billing.views.user_add_balance'),
-    (r'^get_balances/(?P<user_id>\d+)/$', 'billing.views.user_balances'),
     (r'^modify_balances/(?P<user_id>\d+)/(?P<balance_id>\d+)/$',
         'billing.views.user_modify_balance'),
+    (r'^get_balances/(?P<user_id>\d+)/$', 'billing.views.user_balances'),
+
     (r'^add_receipt/(?P<user_id>\d+)/(?P<balance_id>\d+)/$',
         'billing.views.user_add_receipt'),
     (r'^add_bonus/(?P<user_id>\d+)/(?P<balance_id>\d+)/$',
         'billing.views.user_add_bonus'),
     (r'^lock/(?P<user_id>\d+)/(?P<balance_id>\d+)/$',
         'billing.views.user_lock'),
+    (r'^lock/(?P<user_id>\d+)/$',
+        'billing.views.user_lock'),
+
     (r'^get_locks/(?P<user_id>\d+)/(?P<balance_id>\d+)/$',
-        'billing.views.user_locks'),
+        'billing.views.user_balance_locks'),
 
     (r'^get_action_logs/(?P<user_id>\d+)/$', 'billing.views.user_action_logs'),
 

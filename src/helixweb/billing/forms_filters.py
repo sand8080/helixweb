@@ -115,9 +115,9 @@ class FilterLocksForm(AbstractFilterLocksForm):
         self._add_common_fields()
 
 
-class FilterUserLocksForm(AbstractFilterLocksForm):
+class FilterUserBalanceLocksForm(AbstractFilterLocksForm):
     def __init__(self, *args, **kwargs):
-        super(FilterUserLocksForm, self).__init__(*args, **kwargs)
+        super(FilterUserBalanceLocksForm, self).__init__(*args, **kwargs)
         self.fields['user_id'] = forms.IntegerField(label=_('user id'),
             widget=ConstInput, required=False)
         self.fields['balance_id'] = forms.IntegerField(label=_('balance id'),
@@ -130,8 +130,4 @@ class FilterSelfLocksForm(AbstractFilterLocksForm):
 
     def __init__(self, *args, **kwargs):
         super(FilterSelfLocksForm, self).__init__(*args, **kwargs)
-#        self.fields['user_id'] = forms.IntegerField(label=_('user id'),
-#            widget=ConstInput, required=False)
-#        self.fields['balance_id'] = forms.IntegerField(label=_('balance id'),
-#            widget=ConstInput, required=False)
         self._add_common_fields()

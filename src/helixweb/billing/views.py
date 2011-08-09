@@ -12,7 +12,8 @@ from helixweb.billing.forms import (CurrenciesForm, UsedCurrenciesForm,
 from django.http import HttpResponseRedirect
 from helixweb.billing.forms_filters import (FilterAllActionLogsForm,
     FilterSelfActionLogsForm, FilterBalanceForm, FilterUserActionLogsForm,
-    FilterUserLocksForm, FilterLocksForm, FilterSelfLocksForm)
+    FilterUserLocksForm, FilterLocksForm, FilterSelfLocksForm,
+    FilterUserBalanceLocksForm)
 
 
 helix_cli = Client(settings.BILLING_SERVICE_URL)
@@ -335,8 +336,8 @@ def locks(request):
 
 
 @login_redirector
-def user_locks(request, user_id, balance_id):
-    return _locks(request, FilterUserLocksForm, 'user/locks.html',
+def user_balance_locks(request, user_id, balance_id):
+    return _locks(request, FilterUserBalanceLocksForm, 'user/balance_locks.html',
         user_id, balance_id)
 
 
