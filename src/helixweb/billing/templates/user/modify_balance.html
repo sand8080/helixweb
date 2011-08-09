@@ -25,7 +25,7 @@
                 <tr>
                     <td colspan="2">
                         <h2 class="menu_linked">
-                            {% if "/billing/get_balances/"|is_url_allowed:rights %}
+                            {% if access_to_billing_user_info %}
                                 <a href="{{ '/billing/user_info/'|chlocale:cur_lang }}{{ user_id }}/">
                                     {% trans "user id #" %}{{ user_id }}
                                 </a>

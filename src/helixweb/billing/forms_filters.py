@@ -123,3 +123,15 @@ class FilterUserLocksForm(AbstractFilterLocksForm):
         self.fields['balance_id'] = forms.IntegerField(label=_('balance id'),
             widget=ConstInput, required=False)
         self._add_common_fields()
+
+
+class FilterSelfLocksForm(AbstractFilterLocksForm):
+    action = 'get_locks_self'
+
+    def __init__(self, *args, **kwargs):
+        super(FilterSelfLocksForm, self).__init__(*args, **kwargs)
+#        self.fields['user_id'] = forms.IntegerField(label=_('user id'),
+#            widget=ConstInput, required=False)
+#        self.fields['balance_id'] = forms.IntegerField(label=_('balance id'),
+#            widget=ConstInput, required=False)
+        self._add_common_fields()

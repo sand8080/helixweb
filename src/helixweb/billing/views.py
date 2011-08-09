@@ -1,11 +1,8 @@
-from functools import partial
-
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 
-from helixweb.core.forms import _get_user_id
-from helixweb.core.views import (login_redirector, _prepare_context,
-    process_helix_response, _action_logs, _prepare_action_log, _prepare_date)
+from helixweb.core.views import (login_redirector, process_helix_response,
+    _action_logs, _prepare_action_log, _prepare_date)
 from helixcore.server.client import Client
 
 from helixweb.billing import settings #@UnresolvedImport
@@ -15,24 +12,21 @@ from helixweb.billing.forms import (CurrenciesForm, UsedCurrenciesForm,
 from django.http import HttpResponseRedirect
 from helixweb.billing.forms_filters import (FilterAllActionLogsForm,
     FilterSelfActionLogsForm, FilterBalanceForm, FilterUserActionLogsForm,
-    FilterUserLocksForm, FilterLocksForm)
+    FilterUserLocksForm, FilterLocksForm, FilterSelfLocksForm)
 
 
 helix_cli = Client(settings.BILLING_SERVICE_URL)
 
-prepare_context = partial(_prepare_context, cur_service='billing')
-
 
 @login_redirector
 def description(request):
-    c = prepare_context(request)
-    return render_to_response('billing_descr.html', c,
+    return render_to_response('billing_descr.html', {},
         context_instance=RequestContext(request))
 
 
 @login_redirector
 def currencies(request):
-    c = prepare_context(request)
+    c = {}
     form = CurrenciesForm({'ordering_params': ['-code']}, request=request)
     if form.is_valid():
         resp = helix_cli.request(form.as_helix_request())
@@ -43,7 +37,7 @@ def currencies(request):
 
 @login_redirector
 def used_currencies(request):
-    c = prepare_context(request)
+    c = {}
     form = UsedCurrenciesForm({'ordering_params': ['-code']}, request=request)
     if form.is_valid():
         resp = helix_cli.request(form.as_helix_request())
@@ -54,8 +48,7 @@ def used_currencies(request):
 
 @login_redirector
 def modify_used_currencies(request):
-    c = prepare_context(request)
-
+    c = {}
     resp = helix_cli.request(ModifyUsedCurrenciesForm.get_currencies_req(request))
     c.update(process_helix_response(resp, 'currencies', 'currencies_error'))
     currencies = resp.get('currencies', [])
@@ -90,7 +83,7 @@ def _prepare_action_logs_context(c):
 
 @login_redirector
 def action_logs(request):
-    c = prepare_context(request)
+    c = {}
     _prepare_action_logs_context(c)
     _action_logs(c, request, FilterAllActionLogsForm, helix_cli)
     return render_to_response('action_logs/billing_list.html', c,
@@ -99,7 +92,7 @@ def action_logs(request):
 
 @login_redirector
 def action_logs_self(request):
-    c = prepare_context(request)
+    c = {}
     _prepare_action_logs_context(c)
     _action_logs(c, request, FilterSelfActionLogsForm, helix_cli)
     return render_to_response('action_logs/billing_list.html', c,
@@ -108,7 +101,7 @@ def action_logs_self(request):
 
 @login_redirector
 def user_action_logs(request, user_id):
-    c = prepare_context(request)
+    c = {}
     c['action'] = FilterUserActionLogsForm.action
     c['user_id'] = user_id
     _prepare_action_logs_context(c)
@@ -130,7 +123,7 @@ def user_action_logs(request, user_id):
 
 @login_redirector
 def balances(request):
-    c = prepare_context(request)
+    c = {}
     resp = helix_cli.request(FilterBalanceForm.get_used_currencies_req(request))
     c.update(process_helix_response(resp, 'currencies', 'currencies_error'))
     currencies = resp.get('currencies', [])
@@ -161,7 +154,7 @@ def _locking_order_as_text(locking_order):
 
 @login_redirector
 def user_balances(request, user_id):
-    c = prepare_context(request)
+    c = {}
     c['action'] = 'get_balances'
     c['user_id'] = user_id
     resp = helix_cli.request(BalanceForm.get_user_balances_req(request, user_id))
@@ -173,19 +166,17 @@ def user_balances(request, user_id):
 
 @login_redirector
 def balances_self(request):
-    c = prepare_context(request)
+    c = {}
     c['action'] = 'get_balances_self'
-    c['user_id'] = _get_user_id(request)
     resp = helix_cli.request(BalanceForm.get_balances_self_req(request))
     c.update(process_helix_response(resp, 'balances', 'balances_error'))
     balances = resp.get('balances', [])
-#    _prepare_balances_info(balances)
     return render_to_response('balance/balances_self.html', c,
         context_instance=RequestContext(request))
 
 
 def _add_balance(request, template, redirect_url, user_id=None):
-    c = prepare_context(request)
+    c = {}
     c['user_id'] = user_id
     c['action'] = AddBalanceForm.action
     resp = helix_cli.request(AddBalanceForm.get_used_currencies_req(request))
@@ -220,7 +211,7 @@ def user_add_balance(request, user_id):
 
 
 def _modify_balance(request, template, redirect_url, balance_id, user_id=None):
-    c = prepare_context(request)
+    c = {}
     c['action'] = ModifyBalanceForm.action
     c['user_id'] = user_id
     if request.method == 'POST':
@@ -258,14 +249,14 @@ def user_modify_balance(request, user_id, balance_id):
 @login_redirector
 def user_info(request, id):
     id = int(id)
-    c = prepare_context(request)
+    c = {}
     c['user_id'] = id
     return render_to_response('user/billing_user_info.html', c,
         context_instance=RequestContext(request))
 
 
 def _add_money(request, form_cls, template, redirect_url, user_id, balance_id):
-    c = prepare_context(request)
+    c = {}
     c['action'] = form_cls.action
     c['user_id'] = user_id
     resp = helix_cli.request(form_cls.get_balance_req(request, balance_id))
@@ -312,7 +303,7 @@ def user_lock(request, user_id, balance_id):
 
 
 def _locks(request, form_cls, template, user_id, balance_id):
-    c = prepare_context(request)
+    c = {}
     c['action'] = FilterUserLocksForm.action
     c['user_id'] = user_id
     c['balance_id'] = balance_id
@@ -342,7 +333,14 @@ def locks(request):
     return _locks(request, FilterLocksForm, 'balance/locks.html',
         None, None)
 
+
 @login_redirector
 def user_locks(request, user_id, balance_id):
     return _locks(request, FilterUserLocksForm, 'user/locks.html',
         user_id, balance_id)
+
+
+@login_redirector
+def locks_self(request):
+    return _locks(request, FilterSelfLocksForm, 'balance/locks_self.html',
+        None, None)

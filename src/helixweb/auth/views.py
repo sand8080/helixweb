@@ -1,4 +1,4 @@
-from functools import partial
+#from functools import partial
 from datetime import datetime, timedelta
 
 from django.shortcuts import render_to_response
@@ -10,7 +10,7 @@ from helixcore.server.client import Client
 
 from helixweb.core.localization import cur_lang
 from helixweb.core.views import (login_redirector, process_helix_response,
-    build_index, get_backurl, _prepare_context, _prepare_action_log,
+    build_index, get_backurl, _prepare_action_log,
     _action_logs)
 from helixweb.core.forms import HelixwebRequestForm
 
@@ -27,9 +27,6 @@ from helixweb.auth import settings
 helix_cli = Client(settings.AUTH_SERVICE_URL)
 
 
-prepare_context = partial(_prepare_context, cur_service='auth')
-
-
 def _make_login(form, request):
     if form.is_valid():
         resp = helix_cli.request(form.as_helix_request(), check_response=False)
@@ -37,6 +34,7 @@ def _make_login(form, request):
         status = resp.get('status')
         s_id = resp.get('session_id')
         user_id = resp.get('user_id')
+        print '### login resp', resp
         if status == 'ok' and s_id is not None:
             # TODO: set secure cookie
             b_url = get_backurl(request)
@@ -77,14 +75,13 @@ def logout(request):
 
 @login_redirector
 def description(request):
-    c = prepare_context(request)
-    return render_to_response('auth_descr.html', c,
+    return render_to_response('auth_descr.html', {},
         context_instance=RequestContext(request))
 
 
 @login_redirector
 def add_service(request):
-    c = prepare_context(request)
+    c = {}
     if request.method == 'POST':
         form = AddServiceForm(request.POST, request=request)
         if form.is_valid():
@@ -102,7 +99,7 @@ def add_service(request):
 
 @login_redirector
 def modify_service(request, id):
-    c = prepare_context(request)
+    c = {}
     if request.method == 'POST':
         form = ModifyServiceForm(request.POST, request=request)
         if form.is_valid():
@@ -123,7 +120,7 @@ def modify_service(request, id):
 
 @login_redirector
 def services(request):
-    c = prepare_context(request)
+    c = {}
     if len(request.GET) == 0 or (len(request.GET) == 1 and 'pager_offset' in request.GET):
         # setting default is_active value to True
         form = FilterServiceForm({'is_active': 'all'}, request=request)
@@ -160,7 +157,7 @@ def add_environment(request):
 
 @login_redirector
 def modify_environment(request):
-    c = prepare_context(request)
+    c = {}
     if request.method == 'POST':
         form = ModifyEnvironmentForm(request.POST, request=request)
         if form.is_valid():
@@ -182,7 +179,7 @@ def modify_environment(request):
 
 @login_redirector
 def add_user(request):
-    c = prepare_context(request)
+    c = {}
     resp = helix_cli.request(AddUserForm.get_active_groups_req(request))
     c.update(process_helix_response(resp, 'groups', 'groups_error'))
     groups = resp.get('groups', [])
@@ -216,7 +213,7 @@ def _merge_groups_rights(groups_idx, groups_ids):
 
 @login_redirector
 def users(request):
-    c = prepare_context(request)
+    c = {}
     resp = helix_cli.request(FilterUserForm.get_active_groups_req(request))
     c.update(process_helix_response(resp, 'groups', 'groups_error'))
     groups_idx = build_index(resp, 'groups')
@@ -255,7 +252,7 @@ def _extract_user(helix_resp):
 @login_redirector
 def user_info(request, id):
     id = int(id)
-    c = prepare_context(request)
+    c = {}
     resp = helix_cli.request(HelixwebRequestForm.get_users_req(request, [id]))
     c.update(process_helix_response(resp, 'users', 'users_error'))
     c['user'] = _extract_user(resp)
@@ -289,7 +286,7 @@ def _calculate_summary_user_rights(users, groups_idx):
 
 @login_redirector
 def modify_user_self(request):
-    c = prepare_context(request)
+    c = {}
     if request.method == 'POST':
         form = ModifyUserSelfForm(request.POST, request=request)
         if form.is_valid():
@@ -316,7 +313,7 @@ def _get_user_info(request, c, id):
 
 @login_redirector
 def modify_user(request, id):
-    c = prepare_context(request)
+    c = {}
     c['action'] = ModifyUserForm.action
     resp = helix_cli.request(ModifyUserForm.get_active_groups_req(request))
     c.update(process_helix_response(resp, 'groups', 'groups_error'))
@@ -343,7 +340,7 @@ def modify_user(request, id):
 
 @login_redirector
 def user_action_logs(request, id):
-    c = prepare_context(request)
+    c = {}
     c['action'] = FilterUserActionLogsForm.action
     _prepare_action_logs_context(c)
     user = _get_user_info(request, c, id)
@@ -366,7 +363,7 @@ def user_action_logs(request, id):
 
 @login_redirector
 def groups(request):
-    c = prepare_context(request)
+    c = {}
     resp = helix_cli.request(FilterGroupForm.get_services_req(request))
     c.update(process_helix_response(resp, 'services', 'services_error'))
     srvs = resp.get('services', [])
@@ -395,7 +392,7 @@ def groups(request):
 
 @login_redirector
 def add_group(request):
-    c = prepare_context(request)
+    c = {}
     resp = helix_cli.request(AddGroupForm.get_services_req(request))
     services = resp.get('services', [])
     c.update(process_helix_response(resp, 'services', 'services_error'))
@@ -418,7 +415,7 @@ def add_group(request):
 
 @login_redirector
 def delete_group(request, id):
-    c = prepare_context(request)
+    c = {}
     if request.method == 'POST':
         form = DeleteGroupForm(request.POST, request=request)
         if form.is_valid():
@@ -441,7 +438,7 @@ def delete_group(request, id):
 
 @login_redirector
 def modify_group(request, id):
-    c = prepare_context(request)
+    c = {}
     resp = helix_cli.request(ModifyGroupForm.get_services_req(request))
     c.update(process_helix_response(resp, 'services', 'services_error'))
     services = resp.get('services', [])
@@ -472,7 +469,7 @@ def _prepare_action_logs_context(c):
 
 @login_redirector
 def action_logs(request):
-    c = prepare_context(request)
+    c = {}
     _prepare_action_logs_context(c)
     _action_logs(c, request, FilterAllActionLogsForm, helix_cli)
     return render_to_response('action_logs/auth_list.html', c,
@@ -481,7 +478,7 @@ def action_logs(request):
 
 @login_redirector
 def action_logs_self(request):
-    c = prepare_context(request)
+    c = {}
     _prepare_action_logs_context(c)
     _action_logs(c, request, FilterSelfActionLogsForm, helix_cli)
     return render_to_response('action_logs/auth_list.html', c,

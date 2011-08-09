@@ -2,14 +2,15 @@ import base64
 import cjson
 import iso8601
 
-from django.core.context_processors import csrf
+#from django.core.context_processors import csrf
 from django.http import HttpResponseRedirect
 from django.utils.safestring import mark_safe
 
+from helixweb.core.localization import cur_lang_value
 from helixcore.error import UnauthorizedActivity
-from helixweb.core.forms import _get_session_id, _get_user_id
-from helixweb.core.localization import cur_lang, cur_lang_value
-from helixweb.core.security import get_rights
+#from helixweb.core.context_processors import _get_session_id, _get_user_id
+#from helixweb.core.localization import cur_lang, cur_lang_value
+#from helixweb.core.security import get_rights
 
 
 def login_redirector(func):
@@ -95,15 +96,15 @@ def elems_as_table(elems, col_num):
     return mark_safe(u'\n'.join(output))
 
 
-def _prepare_context(request, cur_service=None):
-    c = {}
-    c['rights'] = get_rights(_get_session_id(request))
-    c['logged_in'] = True
-    c['cur_service'] = cur_service
-    c['logged_user_id'] = _get_user_id(request)
-    c.update(cur_lang(request))
-    c.update(csrf(request))
-    return c
+#def _prepare_context(request, cur_service=None):
+#    c = {}
+#    c['rights'] = get_rights(_get_session_id(request))
+#    c['logged_in'] = True
+#    c['cur_service'] = cur_service
+#    c['logged_user_id'] = _get_user_id(request)
+#    c.update(cur_lang(request))
+#    c.update(csrf(request))
+#    return c
 
 
 def get_backurl(request):

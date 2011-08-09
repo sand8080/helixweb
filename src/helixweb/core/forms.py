@@ -6,13 +6,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.forms.util import ErrorList
 from django.utils.encoding import force_unicode
 
-
-def _get_session_id(request):
-    return request.COOKIES.get('session_id', '')
-
-
-def _get_user_id(request):
-    return request.COOKIES.get('user_id')
+from helixweb.core.context_processors import _get_session_id
 
 
 class ErrorFieldMaker(ErrorList):

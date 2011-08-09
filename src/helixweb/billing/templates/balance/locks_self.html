@@ -3,35 +3,24 @@
 {% load i18n %}
 
 {% block title %}
-    {% blocktrans %}action logs of user #{{ user_id }}{% endblocktrans %}
-{% endblock %}
-
-{% block user_submenu %}
-    {% include "user/billing_sumbmenu.html" %}
+    {% blocktrans %}locks{% endblocktrans %}
 {% endblock %}
 
 {% block content %}
 
+    {% load i18n %}
     {% load urlutils %}
     {% load localeurl_tags %}
 
-    <form action="" method="get">{% csrf_token %}
+    <div class="bordered">
 
-        <div class="bordered">
+        <form action="" method="get">{% csrf_token %}
 
-            <table class="object_form center"  style="border-collapse:collapse;">
+            <table class="filter_object center">
                 <tr>
-                    <td colspan="2" class="menu_linked">
+                    <td class="menu_linked" colspan="2">
                         <h2>
-                            {% if access_to_billing_user_info %}
-                                <a href="{{ '/billing/user_info/'|chlocale:cur_lang }}{{ user_id }}/">
-                                    {% trans "user id #" %}{{ user_id }}
-                                </a>
-                            {% else %}
-                                {% trans "user id #" %}{{ user_id }}
-                            {% endif %}
-                            &rarr;
-                            {% trans "action logs" %}
+                            {% trans "locks" %}
                         </h2>
                     </td>
                 </tr>
@@ -46,6 +35,8 @@
 
             </table>
 
+            <br>
+
             <script type="text/javascript" src="/static/js/jquery-ui.js"></script>
             <script type="text/javascript" src="/static/js/jquery.url.min.js"></script>
             <script type="text/javascript" src="/static/js/i18n/jquery-ui-i18n.js"></script>
@@ -53,16 +44,15 @@
             <link rel="stylesheet" type="text/css" href="/static/css/jquery-ui/overcast/jquery-ui.custom.css" />
 
             <script type="text/javascript">
-                calendar("from_request_date")
-                calendar("to_request_date")
+                calendar("from_creation_date")
+                calendar("to_creation_date")
             </script>
 
-            <br>
+        </form>
+    </div>
 
-        </div>
+    <br>
 
-    </form>
-
-    {% include "core_action_logs/actions_list.html" %}
+    {% include "balance/_locks.html" %}
 
 {% endblock %}

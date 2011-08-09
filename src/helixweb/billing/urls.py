@@ -31,5 +31,6 @@ urlpatterns = patterns('',
     (r'^get_action_logs/(?P<user_id>\d+)/$', 'billing.views.user_action_logs'),
 
     (r'^get_balances_self/$', 'billing.views.balances_self'),
+    (r'^get_locks_self/$', 'billing.views.locks_self'),
     (r'^get_action_logs_self/$', 'billing.views.action_logs_self'),
 )

@@ -71,14 +71,21 @@
         </tr>
     {% endif %}
 
-    {% if "/billing/get_action_logs_self/,/billing/get_balances_self"|is_any_of_urls_allowed:rights %}
+    {% if "/billing/get_locks_self/,/billing/get_action_logs_self/,/billing/get_balances_self"|is_any_of_urls_allowed:rights %}
         <tr>
             <td>
+                {% allowedurl %}
+                    /billing/get_locks_self/
+                    {% trans "locks" %}
+                    <br>
+                {% endallowedurl %}
+
                 {% allowedurl %}
                     /billing/get_balances_self/
                     {% trans "balances" %}
                     <br>
                 {% endallowedurl %}
+
                 {% allowedurl %}
                     /billing/get_action_logs_self/
                     <span style="white-space:nowrap;">{% trans "action logs" %}</span>

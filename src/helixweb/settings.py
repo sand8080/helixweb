@@ -109,6 +109,8 @@ TEMPLATE_DIRS = (
 TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.request',
     'django.core.context_processors.i18n',
+    'helixweb.core.context_processors.access_info',
+    'helixweb.auth.context_processors.auth_access_info',
 )
 
 INSTALLED_APPS = (

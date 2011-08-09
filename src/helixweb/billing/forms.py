@@ -200,7 +200,8 @@ class LockForm(MoneyForm):
         forms.ChoiceField(label=_('locking order'),
             choices=self.locking_choices(), widget=forms.widgets.RadioSelect)
         self.fields['locking_order'] = forms.ChoiceField(label=_('locking order'),
-            choices=self.locking_choices(), widget=forms.widgets.RadioSelect)
+            choices=self.locking_choices(), widget=forms.widgets.RadioSelect,
+            initial=0)
 
     @classmethod
     def locking_choices(cls):

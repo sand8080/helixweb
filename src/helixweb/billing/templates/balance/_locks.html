@@ -33,7 +33,7 @@
                 {% if "/billing/modify_balances/"|is_url_allowed:rights %}
                     <th>{% trans "balance id" %}</th>
                 {% endif %}
-                {% if "/billing/get_balances/"|is_url_allowed:rights %}
+                {% if "/billing/add_balances/,/billing/get_balances/,/billing/get_action_logs/"|is_any_of_urls_allowed:rights %}
                     <th>{% trans "user id" %}</th>
                 {% endif %}
                 <th>{% trans "currency" %}</th>
@@ -45,17 +45,27 @@
             </tr>
 
             {% for lock in locks %}
-                <tr>
+                <tr class="objects_data {% cycle 'row1' 'row2' %}">
+
                     <td>{{ lock.id }}</td>
 
                     {% if "/billing/modify_balances/"|is_url_allowed:rights %}
-                        <td><a href="{{ '/billing/modify_balances/'|chlocale:cur_lang}}{{ lock.user_id }}/{{ lock.balance_id }}/">
+                        <td>
+                            {% allowedurl True %}
+                                /billing/modify_balances/{{ lock.balance_id }}/
                                 {{ lock.balance_id }}
-                            </a>
+                            {% endallowedurl %}
+
+                            {% allowedurl %}
+                                /billing/modify_balances/{{ lock.balance_id }}/
+                                <br>
+                                <span class="small_text">{% trans "modify" %}</span>
+                            {% endallowedurl %}
+
                         </td>
                     {% endif %}
 
-                    {% if "/billing/get_balances/"|is_url_allowed:rights %}
+                    {% if access_to_billing_user_info %}
                         <td>
                             <a href="{{ '/billing/user_info/'|chlocale:cur_lang }}{{ lock.user_id }}/">
                                 {{ lock.user_id }}
