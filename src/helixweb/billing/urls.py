@@ -29,6 +29,8 @@ urlpatterns = patterns('',
         'billing.views.user_lock'),
     (r'^lock/(?P<user_id>\d+)/$',
         'billing.views.user_lock'),
+    (r'^unlock/$', 'billing.views.unlock'),
+    (r'^charge_off/$', 'billing.views.charge_off'),
 
     (r'^get_locks/(?P<user_id>\d+)/(?P<balance_id>\d+)/$',
         'billing.views.user_balance_locks'),

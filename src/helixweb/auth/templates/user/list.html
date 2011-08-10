@@ -68,8 +68,6 @@
 
             {% if users %}
 
-                <script type="text/javascript" src="/static/js/utils.js"></script>
-
                 {% load transform %}
                 {% load objectutils %}
 
@@ -113,7 +111,8 @@
                             {% endif %}
                         </td>
                         <td width="60%">
-                            <a href="#" id="rights_{{ u.id }}">[+] {% trans "rights" %}</a>
+                            <button id="rights_{{ u.id }}">{% trans "rights details" %}</button>
+
                             <div id="rights_list_{{ u.id }}" style="display:none;">
 
                                 <table class="services_properties wide center">
@@ -145,7 +144,10 @@
                             </div>
 
                             <script type="text/javascript">
-                                slider('rights_{{ u.id }}', 'rights_list_{{ u.id }}')
+                                $("#rights_{{ u.id }}").click(function () {
+                                    $("#rights_list_{{ u.id }}").slideToggle("slow");
+                                    return false;
+                                });
                             </script>
                         </td>
                     </tr>

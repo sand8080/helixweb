@@ -117,9 +117,6 @@ class ModifyBalanceForm(BalanceForm):
             initial=kwargs.get('currency_code'), widget=ConstInput)
         self.fields['new_overdraft_limit'] = forms.DecimalField(label=_('overdraft limit'),
             required=False)
-#        self.fields['new_locking_order'] = forms.ChoiceField(label=_('locking order'),
-#            required=False, choices=self.locking_choices(),
-#            widget=forms.widgets.RadioSelect)
         self.fields['new_is_active'] = forms.ChoiceField(label=_('is active'),
             widget=forms.widgets.RadioSelect(), choices=self.is_active_choices(),
             initial=kwargs.get('new_is_active'))
@@ -129,9 +126,6 @@ class ModifyBalanceForm(BalanceForm):
         d = dict(balance_info)
         d['new_is_active'] = int(d['is_active'])
         d['new_overdraft_limit'] = d['overdraft_limit']
-#        new_lo_choice = ModifyBalanceForm.locking_choice_by_locking_order(
-#            d['locking_order'])
-#        d['new_locking_order'] = new_lo_choice
         return ModifyBalanceForm(d, request=request)
 
     def as_helix_request(self):
@@ -143,8 +137,6 @@ class ModifyBalanceForm(BalanceForm):
         d['ids'] = [id]
         self._strip_bool_param(d, 'new_is_active')
         self._strip_param(d, 'new_overdraft_limit')
-#        self._strip_locking_order(d, 'new_locking_order')
-
         return d
 
 
@@ -231,3 +223,15 @@ class LockForm(MoneyForm):
         self._strip_locking_order(d)
         return d
 
+
+class LockOperationsForm(BillingForm):
+    balance_id = forms.IntegerField(label=_('balance id'), widget=ConstInput)
+    lock_id = forms.IntegerField(label=_('lock id'), widget=ConstInput)
+
+
+class UnlockForm(LockOperationsForm):
+    action = 'unlock'
+
+
+class ChargeOffForm(LockOperationsForm):
+    action = 'charge_off'

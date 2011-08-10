@@ -23,7 +23,7 @@
         {% if locks %}
 
             <tr>
-                <td colspan="6">
+                <td colspan="10">
                     {% include "pager.html" %}
                 </td>
             </tr>
@@ -42,6 +42,11 @@
                 <th>{% trans "real" %}</th>
                 <th>{% trans "virtual" %}</th>
                 <th>{% trans "info" %}</th>
+                {% if "/billing/charge_off/,/billing/unlock"|is_any_of_urls_allowed:rights %}
+                    <th>
+                        {% trans "operations" %}
+                    </th>
+                {% endif %}
             </tr>
 
             {% for lock in locks %}
@@ -86,15 +91,54 @@
                     <td>{{ lock.real_amount }}</td>
                     <td>{{ lock.virtual_amount }}</td>
                     <td>{{ lock.info }}</td>
+                    {% if "/billing/charge_off/,/billing/unlock"|is_any_of_urls_allowed:rights %}
+                        <td>
+                            {% if "/billing/charge_off/"|is_url_allowed:rights %}
+                                <input type="button" class="operation" id="charge_off_{{ lock.id }}"
+                                    lock_id="{{ lock.id }}" balance_id="{{ lock.balance_id }}"
+                                    action="charge_off" value='{% trans "charge off" %}'>
+                                </input>
+                                <div class="errormessage" id="err_charge_off_{{ lock.id }}"></div>
+                            {% endif %}
+
+                            {% if "/billing/unlock/"|is_url_allowed:rights %}
+                                <input type="button" class="operation" id="unlock_{{ lock.id }}"
+                                    lock_id="{{ lock.id }}" balance_id="{{ lock.balance_id }}"
+                                    action="unlock" value='{% trans "charge off" %}'>
+                                </input>
+                                <div class="errormessage" id="err_unlock_{{ lock.id }}"></div>
+                            {% endif %}
+                        </td>
+                    {% endif %}
                 </tr>
             {% endfor %}
 
             <tr>
-                <td colspan="6">
+                <td colspan="10">
                     {% include "pager.html" %}
                 </td>
             </tr>
 
+            <script type="text/javascript">
+                $(document).ready(function() {
+                    $('input.operation').click(function() {
+                        var obj_id = $(this).attr("id");
+                        $.post(
+                            "/{{ cur_lang }}/billing/" + $(this).attr("action") + "/",
+                            {"lock_id": $(this).attr("lock_id"), "balance_id": $(this).attr("balance_id")},
+                            function (data) {
+                                if (data.status == "ok") {
+                                    location.reload();
+                                } else {
+                                    $('#err_' + obj_id).html(data.code);
+                                }
+                            },
+                            "json"
+                        );
+                        return false;
+                    });
+                });
+            </script>
 
         {% else %}
 

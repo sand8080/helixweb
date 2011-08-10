@@ -1,0 +1,22 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <title>{% block title %}Action {{ action }} result{% endblock %}</title>
+</head>
+
+<body>
+
+    {%if resp %}
+        {% if resp.status == 'ok' %}
+            status: {{ resp.status }}
+        {% else %}
+            status: {{ resp.status }}<br>
+            code: {{ resp.code }}<br>
+            message: {{ resp.message }}
+        {% endif %}
+    {% else %}
+        Operation {{ action }} not requested
+    {% endif %}
+
+</body>

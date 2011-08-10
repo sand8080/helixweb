@@ -1,5 +1,8 @@
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from django.utils import simplejson
+from django.http import HttpResponseRedirect
+from django.http import HttpResponse
 
 from helixweb.core.views import (login_redirector, process_helix_response,
     _action_logs, _prepare_action_log, _prepare_date)
@@ -8,12 +11,11 @@ from helixcore.server.client import Client
 from helixweb.billing import settings #@UnresolvedImport
 from helixweb.billing.forms import (CurrenciesForm, UsedCurrenciesForm,
     ModifyUsedCurrenciesForm, AddBalanceForm, ModifyBalanceForm,
-    BalanceForm, AddReceiptForm, AddBonusForm, LockForm)
-from django.http import HttpResponseRedirect
+    BalanceForm, AddReceiptForm, AddBonusForm, LockForm, UnlockForm,
+    ChargeOffForm)
 from helixweb.billing.forms_filters import (FilterAllActionLogsForm,
     FilterSelfActionLogsForm, FilterBalanceForm, FilterUserActionLogsForm,
-    FilterUserLocksForm, FilterLocksForm, FilterSelfLocksForm,
-    FilterUserBalanceLocksForm)
+    FilterLocksForm, FilterSelfLocksForm, FilterUserBalanceLocksForm)
 
 
 helix_cli = Client(settings.BILLING_SERVICE_URL)
@@ -303,9 +305,29 @@ def user_lock(request, user_id, balance_id):
         '/billing/get_balances/%s/' % user_id, user_id, balance_id)
 
 
+def _lock_operations(request, form_cls):
+    if request.method == 'POST':
+        form = form_cls(request.POST, request=request)
+        if form.is_valid():
+            resp = helix_cli.request(form.as_helix_request())
+        else:
+            resp = {'status': 'error', 'code': 'FORM_INVALD'}
+    else:
+        resp = {'status': 'error', 'code': 'POST_FORM_METHOD_REQUIRED'}
+    return HttpResponse(simplejson.dumps(resp))
+
+
+def unlock(request):
+    return _lock_operations(request, UnlockForm)
+
+
+def charge_off(request):
+    return _lock_operations(request, ChargeOffForm)
+
+
 def _locks(request, form_cls, template, user_id, balance_id):
     c = {}
-    c['action'] = FilterUserLocksForm.action
+    c['action'] = form_cls.action
     c['user_id'] = user_id
     c['balance_id'] = balance_id
 
