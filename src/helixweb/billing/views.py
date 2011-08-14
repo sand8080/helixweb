@@ -367,3 +367,47 @@ def user_balance_locks(request, user_id, balance_id):
 def locks_self(request):
     return _locks(request, FilterSelfLocksForm, 'balance/locks_self.html',
         None, None)
+
+
+def _transactions(request, form_cls, template, user_id, balance_id):
+    c = {}
+    c['action'] = form_cls.action
+    c['user_id'] = user_id
+    c['balance_id'] = balance_id
+
+    if len(request.GET) == 0 or (len(request.GET) == 1 and 'pager_offset' in request.GET):
+        form = form_cls({'user_id': user_id, 'balance_id': balance_id},
+            request=request)
+    else:
+        form = form_cls(request.GET, request=request)
+
+    if form.is_valid():
+        resp = helix_cli.request(form.as_helix_request())
+        form.update_total(resp)
+        c.update(process_helix_response(resp, 'transactions', 'transactions_error'))
+        transactions = resp.get('transactions', [])
+        for transaction in transactions:
+            _prepare_date(transaction, 'creation_date')
+        c['transaction'] = transaction
+        c['pager'] = form.pager
+    c['form'] = form
+    return render_to_response(template, c,
+        context_instance=RequestContext(request))
+
+
+@login_redirector
+def transactions(request):
+    return _locks(request, FilterLocksForm, 'balance/locks.html',
+        None, None)
+
+
+@login_redirector
+def user_transactions_locks(request, user_id, balance_id):
+    return _locks(request, FilterUserBalanceLocksForm, 'user/balance_locks.html',
+        user_id, balance_id)
+
+
+@login_redirector
+def transactions_self(request):
+    return _locks(request, FilterSelfLocksForm, 'balance/locks_self.html',
+        None, None)

@@ -15,6 +15,7 @@ class FilterBillingForm(FilterForm, BillingForm):
 class AbstractBillingFilterActionLogsForm(AbstractFilterActionLogsForm, FilterBillingForm):
     action = 'get_action_logs'
     def __init__(self, *args, **kwargs):
+        # TODO: add all actions
         kwargs['choices'] = (('', ''),
             ('add_balance', _('add balance')),
             ('modify_used_currencies', _('modify currencies')),
@@ -116,6 +117,60 @@ class FilterLocksForm(AbstractFilterLocksForm):
 
 
 class FilterUserBalanceLocksForm(AbstractFilterLocksForm):
+    def __init__(self, *args, **kwargs):
+        super(FilterUserBalanceLocksForm, self).__init__(*args, **kwargs)
+        self.fields['user_id'] = forms.IntegerField(label=_('user id'),
+            widget=ConstInput, required=False)
+        self.fields['balance_id'] = forms.IntegerField(label=_('balance id'),
+            widget=ConstInput, required=False)
+        self._add_common_fields()
+
+
+class FilterSelfLocksForm(AbstractFilterLocksForm):
+    action = 'get_locks_self'
+
+    def __init__(self, *args, **kwargs):
+        super(FilterSelfLocksForm, self).__init__(*args, **kwargs)
+        self._add_common_fields()
+
+
+class AbstractFilterTransactionsForm(FilterBillingForm):
+    action = 'get_transactions'
+
+    def _add_common_fields(self):
+        self.fields['order_id'] = forms.CharField(label=_('order id'),
+            max_length=64, required=False)
+        self.fields['type'] = forms.ChoiceField(label=_('type'), required=False,
+            widget=forms.widgets.RadioSelect(),
+            choices=((None, _('all')), ('receipt', _('receipt')), ('bonus', _('bonus')),
+                ('lock', _('lock')), ('unlock', _('unlock')), ('charge_off', _('charge off'))),
+            initial='all')
+        self.fields['from_creation_date'] = forms.DateField(label=_('from'), required=False)
+        self.fields['to_creation_date'] = forms.DateField(label=_('to'), required=False)
+
+    def as_helix_request(self):
+        d = super(AbstractFilterLocksForm, self).as_helix_request()
+        self._strip_filter_param(d, 'user_id')
+        self._strip_filter_param(d, 'order_id')
+        self._strip_filter_param(d, 'type')
+        self._strip_filter_param(d, 'balance_id')
+        self._strip_from_date_param(d, 'from_creation_date')
+        self._strip_to_date_param(d, 'to_creation_date')
+
+        return d
+
+
+class FilterTransactionsForm(AbstractFilterTransactionsForm):
+    def __init__(self, *args, **kwargs):
+        super(FilterLocksForm, self).__init__(*args, **kwargs)
+        self.fields['user_id'] = forms.IntegerField(label=_('user id'),
+            required=False)
+        self.fields['balance_id'] = forms.IntegerField(label=_('balance id'),
+            required=False)
+        self._add_common_fields()
+
+
+class FilterUserTransactionsForm(AbstractFilterTransactionsForm):
     def __init__(self, *args, **kwargs):
         super(FilterUserBalanceLocksForm, self).__init__(*args, **kwargs)
         self.fields['user_id'] = forms.IntegerField(label=_('user id'),
