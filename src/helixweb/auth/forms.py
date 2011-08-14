@@ -132,8 +132,12 @@ class AddUserForm(HelixwebRequestForm):
         super(AddUserForm, self).__init__(*args, **kwargs)
         choices = [(g['id'], g['name']) for g in groups]
         self.fields['groups_ids'] = forms.MultipleChoiceField(label=_('groups'),
-            required=False, choices=choices,
+            required=False, choices=choices, initial=self.initial_groups(choices),
             widget=forms.widgets.CheckboxSelectMultiple)
+
+    def initial_groups(self, choices, groups=('Users', 'Billing Users')):
+        result = filter(lambda x: x[1] in groups, choices)
+        return [x[0] for x in result]
 
     def as_helix_request(self):
         d = super(AddUserForm, self).as_helix_request()
