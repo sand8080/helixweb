@@ -56,6 +56,12 @@
                 {% endallowedurl %}
 
                 {% allowedurl %}
+                    /billing/get_transactions/
+                    <span style="white-space:nowrap;">{% trans "all transactions" %}</span>
+                    <br>
+                {% endallowedurl %}
+
+                {% allowedurl %}
                     /billing/get_locks/
                     <span style="white-space:nowrap;">{% trans "all locks" %}</span>
                     <br>
@@ -83,6 +89,12 @@
                 {% allowedurl %}
                     /billing/get_balances_self/
                     {% trans "balances" %}
+                    <br>
+                {% endallowedurl %}
+
+                {% allowedurl %}
+                    /billing/get_transactions_self/
+                    {% trans "transactions" %}
                     <br>
                 {% endallowedurl %}
 
