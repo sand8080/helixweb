@@ -397,17 +397,11 @@ def _transactions(request, form_cls, template, user_id, balance_id):
 
 @login_redirector
 def transactions(request):
-    return _locks(request, FilterLocksForm, 'balance/locks.html',
+    return _locks(request, FilterLocksForm, 'balance/transactions.html',
         None, None)
 
 
 @login_redirector
-def user_transactions_locks(request, user_id, balance_id):
-    return _locks(request, FilterUserBalanceLocksForm, 'user/balance_locks.html',
-        user_id, balance_id)
-
-
-@login_redirector
 def transactions_self(request):
-    return _locks(request, FilterSelfLocksForm, 'balance/locks_self.html',
+    return _locks(request, FilterSelfLocksForm, 'balance/transactions_self.html',
         None, None)

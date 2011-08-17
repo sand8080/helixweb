@@ -44,29 +44,7 @@
                             </tr>
                             <tr {% if not balance.is_active %}class="disabled"{% endif %}>
                                 <td>{% trans "locked amount" %}</td>
-                                <td>
-                                    {% if action == "get_balances" %}
-
-                                        {% allowedurl True %}
-                                            /billing/get_locks/{{ balance.user_id }}/{{ balance.id }}/
-                                            {{ balance.locked_amount }}
-                                            <span class="small_text">({% trans "locks list" %})</span>
-                                        {% endallowedurl %}
-
-                                    {% else %}
-
-                                        {% if action == "get_balances_self" %}
-
-                                            {% allowedurl True %}
-                                                /billing/get_locks_self/
-                                                {{ balance.locked_amount }}
-                                                <span class="small_text">({% trans "details" %})</span>
-                                            {% endallowedurl %}
-
-                                        {% endif %}
-
-                                    {% endif %}
-                                </td>
+                                <td>{{ balance.locked_amount }}</td>
                             </tr>
 
                             {% if balance.overdraft_limit != '0.0' or  balance.overdraft_limit != '0.00' or balance.overdraft_limit != '0.000' %}
@@ -75,6 +53,44 @@
                                     <td>{{ balance.overdraft_limit }}</td>
                                 </tr>
                             {% endif %}
+
+                            {% if action == "get_balances_self" %}
+
+                                {% if "/billing/get_transactions_self/"|is_url_allowed:rights %}
+                                    <tr><td colspan="2">
+                                        <a href="/billing/get_transactions_self/">
+                                            <span class="small_text">({% trans "transactions" %})</span>
+                                        </a>
+                                    </td></tr>
+                                {% endif %}
+
+                                {% if "/billing/get_locks_self/"|is_url_allowed:rights %}
+                                    <tr><td colspan="2">
+                                        <a href="/billing/get_locks_self/">
+                                            <span class="small_text">({% trans "locks" %})</span>
+                                        </a>
+                                    </td></tr>
+                                {% endif %}
+
+                            {% else %}
+
+                                {% if "/billing/get_transactions/"|is_url_allowed:rights %}
+                                    <tr><td colspan="2">
+                                        <a href="/billing/get_transactions/{{ user_id }}/{{ balance.id }}/">
+                                            <span class="small_text">({% trans "transactions" %})</span>
+                                        </a>
+                                    </td></tr>
+                                {% endif %}
+
+                                {% if "/billing/get_locks/"|is_url_allowed:rights %}
+                                    <tr><td colspan="2">
+                                        <a href="/billing/get_locks/{{ user_id }}/{{ balance.id }}/">
+                                            <span class="small_text">({% trans "locks" %})</span>
+                                        </a>
+                                    </td></tr>
+                                {% endif %}
+                            {% endif %}
+
 
                             {% if "/billing/add_receipt/"|is_url_allowed:rights %}
                                 <tr><td colspan="2">
