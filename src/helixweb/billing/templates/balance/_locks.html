@@ -33,7 +33,7 @@
                 {% if "/billing/modify_balances/"|is_url_allowed:rights %}
                     <th>{% trans "balance id" %}</th>
                 {% endif %}
-                {% if "/billing/add_balances/,/billing/get_balances/,/billing/get_action_logs/"|is_any_of_urls_allowed:rights %}
+                {% if access_to_billing_user_info %}
                     <th>{% trans "user id" %}</th>
                 {% endif %}
                 <th>{% trans "currency" %}</th>

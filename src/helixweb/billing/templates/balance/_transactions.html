@@ -3,27 +3,27 @@
 {% load localeurl_tags %}
 
 <div>
-    {% trans "total locks" %}: {{ pager.total }} &nbsp;
+    {% trans "total transactions" %}: {{ pager.total }} &nbsp;
 </div>
 
 <br>
 
 <table class="center wide bordered">
 
-    {% if locks_error %}
+    {% if transactions_error %}
 
         <tr class="objects_data">
             <td>
-                <span class="errormessage">{% trans locks_error %}</span>
+                <span class="errormessage">{% trans transactions_error %}</span>
             </td>
         </tr>
 
     {% else %}
 
-        {% if locks %}
+        {% if transactions %}
 
             <tr>
-                <td colspan="10">
+                <td colspan="9">
                     {% include "pager.html" %}
                 </td>
             </tr>
@@ -33,36 +33,32 @@
                 {% if "/billing/modify_balances/"|is_url_allowed:rights %}
                     <th>{% trans "balance id" %}</th>
                 {% endif %}
-                {% if "/billing/add_balances/,/billing/get_balances/,/billing/get_action_logs/"|is_any_of_urls_allowed:rights %}
+                {% if access_to_billing_user_info %}
                     <th>{% trans "user id" %}</th>
                 {% endif %}
+                <th>{% trans "type" %}</th>
                 <th>{% trans "currency" %}</th>
                 <th>{% trans "creation date" %}</th>
                 <th>{% trans "order id" %}</th>
                 <th>{% trans "real" %}</th>
                 <th>{% trans "virtual" %}</th>
                 <th>{% trans "info" %}</th>
-                {% if "/billing/charge_off/,/billing/unlock"|is_any_of_urls_allowed:rights %}
-                    <th>
-                        {% trans "operations" %}
-                    </th>
-                {% endif %}
             </tr>
 
-            {% for lock in locks %}
+            {% for transaction in transactions %}
                 <tr class="objects_data {% cycle 'row1' 'row2' %}">
 
-                    <td>{{ lock.id }}</td>
+                    <td>{{ transaction.id }}</td>
 
                     {% if "/billing/modify_balances/"|is_url_allowed:rights %}
                         <td>
                             {% allowedurl True %}
-                                /billing/modify_balances/{{ lock.balance_id }}/
-                                {{ lock.balance_id }}
+                                /billing/modify_balances/{{ transaction.balance_id }}/
+                                {{ transaction.balance_id }}
                             {% endallowedurl %}
 
                             {% allowedurl %}
-                                /billing/modify_balances/{{ lock.balance_id }}/
+                                /billing/modify_balances/{{ transaction.balance_id }}/
                                 <br>
                                 <span class="small_text">{% trans "modify" %}</span>
                             {% endallowedurl %}
@@ -73,43 +69,25 @@
                     {% if access_to_billing_user_info %}
                         <td>
                             <a href="{{ '/billing/user_info/'|chlocale:cur_lang }}{{ lock.user_id }}/">
-                                {{ lock.user_id }}
+                                {{ transaction.user_id }}
                             </a>
                         </td>
                     {% endif %}
 
-                    <td>{{ lock.currency_code }}</td>
+                    <td>{% trans transaction.type %}</td>
+                    <td>{{ transaction.currency_code }}</td>
                     <td>
                         <span style="white-space:nowrap;">
-                            {{ lock.creation_date|date:"Y-m-d" }}
+                            {{ transaction.creation_date|date:"Y-m-d" }}
                         </span>
                         <span style="white-space:nowrap;">
-                            {{ lock.creation_date|date:"H:i:s" }}
+                            {{ transaction.creation_date|date:"H:i:s" }}
                         </span>
                     </td>
-                    <td>{{ lock.order_id }}</td>
-                    <td>{{ lock.real_amount }}</td>
-                    <td>{{ lock.virtual_amount }}</td>
-                    <td>{{ lock.info }}</td>
-                    {% if "/billing/charge_off/,/billing/unlock"|is_any_of_urls_allowed:rights %}
-                        <td>
-                            {% if "/billing/charge_off/"|is_url_allowed:rights %}
-                                <input type="button" class="operation" id="charge_off_{{ lock.id }}"
-                                    lock_id="{{ lock.id }}" balance_id="{{ lock.balance_id }}"
-                                    action="charge_off" value='{% trans "charge off" %}'>
-                                </input>
-                                <div class="errormessage" id="err_charge_off_{{ lock.id }}"></div>
-                            {% endif %}
-
-                            {% if "/billing/unlock/"|is_url_allowed:rights %}
-                                <input type="button" class="operation" id="unlock_{{ lock.id }}"
-                                    lock_id="{{ lock.id }}" balance_id="{{ lock.balance_id }}"
-                                    action="unlock" value='{% trans "unlock" %}'>
-                                </input>
-                                <div class="errormessage" id="err_unlock_{{ lock.id }}"></div>
-                            {% endif %}
-                        </td>
-                    {% endif %}
+                    <td>{{ transaction.order_id }}</td>
+                    <td>{{ transaction.real_amount }}</td>
+                    <td>{{ transaction.virtual_amount }}</td>
+                    <td>{{ transaction.info }}</td>
                 </tr>
             {% endfor %}
 

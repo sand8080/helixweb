@@ -141,7 +141,7 @@ class AbstractFilterTransactionsForm(FilterBillingForm):
         self.fields['order_id'] = forms.CharField(label=_('order id'),
             max_length=64, required=False)
         self.fields['type'] = forms.ChoiceField(label=_('type'), required=False,
-            widget=forms.widgets.RadioSelect(),
+            widget=forms.widgets.Select(),
             choices=((None, _('all')), ('receipt', _('receipt')), ('bonus', _('bonus')),
                 ('lock', _('lock')), ('unlock', _('unlock')), ('charge_off', _('charge off'))),
             initial='all')
@@ -149,7 +149,8 @@ class AbstractFilterTransactionsForm(FilterBillingForm):
         self.fields['to_creation_date'] = forms.DateField(label=_('to'), required=False)
 
     def as_helix_request(self):
-        d = super(AbstractFilterLocksForm, self).as_helix_request()
+        d = super(AbstractFilterTransactionsForm, self).as_helix_request()
+        self._strip_filter_param(d, 'id')
         self._strip_filter_param(d, 'user_id')
         self._strip_filter_param(d, 'order_id')
         self._strip_filter_param(d, 'type')
@@ -162,7 +163,9 @@ class AbstractFilterTransactionsForm(FilterBillingForm):
 
 class FilterTransactionsForm(AbstractFilterTransactionsForm):
     def __init__(self, *args, **kwargs):
-        super(FilterLocksForm, self).__init__(*args, **kwargs)
+        super(FilterTransactionsForm, self).__init__(*args, **kwargs)
+        self.fields['id'] = forms.IntegerField(label=_('id'),
+            required=False)
         self.fields['user_id'] = forms.IntegerField(label=_('user id'),
             required=False)
         self.fields['balance_id'] = forms.IntegerField(label=_('balance id'),
@@ -172,7 +175,9 @@ class FilterTransactionsForm(AbstractFilterTransactionsForm):
 
 class FilterUserTransactionsForm(AbstractFilterTransactionsForm):
     def __init__(self, *args, **kwargs):
-        super(FilterUserBalanceLocksForm, self).__init__(*args, **kwargs)
+        super(FilterUserTransactionsForm, self).__init__(*args, **kwargs)
+        self.fields['id'] = forms.IntegerField(label=_('id'),
+            required=False)
         self.fields['user_id'] = forms.IntegerField(label=_('user id'),
             widget=ConstInput, required=False)
         self.fields['balance_id'] = forms.IntegerField(label=_('balance id'),
@@ -180,7 +185,7 @@ class FilterUserTransactionsForm(AbstractFilterTransactionsForm):
         self._add_common_fields()
 
 
-class FilterSelfLocksForm(AbstractFilterLocksForm):
+class FilterSelfTransactionsForm(AbstractFilterLocksForm):
     action = 'get_locks_self'
 
     def __init__(self, *args, **kwargs):
