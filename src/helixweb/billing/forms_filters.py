@@ -164,11 +164,11 @@ class AbstractFilterTransactionsForm(FilterBillingForm):
 class FilterTransactionsForm(AbstractFilterTransactionsForm):
     def __init__(self, *args, **kwargs):
         super(FilterTransactionsForm, self).__init__(*args, **kwargs)
-        self.fields['id'] = forms.IntegerField(label=_('id'),
-            required=False)
         self.fields['user_id'] = forms.IntegerField(label=_('user id'),
             required=False)
         self.fields['balance_id'] = forms.IntegerField(label=_('balance id'),
+            required=False)
+        self.fields['id'] = forms.IntegerField(label=_('id'),
             required=False)
         self._add_common_fields()
 
@@ -176,12 +176,12 @@ class FilterTransactionsForm(AbstractFilterTransactionsForm):
 class FilterUserTransactionsForm(AbstractFilterTransactionsForm):
     def __init__(self, *args, **kwargs):
         super(FilterUserTransactionsForm, self).__init__(*args, **kwargs)
-        self.fields['id'] = forms.IntegerField(label=_('id'),
-            required=False)
         self.fields['user_id'] = forms.IntegerField(label=_('user id'),
             widget=ConstInput, required=False)
         self.fields['balance_id'] = forms.IntegerField(label=_('balance id'),
             widget=ConstInput, required=False)
+        self.fields['id'] = forms.IntegerField(label=_('id'),
+            required=False)
         self._add_common_fields()
 
 
@@ -190,4 +190,6 @@ class FilterSelfTransactionsForm(AbstractFilterLocksForm):
 
     def __init__(self, *args, **kwargs):
         super(FilterSelfLocksForm, self).__init__(*args, **kwargs)
+        self.fields['id'] = forms.IntegerField(label=_('id'),
+            required=False)
         self._add_common_fields()

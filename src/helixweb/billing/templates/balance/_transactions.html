@@ -23,7 +23,7 @@
         {% if transactions %}
 
             <tr>
-                <td colspan="9">
+                <td colspan="10">
                     {% include "pager.html" %}
                 </td>
             </tr>
@@ -33,7 +33,7 @@
                 {% if "/billing/modify_balances/"|is_url_allowed:rights %}
                     <th>{% trans "balance id" %}</th>
                 {% endif %}
-                {% if access_to_billing_user_info %}
+                {% if "/billing/get_balances/"|is_url_allowed:rights %}
                     <th>{% trans "user id" %}</th>
                 {% endif %}
                 <th>{% trans "type" %}</th>
@@ -66,11 +66,12 @@
                         </td>
                     {% endif %}
 
-                    {% if access_to_billing_user_info %}
+                    {% if "/billing/get_balances/"|is_url_allowed:rights %}
                         <td>
-                            <a href="{{ '/billing/user_info/'|chlocale:cur_lang }}{{ lock.user_id }}/">
+                            {% allowedurl %}
+                                /billing/get_balances/{{ transaction.user_id }}/
                                 {{ transaction.user_id }}
-                            </a>
+                            {% endallowedurl %}
                         </td>
                     {% endif %}
 

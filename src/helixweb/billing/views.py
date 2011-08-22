@@ -16,7 +16,7 @@ from helixweb.billing.forms import (CurrenciesForm, UsedCurrenciesForm,
 from helixweb.billing.forms_filters import (FilterAllActionLogsForm,
     FilterSelfActionLogsForm, FilterBalanceForm, FilterUserActionLogsForm,
     FilterLocksForm, FilterSelfLocksForm, FilterUserBalanceLocksForm,
-    FilterTransactionsForm)
+    FilterTransactionsForm, FilterUserTransactionsForm)
 
 
 helix_cli = Client(settings.BILLING_SERVICE_URL)
@@ -400,6 +400,12 @@ def _transactions(request, form_cls, template, user_id, balance_id):
 def transactions(request):
     return _transactions(request, FilterTransactionsForm, 'balance/transactions.html',
         None, None)
+
+
+@login_redirector
+def user_transactions(request, user_id, balance_id):
+    return _transactions(request, FilterUserTransactionsForm, 'user/transactions.html',
+        user_id, balance_id)
 
 
 @login_redirector

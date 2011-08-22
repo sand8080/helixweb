@@ -3,7 +3,7 @@
 {% load i18n %}
 
 {% block title %}
-    {% blocktrans %}locks of user #{{ user_id }} on balance #{{ balance_id }}{% endblocktrans %}
+    {% blocktrans %}transactions of user #{{ user_id }} on balance #{{ balance_id }}{% endblocktrans %}
 {% endblock %}
 
 {% block user_submenu %}
@@ -39,7 +39,7 @@
                             &rarr;
                             {% trans "balance id #" %}{{ balance_id }}
                             &rarr;
-                            {% trans "locks" %}
+                            {% trans "transactions" %}
                         </h2>
 
                     </td>
@@ -73,6 +73,6 @@
 
     <br>
 
-    {% include "balance/_locks.html" %}
+    {% include "balance/_transactions.html" %}
 
 {% endblock %}
