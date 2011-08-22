@@ -81,12 +81,6 @@
         <tr>
             <td>
                 {% allowedurl %}
-                    /billing/get_locks_self/
-                    {% trans "locks" %}
-                    <br>
-                {% endallowedurl %}
-
-                {% allowedurl %}
                     /billing/get_balances_self/
                     {% trans "balances" %}
                     <br>
@@ -95,6 +89,12 @@
                 {% allowedurl %}
                     /billing/get_transactions_self/
                     {% trans "transactions" %}
+                    <br>
+                {% endallowedurl %}
+
+                {% allowedurl %}
+                    /billing/get_locks_self/
+                    {% trans "locks" %}
                     <br>
                 {% endallowedurl %}
 

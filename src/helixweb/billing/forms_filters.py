@@ -185,11 +185,11 @@ class FilterUserTransactionsForm(AbstractFilterTransactionsForm):
         self._add_common_fields()
 
 
-class FilterSelfTransactionsForm(AbstractFilterLocksForm):
-    action = 'get_locks_self'
+class FilterSelfTransactionsForm(AbstractFilterTransactionsForm):
+    action = 'get_transactions_self'
 
     def __init__(self, *args, **kwargs):
-        super(FilterSelfLocksForm, self).__init__(*args, **kwargs)
+        super(FilterSelfTransactionsForm, self).__init__(*args, **kwargs)
         self.fields['id'] = forms.IntegerField(label=_('id'),
             required=False)
         self._add_common_fields()
