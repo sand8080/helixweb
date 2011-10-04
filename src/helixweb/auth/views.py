@@ -17,7 +17,7 @@ from helixweb.core.forms import HelixwebRequestForm
 from helixweb.auth.forms import (LoginForm, AddServiceForm, ModifyServiceForm,
     ModifyEnvironmentForm, AddGroupForm, DeleteGroupForm, ModifyGroupForm,
     ModifyUserSelfForm, AddUserForm, LogoutForm, AddEnvironmentForm,
-    ModifyUserForm)
+    ModifyUserForm, ApiSchemeForm)
 from helixweb.auth.forms_filters import (FilterServiceForm, FilterGroupForm,
     FilterUserForm, FilterUserActionLogsForm, FilterAllActionLogsForm,
     FilterSelfActionLogsForm)
@@ -481,4 +481,16 @@ def action_logs_self(request):
     _prepare_action_logs_context(c)
     _action_logs(c, request, FilterSelfActionLogsForm, helix_cli)
     return render_to_response('action_logs/auth_list.html', c,
+        context_instance=RequestContext(request))
+
+
+@login_redirector
+def api_scheme(request):
+    c = {}
+    form = ApiSchemeForm({}, request=request)
+    if form.is_valid():
+        resp = helix_cli.request(form.as_helix_request())
+        form.handle_errors(resp)
+        c['scheme'] = resp.get('scheme')
+    return render_to_response('auth_api_scheme.html', c,
         context_instance=RequestContext(request))

@@ -108,6 +108,20 @@
             </td>
         </tr>
     {% endif %}
+
+    {% if "/auth/get_api_scheme/"|is_any_of_urls_allowed:rights %}
+        <tr>
+            <td>
+                {% allowedurl %}
+                    /auth/get_api_scheme/
+                    <span style="white-space:nowrap;">{% trans "api scheme" %}</span>
+                    <br>
+                {% endallowedurl %}
+                <br>
+            </td>
+        </tr>
+    {% endif %}
+
     <tr><td>&nbsp;</td></tr>
 </table>
 

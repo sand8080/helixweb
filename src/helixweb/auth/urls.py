@@ -29,4 +29,6 @@ urlpatterns = patterns('',
     (r'^add_user/$', 'auth.views.add_user'),
 
     (r'^get_action_logs/$', 'auth.views.action_logs'),
+
+    (r'^get_api_scheme/$', 'auth.views.api_scheme'),
 )

@@ -1,0 +1,29 @@
+{% extends "base_auth.html" %}
+
+{% load i18n %}
+
+{% block title %}{% trans "helixauth" %}{% endblock %}
+
+{% block content %}
+
+    <div class="bordered wide">
+
+        <table class="center">
+            <tr>
+                <td>
+                    <p>
+                    {% blocktrans %}Helixauth api scheme.{% endblocktrans %}
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    {% autoescape off %}{{ scheme }}{% endautoescape %}
+                </td>
+            </tr>
+        </table>
+        <br>
+
+    </div>
+
+{% endblock %}

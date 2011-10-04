@@ -265,3 +265,7 @@ class ModifyGroupForm(GroupForm):
             for p in srv['properties']:
                 res_d['%s_%s' % (srv['service_id'], p)] = ''
         return ModifyGroupForm(res_d, request=request, services=services)
+
+
+class ApiSchemeForm(HelixwebRequestForm):
+    action = 'get_api_scheme'
