@@ -77,7 +77,7 @@
                                 {% if "/billing/get_transactions/"|is_url_allowed:rights %}
                                     <tr><td colspan="2">
                                         <a href="/billing/get_transactions/{{ user_id }}/{{ balance.id }}/">
-                                            <span class="small_text">({% trans "transactions" %})</span>
+                                            <span class="small_text">({% trans "view transactions" %})</span>
                                         </a>
                                     </td></tr>
                                 {% endif %}
@@ -85,35 +85,42 @@
                                 {% if "/billing/get_locks/"|is_url_allowed:rights %}
                                     <tr><td colspan="2">
                                         <a href="/billing/get_locks/{{ user_id }}/{{ balance.id }}/">
-                                            <span class="small_text">({% trans "locks" %})</span>
+                                            <span class="small_text">({% trans "view locks" %})</span>
                                         </a>
                                     </td></tr>
                                 {% endif %}
                             {% endif %}
 
+                            {% if "/billing/add_receipt/,/billing/add_bonus/,/billing/lock/"|is_any_of_urls_allowed:rights %}
 
-                            {% if "/billing/add_receipt/"|is_url_allowed:rights %}
                                 <tr><td colspan="2">
-                                    <a href="/billing/add_receipt/{{ user_id }}/{{ balance.id }}/">
-                                        <span class="small_text">({% trans "add receipt" %})</span>
-                                    </a>
+                                    <span class="small_text">{% trans "Modification operations" %}</span>
                                 </td></tr>
-                            {% endif %}
 
-                            {% if "/billing/add_bonus/"|is_url_allowed:rights %}
-                                <tr><td colspan="2">
-                                    <a href="/billing/add_bonus/{{ user_id }}/{{ balance.id }}/">
-                                        <span class="small_text">({% trans "add bouns" %})</span>
-                                    </a>
-                                </td></tr>
-                            {% endif %}
+                                {% if "/billing/add_receipt/"|is_url_allowed:rights %}
+                                    <tr><td colspan="2">
+                                        <a href="/billing/add_receipt/{{ user_id }}/{{ balance.id }}/">
+                                            <span class="small_text">({% trans "add receipt" %})</span>
+                                        </a>
+                                    </td></tr>
+                                {% endif %}
 
-                            {% if "/billing/lock/"|is_url_allowed:rights %}
-                                <tr><td colspan="2">
-                                    <a href="/billing/lock/{{ user_id }}/{{ balance.id }}/">
-                                        <span class="small_text">({% trans "lock" %})</span>
-                                    </a>
-                                </td></tr>
+                                {% if "/billing/add_bonus/"|is_url_allowed:rights %}
+                                    <tr><td colspan="2">
+                                        <a href="/billing/add_bonus/{{ user_id }}/{{ balance.id }}/">
+                                            <span class="small_text">({% trans "add bouns" %})</span>
+                                        </a>
+                                    </td></tr>
+                                {% endif %}
+
+                                {% if "/billing/lock/"|is_url_allowed:rights %}
+                                    <tr><td colspan="2">
+                                        <a href="/billing/lock/{{ user_id }}/{{ balance.id }}/">
+                                            <span class="small_text">({% trans "lock" %})</span>
+                                        </a>
+                                    </td></tr>
+                                {% endif %}
+
                             {% endif %}
 
                             <tr><td colspan="2"><hr></td></tr>
