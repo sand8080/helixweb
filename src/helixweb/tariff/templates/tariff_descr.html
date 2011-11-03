@@ -1,0 +1,26 @@
+{% extends "base_tariff.html" %}
+
+{% load i18n %}
+
+{% block title %}{% trans "helixtariff" %}{% endblock %}
+
+{% block content %}
+
+    <div class="bordered wide">
+
+        <table class="center">
+            <tr>
+                <td>
+                    <p>
+                    {% blocktrans %}
+                    Helixtariff is service for helixprojects users tariffication.
+                    {% endblocktrans %}
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <br>
+
+    </div>
+
+{% endblock %}

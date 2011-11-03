@@ -43,7 +43,7 @@ SUPPORTED_LANGS = (('en', _('EN')),
 
 DEFAULT_LANGUAGE_CODE = 'en'
 
-SUPPORTED_SERVICES = ('auth', 'billing')
+SUPPORTED_SERVICES = ('auth', 'billing', 'tariff')
 
 SITE_ID = 1
 
@@ -127,4 +127,5 @@ INSTALLED_APPS = (
     'core',
     'auth',
     'billing',
+    'tariff',
 )
