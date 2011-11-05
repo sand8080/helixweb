@@ -2,9 +2,8 @@ from django.conf.urls.defaults import patterns
 
 
 urlpatterns = patterns('',
-    (r'^$', 'billing.views.description'),
-
     # system wide operations
+    (r'^$', 'billing.views.description'),
     (r'^get_used_currencies/$', 'billing.views.used_currencies'),
     (r'^modify_used_currencies/$', 'billing.views.modify_used_currencies'),
 

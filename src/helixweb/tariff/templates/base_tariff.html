@@ -7,6 +7,21 @@
 
 <table class="left_menu bordered wide">
     <tr><td></td></tr>
+
+    {% if "/tariff/add_tariffication_object/"|is_any_of_urls_allowed:rights %}
+        <tr>
+            <td>
+                {% allowedurl %}
+                    /tariff/add_tariffication_object/
+                    {% trans "add tariffication object" %}
+                    <br>
+                {% endallowedurl %}
+
+                <br>
+            </td>
+        </tr>
+    {% endif %}
+
     <tr><td>&nbsp;</td></tr>
 </table>
 
