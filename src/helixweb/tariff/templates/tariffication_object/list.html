@@ -1,0 +1,100 @@
+{% extends "base_tariff.html" %}
+
+{% load i18n %}
+
+{% block title %}{% trans "tariffication objects list" %}{% endblock %}
+
+{% block content %}
+
+<form action="" method="get">
+
+    <div class="bordered">
+        <table class="filter_object center">
+
+            <tr>
+                <th>
+                    <h2 class="menu_linked">{% trans "tariffication objects" %}</h2>
+                </th>
+                <td></td>
+            </tr>
+
+            {{ form.as_table }}
+
+            <tr>
+                <td colspan="2" class="control">
+                    <input type="submit" value={% trans "filter" %} />
+                </td>
+            </tr>
+        </table>
+        <br>
+    </div>
+
+    <br>
+
+    {% load urlutils %}
+
+    <div>
+        {% trans "total tariffication objects" %}: {{ pager.total }} &nbsp;
+        {% allowedurl %}
+            /tariff/add_tariffication_object/
+            {% trans "add tariffication object" %}
+        {% endallowedurl %}
+    </div>
+
+    <br>
+
+    <table class="center wide bordered">
+
+        {% if tariffication_objects_error %}
+
+            <tr>
+                <td>
+                    <span class="errormessage">{% trans tariffication_objects_error %}</span>
+                </td>
+            </tr>
+
+        {% else %}
+
+
+            {% if tariffication_objects %}
+
+                {% load transform %}
+                {% load objectutils %}
+
+                <tr>
+                    <td colspan="5">
+                        {% include "pager.html" %}
+                    </td>
+                </tr>
+
+                <tr class="objects_fields">
+                    <th>{% trans "id" %}</th>
+                    <th>{% trans "name" %}</th>
+                </tr>
+
+                {% for to in tariffication_objects %}
+                    <tr class="objects_data {% cycle 'row1' 'row2' %}">
+                        <td>{{ to.id }}</td>
+                        <td>{{ to.name }}</td>
+                    </tr>
+                {% endfor %}
+
+                <tr>
+                    <td colspan="2">
+                        {% include "pager.html" %}
+                    </td>
+                </tr>
+
+            {% else %}
+
+                <tr><th>{% trans "no tariffication objects found" %}</th></tr>
+
+            {% endif %}
+
+        {% endif %}
+
+    </table>
+
+</form>
+
+{% endblock %}

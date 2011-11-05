@@ -17,6 +17,11 @@
                     <td colspan="2">
 
                         <h2>
+                            {% allowedurl True %}
+                                /tariff/get_tariffication_objects/
+                                {% trans "tariffication objects" %}
+                            {% endallowedurl %}
+                            &rarr;
                             <span class="menu_linked">{% trans "add tariffication object" %}</span>
                         </h2>
                     </td>

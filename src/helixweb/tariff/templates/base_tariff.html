@@ -8,9 +8,15 @@
 <table class="left_menu bordered wide">
     <tr><td></td></tr>
 
-    {% if "/tariff/add_tariffication_object/"|is_any_of_urls_allowed:rights %}
+    {% if "/tariff/get_tariffication_objects/,/tariff/add_tariffication_object/"|is_any_of_urls_allowed:rights %}
         <tr>
             <td>
+                {% allowedurl %}
+                    /tariff/get_tariffication_objects/
+                    {% trans "tariffication objects" %}
+                    <br>
+                {% endallowedurl %}
+
                 {% allowedurl %}
                     /tariff/add_tariffication_object/
                     {% trans "add tariffication object" %}
