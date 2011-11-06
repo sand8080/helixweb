@@ -12,10 +12,9 @@
         <table class="filter_object center">
 
             <tr>
-                <th>
+                <th colspan="2">
                     <h2 class="menu_linked">{% trans "tariffication objects" %}</h2>
                 </th>
-                <td></td>
             </tr>
 
             {{ form.as_table }}
@@ -74,8 +73,20 @@
 
                 {% for to in tariffication_objects %}
                     <tr class="objects_data {% cycle 'row1' 'row2' %}">
-                        <td>{{ to.id }}</td>
-                        <td>{{ to.name }}</td>
+                        <td>
+                            {% allowedurl True %}
+                                /tariff/modify_tariffication_object/{{ to.id }}/
+                                {{ to.id }}
+                            {% endallowedurl %}
+                            <br>
+                            <span class="small_text">
+                            {% allowedurl%}
+                                /tariff/delete_tariffication_object/{{ to.id }}/
+                                {% trans "delete tariffication object" %}
+                            {% endallowedurl %}
+                            </span>
+                        </td>
+                        <td width="60%">{{ to.name }}</td>
                     </tr>
                 {% endfor %}
 
