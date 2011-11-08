@@ -12,7 +12,7 @@ class FilterAuthForm(FilterForm, HelixwebRequestForm):
 
 
 class FilterServiceForm(FilterAuthForm):
-    type = forms.CharField(label=_('service type'), max_length=32,
+    type = forms.CharField(label=_('service type'), max_length=32, #@ReservedAssignment
         required=False)
     is_active = forms.ChoiceField(label=_('is active'), required=False, widget=forms.widgets.RadioSelect(),
         choices=(('all', _('all')), ('1', _('active')), ('0', _('inactive'))),
@@ -62,7 +62,7 @@ class FilterGroupForm(FilterAuthForm):
 class FilterUserForm(FilterAuthForm):
     login = forms.CharField(label=_('login'), max_length=32,
         required=False)
-    id = forms.IntegerField(label=_('id'), required=False)
+    id = forms.IntegerField(label=_('id'), required=False) #@ReservedAssignment
     is_active = forms.ChoiceField(label=_('is active'), required=False, widget=forms.widgets.RadioSelect(),
         choices=(('all', _('all')), ('1', _('active')), ('0', _('inactive'))),
         initial='all')
