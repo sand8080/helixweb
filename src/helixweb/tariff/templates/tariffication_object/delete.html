@@ -1,0 +1,59 @@
+{% extends "base_tariff.html" %}
+
+{% load i18n %}
+
+{% block title %}{% trans "delete tariffication object" %}{% endblock %}
+
+{% block content %}
+
+  {% load urlutils %}
+
+  <form action="" method="post">{% csrf_token %}
+
+      <div class="bordered">
+
+          <table class="object_form center">
+              <tr>
+                  <td colspan="2">
+
+                      <h2 class="menu_linked">
+                          {% allowedurl True %}
+                              /tariff/get_tariffication_objects/
+                              {% trans "tariffication objects" %}
+                          {% endallowedurl %}
+                          &rarr;
+                          <span class="menu_linked">{% trans "delete tariffication object" %}</span>
+                      </h2>
+                  </td>
+              </tr>
+
+              {% if tariffication_object_error %}
+
+                  <tr>
+                      <td colspan="2">
+                          <span class="errormessage">
+                            {% trans tariffication_object_error %}
+                          </span>
+                      </td>
+                  </tr>
+
+              {% else %}
+
+                  {{ form.as_table }}
+
+                  <tr>
+                      <td colspan="2" class="control">
+                          <input type="submit" style="font-weight:bold;"
+                            value="{% trans 'delete tariffication object' %}" />
+                      </td>
+                  </tr>
+
+              {% endif %}
+
+          </table>
+          <br>
+      </div>
+
+  </form>
+
+{% endblock %}
