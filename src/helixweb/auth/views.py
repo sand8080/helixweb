@@ -97,7 +97,7 @@ def add_service(request):
 
 
 @login_redirector
-def modify_service(request, id):
+def modify_service(request, id): #@ReservedAssignment
     c = {}
     if request.method == 'POST':
         form = ModifyServiceForm(request.POST, request=request)
@@ -249,8 +249,8 @@ def _extract_user(helix_resp):
 
 
 @login_redirector
-def user_info(request, id):
-    id = int(id)
+def user_info(request, id): #@ReservedAssignment
+    id = int(id) #@ReservedAssignment
     c = {}
     resp = helix_cli.request(HelixwebRequestForm.get_users_req(request, [id]))
     c.update(process_helix_response(resp, 'users', 'users_error'))
@@ -298,7 +298,7 @@ def modify_user_self(request):
         context_instance=RequestContext(request))
 
 
-def _get_user_info(request, c, id):
+def _get_user_info(request, c, id): #@ReservedAssignment
     resp = helix_cli.request(ModifyUserForm.get_users_req(id, request))
     c.update(process_helix_response(resp, 'users', 'users_error'))
     user = {}
@@ -311,7 +311,7 @@ def _get_user_info(request, c, id):
 
 
 @login_redirector
-def modify_user(request, id):
+def modify_user(request, id): #@ReservedAssignment
     c = {}
     c['action'] = ModifyUserForm.action
     resp = helix_cli.request(ModifyUserForm.get_active_groups_req(request))
@@ -338,7 +338,7 @@ def modify_user(request, id):
 
 
 @login_redirector
-def user_action_logs(request, id):
+def user_action_logs(request, id): #@ReservedAssignment
     c = {}
     c['action'] = FilterUserActionLogsForm.action
     _prepare_action_logs_context(c)
@@ -413,7 +413,7 @@ def add_group(request):
 
 
 @login_redirector
-def delete_group(request, id):
+def delete_group(request, id): #@ReservedAssignment
     c = {}
     if request.method == 'POST':
         form = DeleteGroupForm(request.POST, request=request)
@@ -436,7 +436,7 @@ def delete_group(request, id):
 
 
 @login_redirector
-def modify_group(request, id):
+def modify_group(request, id): #@ReservedAssignment
     c = {}
     resp = helix_cli.request(ModifyGroupForm.get_services_req(request))
     c.update(process_helix_response(resp, 'services', 'services_error'))

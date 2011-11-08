@@ -42,7 +42,7 @@ class ServiceForm(HelixwebRequestForm):
 class AddServiceForm(ServiceForm):
     action = 'add_service'
     name = forms.CharField(label=_('service name'), max_length=32)
-    type = forms.CharField(label=_('service type'), max_length=32)
+    type = forms.CharField(label=_('service type'), max_length=32) #@ReservedAssignment
     properties = forms.CharField(label=_('service functions'),
         widget=forms.Textarea(attrs={'cols': 20, 'rows': 10}))
     is_active = forms.BooleanField(label=_('is active'), initial=True,
@@ -56,9 +56,9 @@ class AddServiceForm(ServiceForm):
 
 class ModifyServiceForm(ServiceForm):
     action = 'modify_service'
-    id = forms.IntegerField(widget=forms.widgets.HiddenInput)
+    id = forms.IntegerField(widget=forms.widgets.HiddenInput) #@ReservedAssignment
     new_name = forms.CharField(label=_('service name'), max_length=32)
-    type = forms.CharField(label=_('service type'), widget=ConstInput)
+    type = forms.CharField(label=_('service type'), widget=ConstInput) #@ReservedAssignment
     new_properties = forms.CharField(label=_('service functions'),
         widget=forms.Textarea(attrs={'cols': 20, 'rows': 10}), required=False)
     new_is_active = forms.BooleanField(label=_('is active'), required=False)
@@ -147,7 +147,7 @@ class AddUserForm(HelixwebRequestForm):
 
 class ModifyUserForm(HelixwebRequestForm):
     action = 'modify_users'
-    id = forms.IntegerField(widget=forms.widgets.HiddenInput)
+    id = forms.IntegerField(widget=forms.widgets.HiddenInput) #@ReservedAssignment
     new_login = forms.CharField(label=_('login'), max_length=32,
         required=False)
     new_password = forms.CharField(label=_('password'),
@@ -165,7 +165,7 @@ class ModifyUserForm(HelixwebRequestForm):
 
     def as_helix_request(self):
         d = super(ModifyUserForm, self).as_helix_request()
-        id = d.pop('id')
+        id = d.pop('id') #@ReservedAssignment
         d['ids'] = [id]
         d['new_groups_ids'] = map(int, d['new_groups_ids'])
         self._strip_param(d, 'new_login')
@@ -180,7 +180,7 @@ class ModifyUserForm(HelixwebRequestForm):
     @staticmethod
     def from_user_info(user_info, groups, request):
         u_d = dict(user_info)
-        id = u_d.pop('id', None)
+        id = u_d.pop('id', None) #@ReservedAssignment
         d = {'id': id}
         for k in u_d.keys():
             d['new_%s' % k] = u_d[k]
@@ -197,7 +197,7 @@ class ModifyUserSelfForm(HelixwebRequestForm):
 
 class GroupForm(HelixwebRequestForm):
     @staticmethod
-    def get_by_id_req(id, request):
+    def get_by_id_req(id, request): #@ReservedAssignment
         return {'action': 'get_groups', 'session_id': _get_session_id(request),
             'filter_params': {'ids': [int(id)]}, 'paging_params':{}}
 
@@ -222,7 +222,7 @@ class AddGroupForm(GroupForm):
 
 class DeleteGroupForm(GroupForm):
     action = 'delete_group'
-    id = forms.IntegerField(widget=forms.widgets.HiddenInput)
+    id = forms.IntegerField(widget=forms.widgets.HiddenInput) #@ReservedAssignment
     name = forms.CharField(label=_('group name'), max_length=32,
         widget=ConstInput)
 
@@ -237,7 +237,7 @@ class DeleteGroupForm(GroupForm):
 
 class ModifyGroupForm(GroupForm):
     action = 'modify_group'
-    id = forms.IntegerField(widget=forms.widgets.HiddenInput)
+    id = forms.IntegerField(widget=forms.widgets.HiddenInput) #@ReservedAssignment
     new_name = forms.CharField(label=_('group name'), max_length=32)
     new_is_active = forms.BooleanField(label=_('is active'), required=False)
 
