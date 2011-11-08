@@ -18,6 +18,12 @@ class AbstractBillingFilterActionLogsForm(AbstractFilterActionLogsForm, FilterBi
         # TODO: add all actions
         kwargs['choices'] = (('', ''),
             ('add_balance', _('add balance')),
+            ('modify_balance', _('modify balance')),
+            ('add_receipt', _('add receipt')),
+            ('add_bounus', _('add bonus')),
+            ('lock', _('lock')),
+            ('unlock', _('unlock')),
+            ('charge_off', _('charge off')),
             ('modify_used_currencies', _('modify currencies')),
         )
         super(AbstractBillingFilterActionLogsForm, self).__init__(*args, **kwargs)
