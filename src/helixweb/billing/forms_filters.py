@@ -15,7 +15,6 @@ class FilterBillingForm(FilterForm, BillingForm):
 class AbstractBillingFilterActionLogsForm(AbstractFilterActionLogsForm, FilterBillingForm):
     action = 'get_action_logs'
     def __init__(self, *args, **kwargs):
-        # TODO: add all actions
         kwargs['choices'] = (('', ''),
             ('add_balance', _('add balance')),
             ('modify_balance', _('modify balance')),
