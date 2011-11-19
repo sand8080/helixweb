@@ -15,7 +15,7 @@ class TariffForm(HelixwebRequestForm):
 
 class AddTarifficationObjectForm(TariffForm):
     action = 'add_tariffication_object'
-    name = forms.CharField(label=_('service name'), max_length=32)
+    name = forms.CharField(label=_('name'), max_length=32)
 
 
 class ModifyTarifficationObjectForm(TariffForm):
@@ -50,3 +50,16 @@ class DeleteTarifficationObjectForm(TariffForm):
     def get_by_id_req(to_id, request):
         return {'action': 'get_tariffication_objects', 'session_id': _get_session_id(request),
             'filter_params': {'ids': [int(to_id)]}, 'paging_params':{}}
+
+
+class AddTariffForm(TariffForm):
+    action = 'add_tariff'
+    name = forms.CharField(label=_('name'), max_length=32)
+    type = forms.ChoiceField(label=_('type'),
+        widget=forms.widgets.RadioSelect(), initial='public',
+        choices=(('public', _('public')), ('personal', _('personal'))))
+    status = forms.ChoiceField(label=_('status'),
+        widget=forms.widgets.RadioSelect(), initial='active',
+        choices=(('active', _('active')), ('archive', _('archive')),
+        ('inactive', _('inactive'))))
+

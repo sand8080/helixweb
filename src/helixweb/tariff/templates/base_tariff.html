@@ -28,6 +28,26 @@
         </tr>
     {% endif %}
 
+    {% if "/tariff/get_tariffs/,/tariff/add_tariff/"|is_any_of_urls_allowed:rights %}
+        <tr>
+            <td>
+                {% allowedurl %}
+                    /tariff/get_tariffs/
+                    {% trans "tariffs" %}
+                    <br>
+                {% endallowedurl %}
+
+                {% allowedurl %}
+                    /tariff/add_tariff/
+                    {% trans "add tariff" %}
+                    <br>
+                {% endallowedurl %}
+
+                <br>
+            </td>
+        </tr>
+    {% endif %}
+
     <tr><td>&nbsp;</td></tr>
 </table>
 
