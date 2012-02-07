@@ -1,9 +1,11 @@
 from django.conf.urls.defaults import include, patterns #@UnusedWildImport
 from django.views.generic.simple import redirect_to
 
+from helixweb import settings
 
 urlpatterns = patterns('',
     (r'^$', redirect_to, {'url': '/auth/'}),
+
     (r'^auth/', include('helixweb.auth.urls')),
     (r'^billing/', include('helixweb.billing.urls')),
     (r'^tariff/', include('helixweb.tariff.urls')),
@@ -14,6 +16,9 @@ urlpatterns = patterns('',
     # Uncomment the next line to enable the admin:
     # (r'^admin/', include(admin.site.urls)),
 
-    (r'^static/(?P<path>.*)$', 'django.views.static.serve',
-        {'document_root': 'static'}),
 )
+
+if settings.DEBUG:
+    urlpatterns += patterns('',
+        (r'^static/(?P<path>.*)$', 'django.views.static.serve',
+        {'document_root': settings.STATIC_ROOT}))
