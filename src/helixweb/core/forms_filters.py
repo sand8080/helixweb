@@ -26,7 +26,14 @@ class FilterForm(object):
         d['filter_params'] = f_params
         d['paging_params'] = {'limit': self.pager.on_page,
             'offset': self.pager.offset}
-        d['ordering_params'] = ['-id']
+
+        if hasattr(self, 'ordering_param'):
+            d['ordering_params'] = [self.ordering_param]
+        elif hasattr(self, 'ordering_params'):
+            d['ordering_params'] = self.ordering_params
+        else:
+            d['ordering_params'] = ['-id']
+
         return d
 
     def update_total(self, helix_resp):

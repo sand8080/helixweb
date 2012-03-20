@@ -12,11 +12,17 @@ class BillingForm(HelixwebRequestForm):
 
     @staticmethod
     def get_currencies_req(request):
-        return BillingForm._simple_req('get_currencies', request)
+        return {'action': 'get_currencies',
+            'session_id': _get_session_id(request),
+            'filter_params': {}, 'paging_params': {},
+            'ordering_params': ['code']}
 
     @staticmethod
     def get_used_currencies_req(request):
-        return BillingForm._simple_req('get_used_currencies', request)
+        return {'action': 'get_used_currencies',
+            'session_id': _get_session_id(request),
+            'filter_params': {}, 'paging_params': {},
+            'ordering_params': ['code']}
 
     @staticmethod
     def get_balances_self_req(request):
@@ -43,16 +49,6 @@ class BillingForm(HelixwebRequestForm):
         choices = [(None, '--')] + [(c['code'], c['code']) for c in currencies]
         return forms.ChoiceField(label=_('currency'), choices=choices,
             widget=forms.widgets.Select, required=required)
-
-
-class CurrenciesForm(BillingForm):
-    action = 'get_currencies'
-    ordering_params = ['-code']
-
-
-class UsedCurrenciesForm(BillingForm):
-    action = 'get_used_currencies'
-    ordering_params = ['-code']
 
 
 class ModifyUsedCurrenciesForm(BillingForm):

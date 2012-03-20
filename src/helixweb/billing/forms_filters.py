@@ -40,6 +40,16 @@ class FilterUserActionLogsForm(AbstractBillingFilterActionLogsForm, AbstractFilt
     pass
 
 
+class FilterCurrenciesForm(FilterBillingForm):
+    action = 'get_currencies'
+    ordering_param = '-code'
+
+
+class FilterUsedCurrenciesForm(FilterBillingForm):
+    action = 'get_used_currencies'
+    ordering_param = '-code'
+
+
 class FilterBalanceForm(FilterBillingForm):
     action = 'get_balances'
 
