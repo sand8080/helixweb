@@ -8,7 +8,8 @@ from helixcore.server.client import Client
 from helixweb.tariff import settings #@UnresolvedImport
 from helixweb.tariff.forms import AddTarifficationObjectForm,\
     ModifyTarifficationObjectForm, DeleteTarifficationObjectForm, AddTariffForm
-from helixweb.tariff.forms_filters import FilterTarifficationObjectsForm
+from helixweb.tariff.forms_filters import FilterTarifficationObjectsForm,\
+    FilterTariffsForm
 
 helix_cli = Client(settings.TARIFF_SERVICE_URL)
 
@@ -114,4 +115,17 @@ def add_tariff(request):
         form = AddTariffForm(request=request)
     c['form'] = form
     return render_to_response('tariff/add.html', c,
+        context_instance=RequestContext(request))
+
+
+
+@login_redirector
+def get_tariffs(request):
+    c = {}
+    form = FilterTariffsForm(request.GET, request=request)
+    if form.is_valid():
+        resp = helix_cli.request(form.as_helix_request())
+        c.update(process_helix_response(resp, 'tariffs', 'tariffs_error'))
+    c['form'] = form
+    return render_to_response('tariff/list.html', c,
         context_instance=RequestContext(request))

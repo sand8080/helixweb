@@ -1,0 +1,51 @@
+{% extends "base_tariff.html" %}
+
+{% load i18n %}
+
+{% block title %}{% trans "tariffs list" %}{% endblock %}
+
+{% block content %}
+
+{% load urlutils %}
+
+<br>
+
+<div class="bordered">
+
+  <table class="center wide bordered">
+
+      <tr>
+          <th>
+              <h2 class="menu_linked">{% trans "tariffs" %}</h2>
+          </th>
+      </tr>
+
+      {% if tariffs_error %}
+          <tr>
+              <td>
+                  <span class="errormessage">{% trans tariffs_error %}</span>
+              </td>
+          </tr>
+
+      {% else %}
+
+          {% if tariffs %}
+
+              <tr><td>tariffs</td></tr>
+
+              {% load transform %}
+              {% load objectutils %}
+
+          {% else %}
+
+              <tr><th>{% trans "no tariffs found" %}</th></tr>
+
+          {% endif %}
+
+      {% endif %}
+
+  </table>
+
+</div>
+
+{% endblock %}

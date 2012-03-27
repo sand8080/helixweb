@@ -44,3 +44,14 @@ class FilterTarifficationObjectsForm(FilterTariffForm):
         self._strip_filter_param(d, 'id')
         self._strip_filter_param(d, 'name')
         return d
+
+
+class FilterTariffsForm(FilterTariffForm):
+    action = 'get_tariffs'
+#    name = forms.CharField(label=_('tariff name'), max_length=32,
+#        required=False)
+
+    def as_helix_request(self):
+        d = super(FilterTariffsForm, self).as_helix_request()
+#        self._strip_filter_param(d, 'name')
+        return d
