@@ -1,5 +1,4 @@
 import base64
-import cjson
 import iso8601
 
 #from django.core.context_processors import csrf
@@ -8,6 +7,7 @@ from django.utils.safestring import mark_safe
 
 from helixweb.core.localization import cur_lang_value
 from helixcore.error import UnauthorizedActivity
+import json
 #from helixweb.core.context_processors import _get_session_id, _get_user_id
 #from helixweb.core.localization import cur_lang, cur_lang_value
 #from helixweb.core.security import get_rights
@@ -133,6 +133,6 @@ def _prepare_date(d, field_name):
 
 def _prepare_action_log(a_log):
     _prepare_date(a_log, 'request_date')
-    a_log['request'] = cjson.decode(a_log['request'])
-    a_log['response'] = cjson.decode(a_log['response'])
+    a_log['request'] = json.loads(a_log['request'])
+    a_log['response'] = json.loads(a_log['response'])
     return a_log
