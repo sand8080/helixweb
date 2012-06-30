@@ -1,5 +1,4 @@
 function calendar(fieldName) {
-    $("#id_" + fieldName).datepicker($.datepicker.regional["{{ cur_lang }}"])
     $("#id_" + fieldName).datepicker({
         changeYear: true,
         showOn: "button",

@@ -44,9 +44,9 @@
 
             <script type="text/javascript" src="/static/js/jquery-ui.js"></script>
             <script type="text/javascript" src="/static/js/jquery.url.min.js"></script>
-            <script type="text/javascript" src="/static/js/i18n/jquery-ui-i18n.js"></script>
             <script type="text/javascript" src="/static/js/calendar.js"></script>
-            <link rel="stylesheet" type="text/css" href="/static/css/jquery-ui/overcast/jquery-ui.custom.css" />
+            <script type="text/javascript" src="/static/js/i18n/jquery.ui.datepicker-{{ cur_lang }}.js"></script>
+            <link rel="stylesheet" type="text/css" href="/static/css/jquery-ui/current-theme/jquery-ui.custom.css" />
 
             <script type="text/javascript">
                 calendar("from_request_date")
@@ -56,7 +56,7 @@
             <br>
 
         </div>
-
+    cur lang {{ cur_lang }}
     </form>
 
     {% include "core_action_logs/actions_list.html" %}
