@@ -1,4 +1,4 @@
-table.main {width:85%;}
+table.main {width:100%;}
 table.main tr {vertical-align:top;}
 
 tr.row1 {background:white;}
@@ -13,7 +13,7 @@ tr.errormessage {background-color:pink;}
 
 table.center {margin-left:auto;margin-right:auto;}
 table.wide {width:100%;}
-table.header {width:100%;background:#EDE8E8;padding:10px;}
+/*table.header {width:100%;}*/
 
 table.lang_sw {margin:auto 0px auto auto;}
 table.lang_sw td {border:1px solid #BABABA;padding:3px;}

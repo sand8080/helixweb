@@ -9,7 +9,10 @@
     <link rel="stylesheet" type="text/css" href="/static/css/base.css" />
 
     <script type="text/javascript" src="/static/js/jquery.js"></script>
+    <script type="text/javascript" src="/static/js/jquery-ui.js"></script>
     <script type="text/javascript" src="/static/js/jquery.cookie.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="/static/css/jquery-ui/current-theme/jquery-ui.custom.css" />
 
 </head>
 
@@ -18,15 +21,15 @@
     {% load i18n %}
     {% load localeurl_tags %}
 
-    <table class="center main">
+    <table class="center main ui-widget">
         <tr>
             <td colspan="2">
 
-                <div id="header">
-                    <table class="header">
+                <div>
+                    <table class="wide ui-widget-header">
                         <tr>
                             <td style="padding-left:17px;"><h1>helixproject</h1></td>
-                            <td style="text-align:right;">
+                            <td style="text-align:right;" class="control">
                                 {% load lang_switcher %}
                                 {% lang_switcher %}
                                 {% if logged_in %}
@@ -36,7 +39,6 @@
                         </tr>
                     </table>
                 </div>
-
             </td>
         </tr>
         {% if logged_in %}

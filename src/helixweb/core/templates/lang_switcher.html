@@ -1,7 +1,7 @@
 {% load i18n %}
 {% load localeurl_tags %}
 
-<table class="lang_sw">
+<table class="control">
     <tr>
         {% for l in langs %}
             {% if l.0 == cur_lang %}
@@ -14,3 +14,7 @@
         {% endfor %}
     </tr>
 </table>
+
+<!-- script type="text/javascript">
+    $( "#selscted_lang" ).button({ disabled: true });
+</script-->
