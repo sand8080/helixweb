@@ -15,6 +15,18 @@
     </tr>
 </table>
 
+<br>
+<div class="control">
+    {% for l in langs %}
+        {% if l.0 == cur_lang %}
+            <button>{% trans l.1 %}</button>
+        {% else %}
+            <a href="{{ path|chlocale:l.0 }}{% if url_params %}?{{ url_params }}{% endif %}">
+                {% trans l.1 %}
+            </a>
+        {% endif %}
+    {% endfor %}
+</div>
 <!-- script type="text/javascript">
     $( "#selscted_lang" ).button({ disabled: true });
 </script-->
