@@ -8,14 +8,6 @@
 
 {% block content %}
 
-    <script>
-        $(function() {
-          $( "input:submit, a, button", ".control" ).button();
-          $( "a", ".control" ).click(function() { return false; });
-        });
-    </script>
-
-
     <form action="" method="post">{% csrf_token %}
 
         <div class="login">

@@ -16,8 +16,7 @@ table.center {margin-left:auto;margin-right:auto;}
 table.wide {width:100%;}
 
 table.lang_sw {margin:auto 0px auto auto;}
-table.lang_sw td {border:1px solid #BABABA;padding:3px;}
-td.lang_sel {background:#FAFAC8;}
+table.lang_sw td {padding:2px;}
 
 table.service_sw {margin:auto auto auto 0px;}
 table.service_sw td {border:1px solid #BABABA;padding:5px;}
@@ -31,7 +30,7 @@ table.object_form ul {list-style:none;padding-left:0px;}
 tr.objects_fields {background:#EFF3FF;}
 tr.objects_data {vertical-align:text-top;text-align:center;}
 
-.control {background:#EDE8E8;text-align:right;}
+.control {text-align:right;}
 .bordered {border:1px solid #BABABA;}
 
 .menu_linked {color:#2c9e1f;}

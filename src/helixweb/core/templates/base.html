@@ -29,12 +29,9 @@
                     <table class="wide ui-widget-header">
                         <tr>
                             <td class="header"><h1>helixproject</h1></td>
-                            <td style="text-align:right;" class="control">
+                            <td class="control">
                                 {% load lang_switcher %}
                                 {% lang_switcher %}
-                                {% if logged_in %}
-                                    <a href={{ "/auth/logout/"|chlocale:cur_lang }}>{% trans "logout" %}</a>
-                                {% endif %}
                             </td>
                         </tr>
                     </table>
@@ -79,6 +76,12 @@
 
     </table>
 
+    <!-- making elements of class control viewed like buttons -->
+    <script>
+        $(function() {
+          $( "input:submit, a, button", ".control" ).button();
+        });
+    </script>
 
 </body>
 </html>

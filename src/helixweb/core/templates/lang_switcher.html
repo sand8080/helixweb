@@ -1,32 +1,29 @@
 {% load i18n %}
 {% load localeurl_tags %}
 
-<table class="control">
+<table class="lang_sw">
     <tr>
         {% for l in langs %}
             {% if l.0 == cur_lang %}
-                <td class="lang_sel">{% trans l.1 %}</td>
+                <td class="lang_sel ui-button">
+                    <button id="button_lang_selected">{% trans l.1 %}</button>
+                </td>
             {% else %}
-                <td><a href="{{ path|chlocale:l.0 }}{% if url_params %}?{{ url_params }}{% endif %}">
+                <td><a class="ui-button" href="{{ path|chlocale:l.0 }}{% if url_params %}?{{ url_params }}{% endif %}">
                     {% trans l.1 %}</a>
                 </td>
             {% endif %}
         {% endfor %}
     </tr>
+    <tr>
+        <td colspan="2">
+            {% if logged_in %}
+                <a href={{ "/auth/logout/"|chlocale:cur_lang }}>{% trans "logout" %}</a>
+            {% endif %}
+        </td>
+    </tr>
 </table>
 
-<br>
-<div class="control">
-    {% for l in langs %}
-        {% if l.0 == cur_lang %}
-            <button>{% trans l.1 %}</button>
-        {% else %}
-            <a href="{{ path|chlocale:l.0 }}{% if url_params %}?{{ url_params }}{% endif %}">
-                {% trans l.1 %}
-            </a>
-        {% endif %}
-    {% endfor %}
-</div>
-<!-- script type="text/javascript">
-    $( "#selscted_lang" ).button({ disabled: true });
-</script-->
+<script type="text/javascript">
+    $( "#button_lang_selected" ).button({ disabled: true });
+</script>

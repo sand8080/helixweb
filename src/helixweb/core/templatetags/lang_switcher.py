@@ -12,5 +12,7 @@ def lang_switcher(context):
     request = context['request']
     d = c_l(request)
     cur_lang = _(d.get('cur_lang'))
+    logged_in = context.get('logged_in')
     return {'langs': SUPPORTED_LANGS, 'path': request.path,
-        'url_params': request.GET.urlencode(), 'cur_lang': cur_lang}
+        'url_params': request.GET.urlencode(), 'cur_lang': cur_lang,
+        'logged_in': logged_in}
