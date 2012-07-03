@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-05-25 22:38+0400\n"
+"POT-Creation-Date: 2012-07-04 00:06+0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -57,23 +57,27 @@ msgstr ""
 msgid "HELIX_AUTH_ERROR"
 msgstr ""
 
-#: forms_filters.py:64
-msgid "user id"
+#: error_code.py:13
+msgid "HELIX_OBJECT_NOT_FOUND"
 msgstr ""
 
-#: forms_filters.py:65
+#: forms_filters.py:71
 msgid "action name"
 msgstr ""
 
-#: forms_filters.py:67
+#: forms_filters.py:73
+msgid "user id"
+msgstr ""
+
+#: forms_filters.py:74
 msgid "session"
 msgstr ""
 
-#: forms_filters.py:69
+#: forms_filters.py:76
 msgid "from"
 msgstr ""
 
-#: forms_filters.py:70
+#: forms_filters.py:77
 msgid "to"
 msgstr ""
 
@@ -81,13 +85,13 @@ msgstr ""
 msgid "select all"
 msgstr ""
 
-#: templates/base.html:33
-msgid "logout"
-msgstr ""
-
-#: templates/base.html:50
+#: templates/base.html:49
 #, python-format
 msgid "logged in as user id #%(logged_user_id)s"
+msgstr ""
+
+#: templates/lang_switcher.html:21
+msgid "logout"
 msgstr ""
 
 #: templates/pager.html:10
@@ -150,7 +154,7 @@ msgstr ""
 msgid "custom info"
 msgstr ""
 
-#: templates/core_action_logs/actions_list.html:153
+#: templates/core_action_logs/actions_list.html:154
 msgid "no action logs found"
 msgstr ""
 

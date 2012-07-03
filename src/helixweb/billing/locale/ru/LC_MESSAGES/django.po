@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-05-25 21:40+0400\n"
+"POT-Creation-Date: 2012-07-04 00:08+0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,92 +16,135 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
 #: error_code.py:4
 msgid "HELIXBILLING_ERROR"
 msgstr ""
 
 #: error_code.py:5
-msgid "HELIXBILLING_OBJECT_NOT_FOUND"
+msgid "HELIXBILLING_ACCESS_DENIED"
 msgstr ""
 
 #: error_code.py:6
+msgid "HELIXBILLING_OBJECT_NOT_FOUND"
+msgstr ""
+
+#: error_code.py:7
 msgid "HELIXBILLING_OBJECT_ALREADY_EXISTS"
 msgstr ""
 
-#: error_code.py:9
+#: error_code.py:10
 msgid "HELIXBILLING_BALANCE_NOT_FOUND"
 msgstr ""
 
-#: error_code.py:10
+#: error_code.py:11
 msgid "HELIXBILLING_BALANCE_ALREADY_EXISTS"
 msgstr ""
 
 #: error_code.py:12
-msgid "HELIXBILLING_USER_NOT_EXISTS"
+msgid "HELIXBILLING_BALANCE_DISABLED"
 msgstr ""
 
 #: error_code.py:13
+msgid "HELIXBILLING_MONEY_NOT_ENOUGH"
+msgstr ""
+
+#: error_code.py:16
+msgid "HELIXBILLING_USER_NOT_EXISTS"
+msgstr ""
+
+#: error_code.py:17
 msgid "HELIXBILLING_USER_CHECKING_ERROR"
 msgstr ""
 
-#: forms.py:33 templates/balance/list.html:72
+#: error_code.py:20
+msgid "HELIXBILLING_BALANCE_LOCK_NOT_FOUND"
+msgstr ""
+
+#: forms.py:50 forms.py:146 templates/balance/_locks.html:39
+#: templates/balance/_transactions.html:40 templates/balance/list.html:72
 msgid "currency"
 msgstr ""
 
-#: forms.py:54 templates/base_billing.html:15 templates/currency/list.html:16
+#: forms.py:61 templates/currency/list.html:16
 msgid "currencies"
 msgstr ""
 
-#: forms.py:85 forms_filters.py:62
+#: forms.py:69 forms_filters.py:80
 msgid "active"
 msgstr ""
 
-#: forms.py:85 forms_filters.py:62
+#: forms.py:69 forms_filters.py:80
 msgid "inactive"
 msgstr ""
 
-#: forms.py:114 forms.py:147 forms_filters.py:43
+#: forms.py:80 forms.py:110 forms_filters.py:61 forms_filters.py:127
+#: forms_filters.py:137 forms_filters.py:182 forms_filters.py:194
+#: templates/balance/_locks.html:37 templates/balance/_transactions.html:37
 #: templates/balance/list.html:70
 msgid "user id"
 msgstr ""
 
-#: forms.py:117 forms.py:151 templates/balance/pretty_balances.html:52
+#: forms.py:83 forms.py:114 templates/balance/pretty_balances.html:52
 msgid "overdraft limit"
 msgstr ""
 
-#: forms.py:119 forms.py:153 templates/balance/list.html:77
-#: templates/balance/pretty_balances.html:58
-msgid "locking order"
-msgstr ""
-
-#: forms.py:122 forms.py:156 forms_filters.py:61
-#: templates/balance/list.html:71
+#: forms.py:85 forms.py:116 forms_filters.py:79 templates/balance/list.html:71
 msgid "is active"
 msgstr ""
 
-#: forms.py:125
+#: forms.py:88
 msgid "check user exist"
 msgstr ""
 
-#: forms.py:127
+#: forms.py:90
 msgid "check"
 msgstr ""
 
-#: forms.py:127
+#: forms.py:90
 msgid "not check"
 msgstr ""
 
-#: forms.py:145 templates/balance/list.html:69
+#: forms.py:108 forms_filters.py:186 forms_filters.py:198 forms_filters.py:208
+#: templates/balance/_locks.html:32 templates/balance/_transactions.html:32
+#: templates/balance/list.html:69
 msgid "id"
 msgstr ""
 
-#: forms.py:149
+#: forms.py:112
 msgid "currency_code"
 msgstr ""
 
-#: forms_filters.py:17 templates/base_billing.html:40
+#: forms.py:144 forms.py:224 forms_filters.py:60 forms_filters.py:129
+#: forms_filters.py:139 forms_filters.py:184 forms_filters.py:196
+#: templates/balance/_locks.html:34 templates/balance/_transactions.html:34
+msgid "balance id"
+msgstr ""
+
+#: forms.py:148
+msgid "amount"
+msgstr ""
+
+#: forms.py:149
+msgid "description"
+msgstr ""
+
+#: forms.py:186 forms_filters.py:109 forms_filters.py:156
+#: templates/balance/_locks.html:41 templates/balance/_transactions.html:42
+msgid "order id"
+msgstr ""
+
+#: forms.py:188 forms.py:190
+msgid "locking order"
+msgstr ""
+
+#: forms.py:225
+msgid "lock id"
+msgstr ""
+
+#: forms_filters.py:19 templates/base_billing.html:34
 #: templates/balance/add.html:5 templates/balance/add.html.py:20
 #: templates/balance/list.html:40 templates/user/add_balance.html:36
 #: templates/user/billing_sumbmenu.html:12
@@ -110,70 +153,150 @@ msgstr ""
 msgid "add balance"
 msgstr ""
 
-#: forms_filters.py:18 templates/base_billing.html:21
-#: templates/currency/modify_used_currencies.html:5
+#: forms_filters.py:20 templates/balance/modify.html:5
+#: templates/balance/modify.html.py:25 templates/user/modify_balance.html:41
+msgid "modify balance"
+msgstr ""
+
+#: forms_filters.py:21 templates/balance/pretty_balances.html:103
+#: templates/user/add_receipt.html:30
+msgid "add receipt"
+msgstr ""
+
+#: forms_filters.py:22 templates/user/add_bonus.html:28
+msgid "add bonus"
+msgstr ""
+
+#: forms_filters.py:23 forms_filters.py:161
+#: templates/balance/pretty_balances.html:119 templates/user/lock.html:30
+msgid "lock"
+msgstr ""
+
+#: forms_filters.py:24 forms_filters.py:161 templates/balance/_locks.html:107
+msgid "unlock"
+msgstr ""
+
+#: forms_filters.py:25 forms_filters.py:161 templates/balance/_locks.html:99
+msgid "charge off"
+msgstr ""
+
+#: forms_filters.py:26 templates/currency/modify_used_currencies.html:5
 #: templates/currency/modify_used_currencies.html:19
 msgid "modify currencies"
 msgstr ""
 
-#: forms_filters.py:42
-msgid "balance id"
-msgstr ""
-
-#: forms_filters.py:45
+#: forms_filters.py:63
 msgid "real amount from"
 msgstr ""
 
-#: forms_filters.py:47
+#: forms_filters.py:65
 msgid "real amount to"
 msgstr ""
 
-#: forms_filters.py:49
+#: forms_filters.py:67
 msgid "virtual amount from"
 msgstr ""
 
-#: forms_filters.py:51
+#: forms_filters.py:69
 msgid "virtual amount to"
 msgstr ""
 
-#: forms_filters.py:53
+#: forms_filters.py:71
 msgid "overdraft limit from"
 msgstr ""
 
-#: forms_filters.py:55
+#: forms_filters.py:73
 msgid "overdraft limit to"
 msgstr ""
 
-#: forms_filters.py:57
+#: forms_filters.py:75
 msgid "locked amount from"
 msgstr ""
 
-#: forms_filters.py:59
+#: forms_filters.py:77
 msgid "locked amount to"
 msgstr ""
 
-#: forms_filters.py:62
+#: forms_filters.py:80 forms_filters.py:160
 msgid "all"
 msgstr ""
 
-#: templates/base_billing.html:34
+#: forms_filters.py:111 forms_filters.py:163
+msgid "from"
+msgstr ""
+
+#: forms_filters.py:112 forms_filters.py:164
+msgid "to"
+msgstr ""
+
+#: forms_filters.py:158 templates/balance/_transactions.html:39
+msgid "type"
+msgstr ""
+
+#: forms_filters.py:160
+msgid "receipt"
+msgstr ""
+
+#: forms_filters.py:160
+msgid "bonus"
+msgstr ""
+
+#: templates/base_billing.html:15 templates/currency/used_list.html:16
+msgid "used currencies"
+msgstr ""
+
+#: templates/base_billing.html:21
+msgid "manage currencies"
+msgstr ""
+
+#: templates/base_billing.html:54
 msgid "all balances"
 msgstr ""
 
 #: templates/base_billing.html:60
+msgid "all transactions"
+msgstr ""
+
+#: templates/base_billing.html:66
+msgid "all locks"
+msgstr ""
+
+#: templates/base_billing.html:72
 msgid "all action logs"
 msgstr ""
 
-#: templates/base_billing.html:73 templates/balance/balances_self.html:6
+#: templates/base_billing.html:85 templates/balance/balances_self.html:6
 #: templates/balance/balances_self.html:21 templates/balance/list.html:5
 #: templates/balance/list.html.py:16 templates/balance/modify.html:22
-#: templates/user/balances.html:35 templates/user/billing_sumbmenu.html:27
-#: templates/user/billing_user_info.html:54
-#: templates/user/modify_balance.html:38
+#: templates/user/add_bonus.html:25 templates/user/add_receipt.html:27
+#: templates/user/balance_locks.html:37 templates/user/balances.html:33
+#: templates/user/billing_sumbmenu.html:27
+#: templates/user/billing_user_info.html:54 templates/user/lock.html:27
+#: templates/user/locks.html:37 templates/user/modify_balance.html:38
+#: templates/user/transactions.html:37
 msgid "balances"
 msgstr ""
 
-#: templates/base_billing.html:78 templates/user/billing_sumbmenu.html:36
+#: templates/base_billing.html:91 templates/balance/pretty_balances.html:62
+#: templates/balance/transactions.html:6
+#: templates/balance/transactions.html:23
+#: templates/balance/transactions_self.html:6
+#: templates/balance/transactions_self.html:23
+#: templates/user/transactions.html:42
+msgid "transactions"
+msgstr ""
+
+#: templates/base_billing.html:97 templates/balance/locks.html:6
+#: templates/balance/locks.html.py:23 templates/balance/locks_self.html:6
+#: templates/balance/locks_self.html:23
+#: templates/balance/pretty_balances.html:70
+#: templates/user/balance_locks.html:42 templates/user/locks.html:42
+msgid "locks"
+msgstr ""
+
+#: templates/base_billing.html:103 templates/user/billing_sumbmenu.html:36
+#: templates/user/billing_sumbmenu.html:39
+#: templates/user/billing_user_action_logs.html:34
 #: templates/user/billing_user_info.html:60
 msgid "action logs"
 msgstr ""
@@ -194,28 +317,68 @@ msgstr ""
 msgid "action logs list"
 msgstr ""
 
-#: templates/balance/add.html:39 templates/user/add_balance.html:55
+#: templates/balance/_locks.html:6
+msgid "total locks"
+msgstr ""
+
+#: templates/balance/_locks.html:40 templates/balance/_transactions.html:41
+msgid "creation date"
+msgstr ""
+
+#: templates/balance/_locks.html:42 templates/balance/_transactions.html:43
+#: templates/balance/list.html:73
+msgid "real"
+msgstr ""
+
+#: templates/balance/_locks.html:43 templates/balance/_transactions.html:44
+#: templates/balance/list.html:74
+msgid "virtual"
+msgstr ""
+
+#: templates/balance/_locks.html:44 templates/balance/_transactions.html:45
+msgid "info"
+msgstr ""
+
+#: templates/balance/_locks.html:47
+msgid "operations"
+msgstr ""
+
+#: templates/balance/_locks.html:67 templates/balance/_transactions.html:63
+#: templates/balance/list.html:90
+msgid "modify"
+msgstr ""
+
+#: templates/balance/_locks.html:145 templates/balance/_transactions.html:124
+msgid "no locks found"
+msgstr ""
+
+#: templates/balance/_transactions.html:6
+msgid "total transactions"
+msgstr ""
+
+#: templates/balance/add.html:39
+#: templates/user/_billing_money_operations.html:38
+#: templates/user/add_balance.html:55
 msgid "create"
 msgstr ""
 
-#: templates/balance/add.html:41 templates/user/add_balance.html:57
+#: templates/balance/add.html:41
+#: templates/user/_billing_money_operations.html:40
+#: templates/user/add_balance.html:57
 msgid "create and add another"
 msgstr ""
 
-#: templates/balance/list.html:25
+#: templates/balance/list.html:25 templates/balance/locks.html:32
+#: templates/balance/locks_self.html:32 templates/balance/transactions.html:32
+#: templates/balance/transactions_self.html:32
+#: templates/user/balance_locks.html:52
+#: templates/user/billing_user_action_logs.html:43
+#: templates/user/locks.html:52 templates/user/transactions.html:52
 msgid "filter"
 msgstr ""
 
 #: templates/balance/list.html:37
 msgid "total users"
-msgstr ""
-
-#: templates/balance/list.html:73
-msgid "real"
-msgstr ""
-
-#: templates/balance/list.html:74
-msgid "virtual"
 msgstr ""
 
 #: templates/balance/list.html:75
@@ -226,21 +389,8 @@ msgstr ""
 msgid "locked"
 msgstr ""
 
-#: templates/balance/list.html:89
-msgid "further details"
-msgstr ""
-
-#: templates/balance/list.html:116
-msgid "by default"
-msgstr ""
-
-#: templates/balance/list.html:130 templates/balance/pretty_balances.html:70
+#: templates/balance/list.html:122 templates/balance/pretty_balances.html:134
 msgid "no balances found"
-msgstr ""
-
-#: templates/balance/modify.html:5 templates/balance/modify.html.py:25
-#: templates/user/modify_balance.html:41
-msgid "modify balance"
 msgstr ""
 
 #: templates/balance/modify.html:44
@@ -275,6 +425,22 @@ msgstr ""
 msgid "locked amount"
 msgstr ""
 
+#: templates/balance/pretty_balances.html:80
+msgid "view transactions"
+msgstr ""
+
+#: templates/balance/pretty_balances.html:88
+msgid "view locks"
+msgstr ""
+
+#: templates/balance/pretty_balances.html:97
+msgid "Modification operations"
+msgstr ""
+
+#: templates/balance/pretty_balances.html:111
+msgid "add bouns"
+msgstr ""
+
 #: templates/currency/list.html:5
 msgid "currencies list"
 msgstr ""
@@ -299,10 +465,6 @@ msgstr ""
 msgid "used currencies list"
 msgstr ""
 
-#: templates/currency/used_list.html:16
-msgid "used currencies"
-msgstr ""
-
 #: templates/user/add_balance.html:6
 #, python-format
 msgid ""
@@ -312,22 +474,58 @@ msgid ""
 msgstr ""
 
 #: templates/user/add_balance.html:30 templates/user/add_balance.html.py:33
-#: templates/user/balances.html:29 templates/user/balances.html.py:32
+#: templates/user/add_bonus.html:17 templates/user/add_bonus.html.py:20
+#: templates/user/add_receipt.html:19 templates/user/add_receipt.html.py:22
+#: templates/user/balance_locks.html:29 templates/user/balance_locks.html:32
+#: templates/user/balances.html:27 templates/user/balances.html.py:30
 #: templates/user/billing_sumbmenu.html:6
-#: templates/user/modify_balance.html:30 templates/user/modify_balance.html:33
+#: templates/user/billing_user_action_logs.html:28
+#: templates/user/billing_user_action_logs.html:31 templates/user/lock.html:19
+#: templates/user/lock.html.py:22 templates/user/locks.html:29
+#: templates/user/locks.html.py:32 templates/user/modify_balance.html:30
+#: templates/user/modify_balance.html:33 templates/user/transactions.html:29
+#: templates/user/transactions.html:32
 msgid "user id #"
+msgstr ""
+
+#: templates/user/add_bonus.html:8
+#, python-format
+msgid ""
+"\n"
+"        add bonus to user #%(user_id)s\n"
+"    "
+msgstr ""
+
+#: templates/user/add_receipt.html:9
+#, python-format
+msgid ""
+"\n"
+"        add receipt to user #%(user_id)s\n"
+"    "
+msgstr ""
+
+#: templates/user/balance_locks.html:6 templates/user/locks.html:6
+#, python-format
+msgid "locks of user #%(user_id)s on balance #%(balance_id)s"
+msgstr ""
+
+#: templates/user/balance_locks.html:40 templates/user/locks.html:40
+#: templates/user/transactions.html:40
+msgid "balance id #"
 msgstr ""
 
 #: templates/user/balances.html:6
 #, python-format
-msgid ""
-"\n"
-"        balances of user #%(user_id)s\n"
-"    "
+msgid "balances of user #%(user_id)s"
 msgstr ""
 
 #: templates/user/billing_sumbmenu.html:24
 msgid "get balances"
+msgstr ""
+
+#: templates/user/billing_user_action_logs.html:6
+#, python-format
+msgid "action logs of user #%(user_id)s"
 msgstr ""
 
 #: templates/user/billing_user_info.html:5
@@ -350,10 +548,23 @@ msgstr ""
 msgid "no available user operations"
 msgstr ""
 
+#: templates/user/lock.html:9
+#, python-format
+msgid ""
+"\n"
+"        lock to user #%(user_id)s\n"
+"    "
+msgstr ""
+
 #: templates/user/modify_balance.html:6
 #, python-format
 msgid ""
 "\n"
 "        modify balance of user #%(user_id)s\n"
 "    "
+msgstr ""
+
+#: templates/user/transactions.html:6
+#, python-format
+msgid "transactions of user #%(user_id)s on balance #%(balance_id)s"
 msgstr ""
