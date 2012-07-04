@@ -18,6 +18,15 @@
 
 <body>
 
+    <script>
+        $(function() {
+            <!-- making elements of class control viewed like buttons -->
+            $( "input:submit, a, button", ".control" ).button();
+            <!-- making elements of class and radio_control viewed like buttonset -->
+            $(function() { $( ".radio_control" ).buttonset(); });
+        });
+    </script>
+
     {% load i18n %}
     {% load localeurl_tags %}
 
@@ -75,13 +84,6 @@
 
 
     </table>
-
-    <!-- making elements of class control viewed like buttons -->
-    <script>
-        $(function() {
-          $( "input:submit, a, button", ".control" ).button();
-        });
-    </script>
 
 </body>
 </html>

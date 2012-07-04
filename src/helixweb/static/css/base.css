@@ -19,9 +19,9 @@ table.lang_sw {margin:auto 0px auto auto;}
 table.lang_sw td {padding:2px;}
 
 table.service_sw {margin:auto auto auto 0px;}
-table.service_sw td {border:1px solid #BABABA;padding:5px;}
+/*table.service_sw td {border:1px solid #BABABA;padding:5px;}
 td.service_sel {background:#FAFAC8;}
-
+*/
 table.object_form td {vertical-align:top;}
 table.object_form th {vertical-align:top;text-align:right;}
 table.object_form ul {list-style:none;padding-left:0px;}
@@ -30,7 +30,8 @@ table.object_form ul {list-style:none;padding-left:0px;}
 tr.objects_fields {background:#EFF3FF;}
 tr.objects_data {vertical-align:text-top;text-align:center;}
 
-.control {text-align:right;}
+.control {text-align:right;font-size:small;}
+.radio_control {font-size:small;}
 .bordered {border:1px solid #BABABA;}
 
 .menu_linked {color:#2c9e1f;}

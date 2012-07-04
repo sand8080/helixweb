@@ -2,14 +2,28 @@
 
 <table class="service_sw">
     <tr>
-        {% for s in services %}
-            {% if s == cur_service %}
-                <td class="service_sel">{% trans s %}</td>
-            {% else %}
-                <td><a href="/{{ cur_lang }}/{{ s }}/{% if url_params %}?{{ url_params }}{% endif %}">
-                    {% trans s %}</a>
-                </td>
-            {% endif %}
-        {% endfor %}
+        <td class="radio_control">
+            {% for s in services %}
+                {% if s == cur_service %}
+                    <input type="radio" id="radio_{{ s }}" checked="checked"/>
+                        <label for="radio_{{ s }}">{% trans s %}</label>
+                {% else %}
+                    <input type="radio" id="radio_{{ s }}"/>
+                        <label for="radio_{{ s }}">{% trans s %}</label>
+                    <script type="text/javascript">
+                        $(function() {
+                            $( "#radio_{{ s }}" ).click(function() {
+                                window.location.replace("/{{ cur_lang }}/{{ s }}/");
+                            })
+                        });
+                    </script>
+
+ <!--
+                    <td><a href="/{{ cur_lang }}/{{ s }}/{% if url_params %}?{{ url_params }}{% endif %}">
+                        {% trans s %}</a>
+  -->
+                {% endif %}
+            {% endfor %}
+        </td>
     </tr>
 </table>

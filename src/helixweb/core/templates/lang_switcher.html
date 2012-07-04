@@ -1,41 +1,33 @@
 {% load i18n %}
 {% load localeurl_tags %}
 
-<script type="text/javascript">
-    $(function() { $( "#radio_lang_sel" ).buttonset(); });
-</script>
-
 <table class="lang_sw">
     <tr>
-        <td>
-            <div id="radio_lang_sel" class="small_text">
-                {% for l in langs %}
-                    {% if l.0 == cur_lang %}
-                        <input type="radio" id="radio_{{ l.0 }}" name="radio" checked="checked"/>
-                            <label for="radio_{{ l.0 }}">{% trans l.1 %}</label>
-                    {% else %}
-                        <input type="radio" id="radio_{{ l.0 }}" name="radio"/>
-                            <label for="radio_{{ l.0 }}">{% trans l.1 %}</label>
-                        <script type="text/javascript">
-                            $(function() {
-                                $( "#radio_{{ l.0 }}" ).click(function() {
-                                    window.location.replace(
-                                        "{{ path|chlocale:l.0 }}{% if url_params %}?{{ url_params|safe }}{% endif %}"
-                                    );
-                                })
-                            });
-                        </script>
-                    {% endif %}
-                {% endfor %}
-            </div>
+        <td class="radio_control">
+            {% for l in langs %}
+                {% if l.0 == cur_lang %}
+                    <input type="radio" id="radio_{{ l.0 }}" checked="checked"/>
+                        <label for="radio_{{ l.0 }}">{% trans l.1 %}</label>
+                {% else %}
+                    <input type="radio" id="radio_{{ l.0 }}"/>
+                        <label for="radio_{{ l.0 }}">{% trans l.1 %}</label>
+                    <script type="text/javascript">
+                        $(function() {
+                            $( "#radio_{{ l.0 }}" ).click(function() {
+                                window.location.replace(
+                                    "{{ path|chlocale:l.0 }}{% if url_params %}?{{ url_params|safe }}{% endif %}"
+                                );
+                            })
+                        });
+                    </script>
+                {% endif %}
+            {% endfor %}
         </td>
     </tr>
     <tr>
         <td>
             {% if logged_in %}
-                <div class="small_text">
-                    <a href={{ "/auth/logout/"|chlocale:cur_lang }}>{% trans "logout" %}</a>
-                </div>
+                <a href={{ "/auth/logout/"|chlocale:cur_lang }}>{% trans "logout" %}</a>
             {% endif %}
         </td>
     </tr>
