@@ -89,7 +89,7 @@
                     <tr class="objects_data {% cycle 'row1' 'row2' %}">
                         <td>{{ u.id }}</td>
                         <td>
-                            <a href="/auth/user_info/{{ u.id }}/">{{ u.login }}</a>
+                            <a href="/{{ cur_lang }}/auth/user_info/{{ u.id }}/">{{ u.login }}</a>
                         </td>
                         <td>
                             {% if u.is_active %}
@@ -110,7 +110,7 @@
                                 {% endfor %}
                             {% endif %}
                         </td>
-                        <td width="60%">
+                        <td width="60%" class="control">
                             <button id="rights_{{ u.id }}">{% trans "rights details" %}</button>
 
                             <div id="rights_list_{{ u.id }}" style="display:none;">
