@@ -4,9 +4,6 @@ table.main tr {vertical-align:top;}
 tr.row1 {background:white;}
 tr.row2 {background:#DFDFDF;}
 
-table.login {padding:20px 10px 20px 10px;}
-div.login {padding-left:17%;}
-
 .errormessage {color:red;}
 .disabled {color:gray;}
 tr.errormessage {background-color:pink;}
@@ -19,9 +16,7 @@ table.lang_sw {margin:auto 0px auto auto;}
 table.lang_sw td {padding:2px;}
 
 table.service_sw {margin:auto auto auto 0px;}
-/*table.service_sw td {border:1px solid #BABABA;padding:5px;}
-td.service_sel {background:#FAFAC8;}
-*/
+
 table.object_form td {vertical-align:top;}
 table.object_form th {vertical-align:top;text-align:right;}
 table.object_form ul {list-style:none;padding-left:0px;}
