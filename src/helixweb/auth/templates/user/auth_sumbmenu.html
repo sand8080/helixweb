@@ -2,14 +2,14 @@
 {% load urlutils %}
 {% load localeurl_tags %}
 
-<span class="menu_linked">
+<span class="ui-state-active">
     {% trans "user id #" %}{{ user.id }}
 </span>
 
 {% if "/auth/modify_users/"|is_url_allowed:rights %}
     <div class="submenu">
         {% if action == 'modify_users' %}
-            <span class="menu_linked">{% trans "modify user" %}</span>
+            <span class="ui-state-active">{% trans "modify user" %}</span>
         {% else %}
             <a href="{{ '/auth/modify_users/'|chlocale:cur_lang }}{{ user.id }}/">
                 <span style="white-space:nowrap;">{% trans "modify user" %}</span>
@@ -21,7 +21,7 @@
 {% if "/auth/get_action_logs/"|is_url_allowed:rights %}
     <div class="submenu">
         {% if action == 'get_action_logs' %}
-            <span class="menu_linked">{% trans "action logs" %}</span>
+            <span class="ui-state-active">{% trans "action logs" %}</span>
         {% else %}
             <a href="{{ '/auth/get_action_logs/'|chlocale:cur_lang }}{{ user.id }}/">
                 <span style="white-space:nowrap;">{% trans "action logs" %}</span>
