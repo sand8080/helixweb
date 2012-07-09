@@ -4,7 +4,11 @@
 
 {% block title %}{% trans "create new environment" %}{% endblock %}
 
-{% block sidebar %}{% endblock %}
+{% block sidebar %}
+    <style type="text/css">
+        td.sidebar {width:0%;}
+    </style>
+{% endblock %}
 
 {% block content %}
 
@@ -14,7 +18,7 @@
 
         <div class="login">
 
-            <table class="object_form">
+            <table class="object_form center">
                 <tr>
                     <td colspan="2" style="text-align:center;">
                         <h2>

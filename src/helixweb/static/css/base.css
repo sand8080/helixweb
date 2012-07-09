@@ -52,5 +52,7 @@ table.balance {padding:1px 2px 1px 2px;}
 table.balance th {text-align:left;background:#EFF3FF;}
 table.balance td {padding:2px 10px 2px 10px;}
 
+td.sidebar {width:20%;}
+
 /*.marked {color:green;}*/
 .not_marked {color:red;}

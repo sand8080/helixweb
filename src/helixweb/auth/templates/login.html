@@ -4,7 +4,11 @@
 
 {% block title %}{% trans "login" %}{% endblock %}
 
-{% block sidebar %}{% endblock %}
+{% block sidebar %}
+    <style type="text/css">
+        td.sidebar {width:0%;}
+    </style>
+{% endblock %}
 
 {% block content %}
 
@@ -12,7 +16,7 @@
 
         <div class="login">
 
-            <table class="object_form">
+            <table class="object_form center">
                 <tr>
                     <td colspan="2">
                         <h2>
