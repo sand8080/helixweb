@@ -24,9 +24,9 @@
                         {% endallowedurl %}
                         &rarr;
                         {% if user.login %}
-                            <span class="ui-state-active">{{ user.login }}</span>
+                            <span class="ui-state-active noborder">{{ user.login }}</span>
                         {% else %}
-                            <span class="ui-state-active">{% trans "user not found" %}</span>
+                            <span class="ui-state-active noborder">{% trans "user not found" %}</span>
                         {% endif %}
                     </h2>
                 </td>

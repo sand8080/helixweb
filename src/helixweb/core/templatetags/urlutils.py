@@ -60,7 +60,7 @@ class UrlNode(Node):
                 cur_lang = resolve_variable('cur_lang', context)
                 lang_url = '/%s%s' % (cur_lang, url)
                 if lang_url == request.path:
-                    return '<span class="current_item ui-state-active">%s</span>' % descr
+                    return '<span class="ui-state-active noborder">%s</span>' % descr
                 else:
                     return '<a href="%(lang_url)s">%(descr)s</a>' % \
                         {'lang_url': lang_url, 'descr': descr}
