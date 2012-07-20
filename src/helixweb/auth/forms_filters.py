@@ -93,6 +93,7 @@ class AbstractAuthFilterActionLogsForm(AbstractFilterActionLogsForm, FilterAuthF
             ('modify_environment', _('modify environment')),
             ('add_service', _('add service')),
             ('modify_service', _('modify service')),
+            ('delete_service', _('delete service')),
             ('add_group', _('add group')),
             ('modify_group', _('modify group')),
             ('delete_group', _('delete group')),
