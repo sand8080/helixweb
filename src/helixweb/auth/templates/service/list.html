@@ -77,6 +77,16 @@
                                 /auth/modify_service/{{ srv.id }}/
                                 {% trans srv.name %}
                             {% endallowedurl %}
+
+                            {% if srv.type != 'auth' %}
+                                <br>
+                                <span class="small_text">
+                                {% allowedurl%}
+                                    /auth/delete_service/{{ srv.id }}/
+                                    {% trans "delete service" %}
+                                {% endallowedurl %}
+                                </span>
+                            {% endif %}
                         </td>
                         <td>{{ srv.type }}</td>
                         <td>

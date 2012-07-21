@@ -38,6 +38,11 @@ class ServiceForm(HelixwebRequestForm):
         props = filter(len, props)
         return props
 
+    @staticmethod
+    def get_by_id_req(id, request): #@ReservedAssignment
+        return {'action': 'get_services', 'session_id': _get_session_id(request),
+            'filter_params': {'id': int(id)}, 'paging_params':{}}
+
 
 class AddServiceForm(ServiceForm):
     action = 'add_service'
@@ -51,6 +56,21 @@ class AddServiceForm(ServiceForm):
     def as_helix_request(self):
         d = super(AddServiceForm, self).as_helix_request()
         d['properties'] = self._prepare_properties(d.get('properties', ''))
+        return d
+
+
+class DeleteServiceForm(ServiceForm):
+    action = 'delete_service'
+    id = forms.IntegerField(widget=forms.widgets.HiddenInput) #@ReservedAssignment
+    name = forms.CharField(label=_('service name'), max_length=32,
+        widget=ConstInput)
+
+    def __init__(self, *args, **kwargs):
+        super(DeleteServiceForm, self).__init__(*args, **kwargs)
+
+    def as_helix_request(self):
+        d = super(DeleteServiceForm, self).as_helix_request()
+        d.pop('name')
         return d
 
 

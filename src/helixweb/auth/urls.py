@@ -18,6 +18,7 @@ urlpatterns = patterns('',
 
     (r'^get_services/$', 'auth.views.services'),
     (r'^add_service/$', 'auth.views.add_service'),
+    (r'^delete_service/(?P<id>\d+)/$', 'auth.views.delete_service'),
     (r'^modify_service/(?P<id>\d+)/$', 'auth.views.modify_service'),
 
     (r'^get_groups/$', 'auth.views.groups'),

@@ -17,7 +17,7 @@ from helixweb.core.forms import HelixwebRequestForm
 from helixweb.auth.forms import (LoginForm, AddServiceForm, ModifyServiceForm,
     ModifyEnvironmentForm, AddGroupForm, DeleteGroupForm, ModifyGroupForm,
     ModifyUserSelfForm, AddUserForm, LogoutForm, AddEnvironmentForm,
-    ModifyUserForm, ApiSchemeForm)
+    ModifyUserForm, ApiSchemeForm, DeleteServiceForm)
 from helixweb.auth.forms_filters import (FilterServiceForm, FilterGroupForm,
     FilterUserForm, FilterUserActionLogsForm, FilterAllActionLogsForm,
     FilterSelfActionLogsForm)
@@ -93,6 +93,30 @@ def add_service(request):
         form = AddServiceForm(request=request)
     c['form'] = form
     return render_to_response('service/add.html', c,
+        context_instance=RequestContext(request))
+
+
+@login_redirector
+def delete_service(request, id): #@ReservedAssignment
+    c = {}
+    if request.method == 'POST':
+        form = DeleteServiceForm(request.POST, request=request)
+        if form.is_valid():
+            resp = helix_cli.request(form.as_helix_request())
+            form.handle_errors(resp)
+            if resp['status'] == 'ok':
+                return HttpResponseRedirect('/auth/get_services/')
+    else:
+        resp = helix_cli.request(DeleteServiceForm.get_by_id_req(id, request))
+        print '### resp', resp
+        services = resp.get('services', [{}])
+        d_srv = services[0] if len(services) else {}
+        form = DeleteServiceForm(d_srv, request=request)
+        if form.is_valid():
+            form.handle_errors(resp)
+
+    c['form'] = form
+    return render_to_response('service/delete.html', c,
         context_instance=RequestContext(request))
 
 
