@@ -108,7 +108,6 @@ def delete_service(request, id): #@ReservedAssignment
                 return HttpResponseRedirect('/auth/get_services/')
     else:
         resp = helix_cli.request(DeleteServiceForm.get_by_id_req(id, request))
-        print '### resp', resp
         services = resp.get('services', [{}])
         d_srv = services[0] if len(services) else {}
         form = DeleteServiceForm(d_srv, request=request)
