@@ -26,7 +26,7 @@ tr.objects_fields {background:#EFF3FF;}
 tr.objects_data {vertical-align:text-top;text-align:center;}
 
 .control {text-align:right;font-size:small;}
-.radio_control {font-size:small;}
+.radio_control {font-size:small;white-space:nowrap;}
 .bordered {border:1px solid #BABABA;}
 
 /*.menu_linked {color:#2c9e1f;}*/
