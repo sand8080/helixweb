@@ -2,22 +2,28 @@ from helixweb.core.context_processors import _get_session_id, _get_user_id
 from helixweb.core.security import get_rights
 
 
-def _billing_rights(rights):
+def _srv_rights(rights, srv_type):
     for r in rights:
-        if r.get('service_type') == 'billing':
+        if r.get('service_type') == srv_type:
             return r.get('properties', [])
     return []
 
 
-def _access_to_billing_user_info(c):
+def _access_to_service_user_info(c, srv_type, req_rights, result_ctx_param_name):
     rights = c.get('rights', [])
-    billing_rights = _billing_rights(rights)
-    requires = ('add_balance', 'get_balances', 'get_action_logs')
-    for req in requires:
-        if req in billing_rights:
-            c['access_to_billing_user_info'] = True
+    srv_rights = _srv_rights(rights, srv_type)
+    for req in req_rights:
+        if req in srv_rights:
+            c[result_ctx_param_name] = True
             return
-    c['access_to_billing_user_info'] = False
+    c[result_ctx_param_name] = False
+
+
+def _access_to_billing_user_info(c):
+    srv_type = 'billing'
+    req_rights = ('add_balance', 'get_balances', 'get_action_logs')
+    result_ctx_param_name = 'access_to_billing_user_info'
+    _access_to_service_user_info(c, srv_type, req_rights, result_ctx_param_name)
 
 
 def auth_access_info(request):
