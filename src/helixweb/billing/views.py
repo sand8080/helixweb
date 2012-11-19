@@ -4,10 +4,10 @@ from django.utils import simplejson
 from django.http import HttpResponseRedirect
 from django.http import HttpResponse
 
-from helixweb.core.views import (login_redirector, process_helix_response,
-    _action_logs, _prepare_action_log, _prepare_date)
 from helixcore.server.client import Client
 
+from helixweb.core.views import (login_redirector, process_helix_response,
+    _action_logs, _prepare_action_log, _prepare_date)
 from helixweb.billing import settings #@UnresolvedImport
 from helixweb.billing.forms import (ModifyUsedCurrenciesForm,
     AddBalanceForm, ModifyBalanceForm, BalanceForm, AddReceiptForm,
@@ -251,7 +251,7 @@ def user_modify_balance(request, user_id, balance_id):
 
 
 @login_redirector
-def user_info(request, id):
+def user_info(request, id): #@ReservedAssignment
     id_ = int(id)
     c = {}
     c['user_id'] = id_
