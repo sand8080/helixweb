@@ -26,6 +26,13 @@ def _access_to_billing_user_info(c):
     _access_to_service_user_info(c, srv_type, req_rights, result_ctx_param_name)
 
 
+def _access_to_auth_user_info(c):
+    srv_type = 'auth'
+    req_rights = ('modify_users', 'get_action_logs')
+    result_ctx_param_name = 'access_to_auth_user_info'
+    _access_to_service_user_info(c, srv_type, req_rights, result_ctx_param_name)
+
+
 def auth_access_info(request):
     c = {}
     if request.path_info.startswith(('/auth/add_environment',
@@ -38,4 +45,5 @@ def auth_access_info(request):
         c['logged_user_id'] = _get_user_id(request)
         c['rights'] = get_rights(_get_session_id(request))
     _access_to_billing_user_info(c)
+    _access_to_auth_user_info(c)
     return c

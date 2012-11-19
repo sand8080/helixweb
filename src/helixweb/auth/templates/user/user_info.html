@@ -44,7 +44,7 @@
 
                 {% if user %}
 
-                    {% if "/auth/modify_users/,/auth/get_action_logs/"|is_any_of_urls_allowed:rights %}
+                    {% if access_to_auth_user_info %}
 
                         <tr><td><hr></td></tr>
                         <tr><td>
