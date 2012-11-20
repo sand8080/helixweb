@@ -5,23 +5,9 @@
         <td class="radio_control">
             {% for s in services %}
                 {% if s == cur_service %}
-                    <input type="radio" id="radio_{{ s }}" checked="checked"/>
-                        <label for="radio_{{ s }}">{% trans s %}</label>
+                    <a href="" class="ui-state-active">{{ s }}</a>
                 {% else %}
-                    <input type="radio" id="radio_{{ s }}"/>
-                        <label for="radio_{{ s }}">{% trans s %}</label>
-                    <script type="text/javascript">
-                        $(function() {
-                            $( "#radio_{{ s }}" ).click(function() {
-                                window.location.replace("/{{ cur_lang }}/{{ s }}/");
-                            })
-                        });
-                    </script>
-
- <!--
-                    <td><a href="/{{ cur_lang }}/{{ s }}/{% if url_params %}?{{ url_params }}{% endif %}">
-                        {% trans s %}</a>
-  -->
+                    <a href="/{{ cur_lang }}/{{ s }}/">{{ s }}</a>
                 {% endif %}
             {% endfor %}
         </td>
