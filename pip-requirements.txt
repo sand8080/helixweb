@@ -1,2 +1,4 @@
 django
 django-localeurl
+iso8601
+pytz
