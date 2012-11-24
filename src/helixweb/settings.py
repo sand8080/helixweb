@@ -7,7 +7,7 @@ TEMPLATE_DEBUG = DEBUG
 
 ROOT_DIR = os.path.abspath(os.path.dirname(__file__))
 
-STATIC_ROOT = os.path.join(ROOT_DIR, 'static')
+STATIC_ROOT = '/opt/helixproject/helixweb/static'
 
 #ADMINS = (
 #    # ('Your Name', 'your_email@domain.com'),

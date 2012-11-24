@@ -8,7 +8,7 @@ PYTHON_CMD="$VENV_DIR/bin/python"
 
 pushd "$CUR_DIR"
 export PYTHONPATH="$CUR_DIR/src:$CUR_DIR/../helixcore/src"
-DJANGO_CMD="$PYTHON_CMD $CUR_DIR/src/helixweb/manage.py runserver"
+DJANGO_CMD="$PYTHON_CMD $CUR_DIR/src/helixweb/manage.py runserver --settings=helixweb.settings_dev"
 echo $DJANGO_CMD
 $DJANGO_CMD
 popd
