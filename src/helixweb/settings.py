@@ -2,29 +2,12 @@
 import os
 
 
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 ROOT_DIR = os.path.abspath(os.path.dirname(__file__))
 
 STATIC_ROOT = '/opt/helixproject/helixweb/static'
-
-#ADMINS = (
-#    # ('Your Name', 'your_email@domain.com'),
-#)
-
-#MANAGERS = ADMINS
-#
-#DATABASES = {
-#    'default': {
-#        'ENGINE': 'django.db.backends.', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-#        'NAME': '',                      # Or path to database file if using sqlite3.
-#        'USER': '',                      # Not used with sqlite3.
-#        'PASSWORD': '',                  # Not used with sqlite3.
-#        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
-#        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
-#    }
-#}
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -40,8 +23,7 @@ TIME_ZONE = 'Europe/Moscow'
 LANGUAGE_CODE = 'en-us'
 
 _ = lambda x: x
-SUPPORTED_LANGS = (('en', _('EN')),
-    ('ru', _('RU')),)
+SUPPORTED_LANGS = (('en', _('EN')), ('ru', _('RU')),)
 
 DEFAULT_LANGUAGE_CODE = 'en'
 
@@ -104,8 +86,6 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-
-#    os.path.join(ROOT_DIR, 'templates'),
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -117,15 +97,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 
 INSTALLED_APPS = (
     'localeurl',
-#    'django.contrib.auth',
     'django.contrib.contenttypes',
-#    'django.contrib.sessions',
-#    'django.contrib.sites',
-#    'django.contrib.messages',
-    # Uncomment the next line to enable the admin:
-    # 'django.contrib.admin',
-    # Uncomment the next line to enable admin documentation:
-    # 'django.contrib.admindocs',
+    'django.contrib.staticfiles',
     'core',
     'auth',
     'billing',
