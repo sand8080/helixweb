@@ -47,7 +47,7 @@ env.local_pythonpath = 'export PYTHONPATH="%s:%s"' % (_project_dir(),
     os.path.join(_project_dir(), '..', 'helixcore', 'src'))
 env.rsync_exclude = ['.*', '*.log*', '*.sh', '*.pyc',
     'fabfile.py', 'pip-requirements-dev.txt',
-    'uwsgi/*_dev.*']
+    'uwsgi/*_dev.*', 'settings_dev.py']
 env.activate = '. %s/.env/bin/activate' % env.proj_root_dir
 print green("Production environment configured")
 
@@ -55,11 +55,11 @@ print green("Production environment configured")
 def config_virt_env():
     proj_env_dir = os.path.join(env.proj_root_dir, '.env')
     if not exists(proj_env_dir):
-        print green('Virtualenv creation')
+        print green("Virtualenv creation")
         run('virtualenv %s --no-site-packages' % proj_env_dir)
 
     with prefix(env.activate):
-        print green('Installing required python packages')
+        print green("Installing required python packages")
         run('pip install -r %s/pip-requirements.txt' % env.proj_dir)
 
 
@@ -84,8 +84,13 @@ def _fix_rd(rd, o, g, p):
     print green("Checking project directory parameters")
 
 
-def _collect_static():
-    pass
+def collectstatic():
+    print green("Collecting static files")
+    with prefix(env.activate):
+        print green("Installing required python packages")
+        manage = os.path.join(env.proj_dir, 'src', 'helixweb', 'manage.py')
+        run('python %s collectstatic --noinput' % manage)
+    print green("Static files collected")
 
 
 def sync():
@@ -117,9 +122,9 @@ def sync():
 
 
 def restart_uwsgi():
-    print green('Restarting uwsgi')
+    print green("Restarting uwsgi")
     run('touch %s/uwsgi/uwsgi.xml' % env.proj_dir)
-    print green('Uwsgi restarted')
+    print green("Uwsgi restarted")
 
 
 def deploy_helixcore():
@@ -134,9 +139,10 @@ def deploy():
     with hide('running', 'stdout'):
         print yellow("Welcome back, commander!")
         print green("Deployment started")
-#        deploy_helixcore()
+        deploy_helixcore()
         sync()
         config_virt_env()
-#        restart_uwsgi()
+        collectstatic()
+        restart_uwsgi()
         print green("Deployment complete")
         print yellow("Helixweb operational!")
