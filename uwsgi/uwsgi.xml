@@ -1,0 +1,21 @@
+<uwsgi>
+    <socket>/opt/helixproject/helixweb/run/helixweb.sock</socket>
+    <pidfile>/opt/helixproject/helixweb/run/helixweb.pid</pidfile>
+    <chmod-socket>660</chmod-socket>
+    <chown-socket>helixweb:helixproject</chown-socket>
+
+    <auto-procname/>
+    <procname-prefix>helixweb</procname-prefix>
+    <master/>
+    <workers>5</workers>
+    <no-orphans>true</no-orphans>
+
+    <plugins>python</plugins>
+    <virtualenv>/opt/helixproject/helixweb/.env</virtualenv>
+    <pythonpath>/opt/helixproject/helixweb/helixcore/src/</pythonpath>
+    <pythonpath>/opt/helixproject/helixweb/helixweb/src/</pythonpath>
+    <touch-reload>/opt/helixproject/helixweb/helixweb/uwsgi/uwsgi.xml</touch-reload>
+
+    <env>DJANGO_SETTINGS_MODULE=helixweb.settings</env>
+    <module>helixweb.wsgi</module>
+</uwsgi>
