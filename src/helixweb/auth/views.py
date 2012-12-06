@@ -29,7 +29,7 @@ helix_cli = Client(settings.AUTH_SERVICE_URL)
 
 def _make_login(form, request):
     if form.is_valid():
-        resp = helix_cli.request(form.as_helix_request(), check_response=False)
+        resp = helix_cli.request(form.as_helix_request(), request, check_response=False)
         form.handle_errors(resp)
         status = resp.get('status')
         s_id = resp.get('session_id')
@@ -65,7 +65,7 @@ def login(request):
 def logout(request):
     form = LogoutForm({}, request=request)
     if form.is_valid():
-        helix_cli.request(form.as_helix_request())
+        helix_cli.request(form.as_helix_request(), request)
     resp = HttpResponseRedirect('/auth/login/')
     resp.delete_cookie('session_id')
     resp.delete_cookie('user_id')
@@ -84,7 +84,7 @@ def add_service(request):
     if request.method == 'POST':
         form = AddServiceForm(request.POST, request=request)
         if form.is_valid():
-            resp = helix_cli.request(form.as_helix_request())
+            resp = helix_cli.request(form.as_helix_request(), request)
             form.handle_errors(resp)
             if resp['status'] == 'ok':
                 if request.POST.get('stay_here', '0') != '1':
@@ -102,12 +102,12 @@ def delete_service(request, id): #@ReservedAssignment
     if request.method == 'POST':
         form = DeleteServiceForm(request.POST, request=request)
         if form.is_valid():
-            resp = helix_cli.request(form.as_helix_request())
+            resp = helix_cli.request(form.as_helix_request(), request)
             form.handle_errors(resp)
             if resp['status'] == 'ok':
                 return HttpResponseRedirect('/auth/get_services/')
     else:
-        resp = helix_cli.request(DeleteServiceForm.get_by_id_req(id, request))
+        resp = helix_cli.request(DeleteServiceForm.get_by_id_req(id, request), request)
         services = resp.get('services', [{}])
         d_srv = services[0] if len(services) else {}
         form = DeleteServiceForm(d_srv, request=request)
@@ -125,13 +125,13 @@ def modify_service(request, id): #@ReservedAssignment
     if request.method == 'POST':
         form = ModifyServiceForm(request.POST, request=request)
         if form.is_valid():
-            resp = helix_cli.request(form.as_helix_request())
+            resp = helix_cli.request(form.as_helix_request(), request)
             form.handle_errors(resp)
             if resp['status'] == 'ok':
                 if request.POST.get('stay_here', '0') != '1':
                     return HttpResponseRedirect('/auth/get_services/')
     else:
-        resp = helix_cli.request(ModifyServiceForm.get_by_id_req(id, request))
+        resp = helix_cli.request(ModifyServiceForm.get_by_id_req(id, request), request)
         form = ModifyServiceForm.from_get_services_helix_resp(resp, request)
         if form.is_valid():
             form.handle_errors(resp)
@@ -150,7 +150,7 @@ def services(request):
         form = FilterServiceForm(request.GET, request=request)
 
     if form.is_valid():
-        resp = helix_cli.request(form.as_helix_request())
+        resp = helix_cli.request(form.as_helix_request(), request)
         form.update_total(resp)
         c.update(process_helix_response(resp, 'services', 'services_error'))
         c['pager'] = form.pager
@@ -183,13 +183,13 @@ def modify_environment(request):
     if request.method == 'POST':
         form = ModifyEnvironmentForm(request.POST, request=request)
         if form.is_valid():
-            resp = helix_cli.request(form.as_helix_request())
+            resp = helix_cli.request(form.as_helix_request(), request)
             form.handle_errors(resp)
             if resp['status'] == 'ok':
                 if request.POST.get('stay_here', '0') != '1':
                     return HttpResponseRedirect('/auth/')
     else:
-        resp = helix_cli.request(ModifyEnvironmentForm.get_req(request))
+        resp = helix_cli.request(ModifyEnvironmentForm.get_req(request), request)
         form = ModifyEnvironmentForm.from_get_helix_resp(resp, request)
         if form.is_valid():
             form.handle_errors(resp)
@@ -202,13 +202,13 @@ def modify_environment(request):
 @login_redirector
 def add_user(request):
     c = {}
-    resp = helix_cli.request(AddUserForm.get_active_groups_req(request))
+    resp = helix_cli.request(AddUserForm.get_active_groups_req(request), request)
     c.update(process_helix_response(resp, 'groups', 'groups_error'))
     groups = resp.get('groups', [])
     if request.method == 'POST':
         form = AddUserForm(request.POST, groups=groups, request=request)
         if form.is_valid():
-            resp = helix_cli.request(form.as_helix_request())
+            resp = helix_cli.request(form.as_helix_request(), request)
             form.handle_errors(resp)
             if resp['status'] == 'ok':
                 if request.POST.get('stay_here', '0') != '1':
@@ -236,12 +236,12 @@ def _merge_groups_rights(groups_idx, groups_ids):
 @login_redirector
 def users(request):
     c = {}
-    resp = helix_cli.request(FilterUserForm.get_active_groups_req(request))
+    resp = helix_cli.request(FilterUserForm.get_active_groups_req(request), request)
     c.update(process_helix_response(resp, 'groups', 'groups_error'))
     groups_idx = build_index(resp, 'groups')
     c['groups_idx'] = groups_idx
 
-    resp = helix_cli.request(FilterUserForm.get_services_req(request))
+    resp = helix_cli.request(FilterUserForm.get_services_req(request), request)
     c.update(process_helix_response(resp, 'services', 'services_error'))
     c['services_idx'] = build_index(resp, 'services')
 
@@ -252,7 +252,7 @@ def users(request):
         form = FilterUserForm(request.GET, request=request)
 
     if form.is_valid():
-        resp = helix_cli.request(form.as_helix_request())
+        resp = helix_cli.request(form.as_helix_request(), request)
         form.update_total(resp)
         users_list = resp.get('users', [])
         _calculate_summary_user_rights(users_list, groups_idx)
@@ -275,7 +275,7 @@ def _extract_user(helix_resp):
 def user_info(request, id): #@ReservedAssignment
     id = int(id) #@ReservedAssignment
     c = {}
-    resp = helix_cli.request(HelixwebRequestForm.get_users_req(request, [id]))
+    resp = helix_cli.request(HelixwebRequestForm.get_users_req(request, [id]), request)
     c.update(process_helix_response(resp, 'users', 'users_error'))
     c['user'] = _extract_user(resp)
     return render_to_response('user/user_info.html', c,
@@ -312,7 +312,7 @@ def modify_user_self(request):
     if request.method == 'POST':
         form = ModifyUserSelfForm(request.POST, request=request)
         if form.is_valid():
-            resp = helix_cli.request(form.as_helix_request())
+            resp = helix_cli.request(form.as_helix_request(), request)
             form.handle_errors(resp)
     else:
         form = ModifyUserSelfForm(request=request)
@@ -322,7 +322,7 @@ def modify_user_self(request):
 
 
 def _get_user_info(request, c, id): #@ReservedAssignment
-    resp = helix_cli.request(ModifyUserForm.get_users_req(id, request))
+    resp = helix_cli.request(ModifyUserForm.get_users_req(id, request), request)
     c.update(process_helix_response(resp, 'users', 'users_error'))
     user = {}
     if 'users' in resp:
@@ -337,7 +337,7 @@ def _get_user_info(request, c, id): #@ReservedAssignment
 def modify_user(request, id): #@ReservedAssignment
     c = {}
     c['action'] = ModifyUserForm.action
-    resp = helix_cli.request(ModifyUserForm.get_active_groups_req(request))
+    resp = helix_cli.request(ModifyUserForm.get_active_groups_req(request), request)
     c.update(process_helix_response(resp, 'groups', 'groups_error'))
     groups = resp.get('groups', [])
     user = _get_user_info(request, c, id)
@@ -345,7 +345,7 @@ def modify_user(request, id): #@ReservedAssignment
     if request.method == 'POST':
         form = ModifyUserForm(request.POST, groups=groups, request=request)
         if form.is_valid():
-            resp = helix_cli.request(form.as_helix_request())
+            resp = helix_cli.request(form.as_helix_request(), request)
             form.handle_errors(resp)
             if resp['status'] == 'ok':
                 new_login = request.POST.get('new_login')
@@ -372,7 +372,7 @@ def user_action_logs(request, id): #@ReservedAssignment
     else:
         form = FilterUserActionLogsForm({}, request=request, id=id)
     if form.is_valid():
-        resp = helix_cli.request(form.as_helix_request())
+        resp = helix_cli.request(form.as_helix_request(), request)
         form.update_total(resp)
         if 'action_logs' in resp:
             resp['action_logs'] = map(_prepare_action_log, resp['action_logs'])
@@ -386,7 +386,7 @@ def user_action_logs(request, id): #@ReservedAssignment
 @login_redirector
 def groups(request):
     c = {}
-    resp = helix_cli.request(FilterGroupForm.get_services_req(request))
+    resp = helix_cli.request(FilterGroupForm.get_services_req(request), request)
     c.update(process_helix_response(resp, 'services', 'services_error'))
     srvs = resp.get('services', [])
     srvs_idx = {}
@@ -401,7 +401,7 @@ def groups(request):
         form = FilterGroupForm(request.GET, request=request)
 
     if form.is_valid():
-        resp = helix_cli.request(form.as_helix_request())
+        resp = helix_cli.request(form.as_helix_request(), request)
         form.update_total(resp)
         c.update(process_helix_response(resp, 'groups', 'groups_error'))
         c['pager'] = form.pager
@@ -415,14 +415,14 @@ def groups(request):
 @login_redirector
 def add_group(request):
     c = {}
-    resp = helix_cli.request(AddGroupForm.get_services_req(request))
+    resp = helix_cli.request(AddGroupForm.get_services_req(request), request)
     services = resp.get('services', [])
     c.update(process_helix_response(resp, 'services', 'services_error'))
 
     if request.method == 'POST':
         form = AddGroupForm(request.POST, services=services, request=request)
         if form.is_valid():
-            resp = helix_cli.request(form.as_helix_request())
+            resp = helix_cli.request(form.as_helix_request(), request)
             form.handle_errors(resp)
             if resp['status'] == 'ok':
                 if request.POST.get('stay_here', '0') != '1':
@@ -441,12 +441,12 @@ def delete_group(request, id): #@ReservedAssignment
     if request.method == 'POST':
         form = DeleteGroupForm(request.POST, request=request)
         if form.is_valid():
-            resp = helix_cli.request(form.as_helix_request())
+            resp = helix_cli.request(form.as_helix_request(), request)
             form.handle_errors(resp)
             if resp['status'] == 'ok':
                 return HttpResponseRedirect('/auth/get_groups/')
     else:
-        resp = helix_cli.request(DeleteGroupForm.get_by_id_req(id, request))
+        resp = helix_cli.request(DeleteGroupForm.get_by_id_req(id, request), request)
         groups = resp.get('groups', [{}])
         d_grp = groups[0] if len(groups) else {}
         form = DeleteGroupForm(d_grp, request=request)
@@ -461,20 +461,20 @@ def delete_group(request, id): #@ReservedAssignment
 @login_redirector
 def modify_group(request, id): #@ReservedAssignment
     c = {}
-    resp = helix_cli.request(ModifyGroupForm.get_services_req(request))
+    resp = helix_cli.request(ModifyGroupForm.get_services_req(request), request)
     c.update(process_helix_response(resp, 'services', 'services_error'))
     services = resp.get('services', [])
 
     if request.method == 'POST':
         form = ModifyGroupForm(request.POST, services=services, request=request)
         if form.is_valid():
-            resp = helix_cli.request(form.as_helix_request())
+            resp = helix_cli.request(form.as_helix_request(), request)
             form.handle_errors(resp)
             if resp['status'] == 'ok':
                 if request.POST.get('stay_here', '0') != '1':
                     return HttpResponseRedirect('/auth/get_groups/')
     else:
-        resp = helix_cli.request(ModifyGroupForm.get_by_id_req(id, request))
+        resp = helix_cli.request(ModifyGroupForm.get_by_id_req(id, request), request)
         form = ModifyGroupForm.from_get_groups_helix_resp(resp, request, services)
         if form.is_valid():
             form.handle_errors(resp)
@@ -512,7 +512,7 @@ def api_scheme(request):
     c = {}
     form = ApiSchemeForm({}, request=request)
     if form.is_valid():
-        resp = helix_cli.request(form.as_helix_request())
+        resp = helix_cli.request(form.as_helix_request(), request)
         form.handle_errors(resp)
         c['scheme'] = resp.get('scheme')
     return render_to_response('auth_api_scheme.html', c,

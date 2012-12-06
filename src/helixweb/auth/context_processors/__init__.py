@@ -43,7 +43,7 @@ def auth_access_info(request):
     else:
         c['logged_in'] = True
         c['logged_user_id'] = _get_user_id(request)
-        c['rights'] = get_rights(_get_session_id(request))
+        c['rights'] = get_rights(_get_session_id(request), request)
     _access_to_billing_user_info(c)
     _access_to_auth_user_info(c)
     return c

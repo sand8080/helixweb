@@ -98,7 +98,7 @@ def elems_as_table(elems, col_num):
 
 #def _prepare_context(request, cur_service=None):
 #    c = {}
-#    c['rights'] = get_rights(_get_session_id(request))
+#    c['rights'] = get_rights(_get_session_id(request), request)
 #    c['logged_in'] = True
 #    c['cur_service'] = cur_service
 #    c['logged_user_id'] = _get_user_id(request)
