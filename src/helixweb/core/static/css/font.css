@@ -1,0 +1,14 @@
+body {
+  color:#333;
+}
+
+@font-face {
+  font-family: 'PT Sans Narrow', sans-serif;
+  src: url(http://fonts.googleapis.com/css?family=PT+Sans+Narrow:400,700&subset=latin,cyrillic) format('woff');
+  font-weight:300;
+}
+
+.ui-widget {
+    font-family: 'PT Sans Narrow', sans-serif;
+    font-size: 1.1em;
+}
