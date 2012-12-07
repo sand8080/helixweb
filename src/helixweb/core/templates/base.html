@@ -5,9 +5,6 @@
     <meta charset="utf-8">
 
     <title>{% block title %}Helixweb of helix project{% endblock %}</title>
-    <!--
-     -->
-    <link rel="stylesheet" type="text/css" href="/static/css/base.css" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 
@@ -17,18 +14,15 @@
 
     <link rel="stylesheet" type="text/css" href="/static/css/jquery-ui/current-theme/jquery-ui.custom.css" />
 
-    <link rel="stylesheet" href="/static/css/font.css">
-    <link rel="stylesheet" href="/static/css/pygment_trac.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/base.css" />
+
 </head>
 
 <body>
-
     <script>
-        $(function() {
-            <!-- making elements of class control viewed like buttons -->
-            $( "input:submit, a, button", ".control" ).button();
-            <!-- making elements of class and radio_control viewed like buttonset -->
-            $(function() { $( ".radio_control" ).buttonset(); });
+        $( function() {
+            {% comment %} making elements of class control viewed like buttons {% endcomment %}
+            $( "input:submit, button", ".control" ).button();
         });
     </script>
 

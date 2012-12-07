@@ -5,18 +5,25 @@
         <td class="radio_control">
             {% for s in services %}
                 {% if s == cur_service %}
-                    <a href="" id="a_cur_service">{{ s }}</a>
+                    <a href="" class="ui-button ui-widget ui-state-active ui-button-text-only
+                        {% if forloop.counter == 1 %}
+                          ui-corner-left
+                        {% elif forloop.counter == services|length %}
+                          ui-corner-right
+                        {% endif %}"
+                        role="button" aria-disabled="false"><span class="ui-button-text">{{ s }}</span>
+                    </a>
                 {% else %}
-                    <a href="/{{ cur_lang }}/{{ s }}/">{{ s }}</a>
+                    <a href="/{{ cur_lang }}/{{ s }}/" class="ui-button ui-widget ui-state-default ui-button-text-only
+                        {% if forloop.counter == 1 %}
+                          ui-corner-left
+                        {% elif forloop.counter == services|length %}
+                          ui-corner-right
+                        {% endif %}"
+                        role="button" aria-disabled="false"><span class="ui-button-text">{{ s }}</span>
+                    </a>
                 {% endif %}
             {% endfor %}
         </td>
     </tr>
 </table>
-
-
-<script>
-    $(document).ready(function() {
-        $( "#a_cur_service" ).addClass("ui-state-active");
-    });
-</script>
