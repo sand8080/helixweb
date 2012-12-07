@@ -6,7 +6,7 @@
         <td class="radio_control">
             {% for l in langs %}
                 {% if l.0 == cur_lang %}
-                    <a href="" class="ui-state-active">{% trans l.1 %}</a>
+                    <a href="" id="a_cur_lang">{% trans l.1 %}</a>
                 {% else %}
                     <a href="{{ path|chlocale:l.0 }}{% if url_params %}?{{ url_params|safe }}{% endif %}">
                         {% trans l.1 %}</a>
@@ -22,3 +22,10 @@
         </td>
     </tr>
 </table>
+
+
+<script>
+    $(document).ready(function() {
+        $( "#a_cur_lang" ).addClass("ui-state-active");
+    });
+</script>

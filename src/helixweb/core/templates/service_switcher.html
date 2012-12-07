@@ -5,7 +5,7 @@
         <td class="radio_control">
             {% for s in services %}
                 {% if s == cur_service %}
-                    <a href="" class="ui-state-active">{{ s }}</a>
+                    <a href="" id="a_cur_service">{{ s }}</a>
                 {% else %}
                     <a href="/{{ cur_lang }}/{{ s }}/">{{ s }}</a>
                 {% endif %}
@@ -13,3 +13,10 @@
         </td>
     </tr>
 </table>
+
+
+<script>
+    $(document).ready(function() {
+        $( "#a_cur_service" ).addClass("ui-state-active");
+    });
+</script>
