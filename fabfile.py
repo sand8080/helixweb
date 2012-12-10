@@ -89,7 +89,7 @@ def collectstatic():
     with prefix(env.activate):
         print green("Installing required python packages")
         manage = os.path.join(env.proj_dir, 'src', 'helixweb', 'manage.py')
-        run('python %s collectstatic --noinput' % manage)
+        run('python %s collectstatic --noinput --clear' % manage)
     print green("Static files collected")
 
 
