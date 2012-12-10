@@ -93,6 +93,14 @@ def collectstatic():
     print green("Static files collected")
 
 
+def gzip_static():
+    print green("Gzipping static files")
+    cmd = 'find %s -type f ! -name "*gz" -exec gzip {} \;' % env.static_dir
+    cmd = 'find %s -type f ! -name "*gz" -exec sh -c \'gzip -c "{}" > "{}.gz"\' \;' % env.static_dir
+    resp = run(cmd)
+    print green("Static files gzipped")
+
+
 def sync():
     print green("Files synchronization started")
     _check_rd(env.proj_root_dir, env.proj_root_dir_owner,
@@ -143,6 +151,7 @@ def deploy():
         sync()
         config_virt_env()
         collectstatic()
+        gzip_static()()
         restart_uwsgi()
         print green("Deployment complete")
         print yellow("Helixweb operational!")
