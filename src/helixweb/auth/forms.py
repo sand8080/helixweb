@@ -111,7 +111,7 @@ class ModifyServiceForm(ServiceForm):
 class AddEnvironmentForm(HelixwebRequestForm):
     action = 'add_environment'
     name = forms.CharField(label=_('environment'), max_length=32)
-    su_login = forms.CharField(label=_('super user login'), max_length=32)
+    su_email = forms.CharField(label=_('super user email'), max_length=32)
     su_password = forms.CharField(label=_('password'),
         max_length=32, widget=forms.PasswordInput)
 
