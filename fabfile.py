@@ -151,7 +151,7 @@ def deploy():
         sync()
         config_virt_env()
         collectstatic()
-        gzip_static()()
+        gzip_static()
         restart_uwsgi()
         print green("Deployment complete")
         print yellow("Helixweb operational!")
