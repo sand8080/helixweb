@@ -1,16 +1,12 @@
 import base64
+import json
 import iso8601
 
-#from django.core.context_processors import csrf
 from django.http import HttpResponseRedirect
 from django.utils.safestring import mark_safe
 
 from helixweb.core.localization import cur_lang_value
 from helixcore.error import UnauthorizedActivity
-import json
-#from helixweb.core.context_processors import _get_session_id, _get_user_id
-#from helixweb.core.localization import cur_lang, cur_lang_value
-#from helixweb.core.security import get_rights
 
 
 def login_redirector(func):
@@ -43,7 +39,7 @@ def _action_logs(context, request, form_cls, helix_client):
     else:
         form = form_cls({}, request=request)
     if form.is_valid():
-        resp = helix_client.request(form.as_helix_request())
+        resp = helix_client.request(form.as_helix_request(), request)
         form.update_total(resp)
         if 'action_logs' in resp:
             resp['action_logs'] = map(_prepare_action_log, resp['action_logs'])
