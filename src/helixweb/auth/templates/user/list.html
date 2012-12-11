@@ -79,7 +79,7 @@
 
                 <tr class="objects_fields">
                     <th>{% trans "id" %}</th>
-                    <th>{% trans "login" %}</th>
+                    <th>{% trans "email" %}</th>
                     <th>{% trans "is active" %}</th>
                     <th>{% trans "groups" %}</th>
                     <th>{% trans "rights" %}</th>
@@ -89,7 +89,7 @@
                     <tr class="objects_data {% cycle 'row1' 'row2' %}">
                         <td>{{ u.id }}</td>
                         <td>
-                            <a href="/{{ cur_lang }}/auth/user_info/{{ u.id }}/">{{ u.login }}</a>
+                            <a href="/{{ cur_lang }}/auth/user_info/{{ u.id }}/">{{ u.email }}</a>
                         </td>
                         <td>
                             {% if u.is_active %}

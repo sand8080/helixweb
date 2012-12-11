@@ -9,7 +9,7 @@ class LoginForm(HelixwebRequestForm):
     action = 'login'
     environment_name = forms.CharField(label=_('environment'),
         max_length=32)
-    login = forms.CharField(label=_('login'),
+    email = forms.CharField(label=_('email'),
         max_length=32)
     password = forms.CharField(label=_('password'),
         max_length=32, widget=forms.PasswordInput)
@@ -141,7 +141,7 @@ class ModifyEnvironmentForm(HelixwebRequestForm):
 
 class AddUserForm(HelixwebRequestForm):
     action = 'add_user'
-    login = forms.CharField(label=_('login'), max_length=32)
+    email = forms.CharField(label=_('email'), max_length=32)
     password = forms.CharField(label=_('password'),
         max_length=32, widget=forms.PasswordInput)
     is_active = forms.BooleanField(label=_('is active'), initial=True,
@@ -168,7 +168,7 @@ class AddUserForm(HelixwebRequestForm):
 class ModifyUserForm(HelixwebRequestForm):
     action = 'modify_users'
     id = forms.IntegerField(widget=forms.widgets.HiddenInput) #@ReservedAssignment
-    new_login = forms.CharField(label=_('login'), max_length=32,
+    new_email = forms.CharField(label=_('email'), max_length=32,
         required=False)
     new_password = forms.CharField(label=_('password'),
         max_length=32, widget=forms.PasswordInput, required=False)
@@ -188,7 +188,7 @@ class ModifyUserForm(HelixwebRequestForm):
         id = d.pop('id') #@ReservedAssignment
         d['ids'] = [id]
         d['new_groups_ids'] = map(int, d['new_groups_ids'])
-        self._strip_param(d, 'new_login')
+        self._strip_param(d, 'new_email')
         self._strip_param(d, 'new_password')
         return d
 

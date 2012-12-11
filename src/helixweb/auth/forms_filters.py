@@ -60,7 +60,7 @@ class FilterGroupForm(FilterAuthForm):
 
 
 class FilterUserForm(FilterAuthForm):
-    login = forms.CharField(label=_('login'), max_length=32,
+    email = forms.CharField(label=_('email'), max_length=32,
         required=False)
     id = forms.IntegerField(label=_('id'), required=False) #@ReservedAssignment
     is_active = forms.ChoiceField(label=_('is active'), required=False, widget=forms.widgets.RadioSelect(),
@@ -73,7 +73,7 @@ class FilterUserForm(FilterAuthForm):
 
     def as_helix_request(self):
         d = super(FilterUserForm, self).as_helix_request()
-        self._strip_filter_param(d, 'login')
+        self._strip_filter_param(d, 'email')
         self._strip_filter_param(d, 'id')
         if (not d['filter_params']['is_active'] or
             d['filter_params']['is_active'] == 'all'):
