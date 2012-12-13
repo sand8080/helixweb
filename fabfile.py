@@ -58,9 +58,17 @@ def config_virt_env():
         print green("Virtualenv creation")
         run('virtualenv %s --no-site-packages' % proj_env_dir)
 
+
+def install_requirements():
     with prefix(env.activate):
         print green("Installing required python packages")
         run('pip install -r %s/pip-requirements.txt' % env.proj_dir)
+
+
+def update_requirements():
+    with prefix(env.activate):
+        print green("Updating required python packages")
+        run('pip install --update -r %s/pip-requirements.txt' % env.proj_dir)
 
 
 def _check_rd(rd, o_exp, g_exp, p_exp):
@@ -150,6 +158,7 @@ def deploy():
         deploy_helixcore()
         sync()
         config_virt_env()
+        install_requirements()
         collectstatic()
         gzip_static()
         restart_uwsgi()
