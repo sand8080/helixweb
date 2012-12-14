@@ -13,6 +13,8 @@ class LoginForm(HelixwebRequestForm):
         max_length=32)
     password = forms.CharField(label=_('password'),
         max_length=32, widget=forms.PasswordInput)
+    bind_to_ip = forms.BooleanField(label=_('bind session to ip'),
+        required=False)
 
     def __init__(self, *args, **kwargs):
         request = kwargs['request']
