@@ -23,8 +23,8 @@
                             {% trans "users" %}
                         {% endallowedurl %}
                         &rarr;
-                        {% if user.login %}
-                            <span class="ui-state-active noborder">{{ user.login }}</span>
+                        {% if user.email %}
+                            <span class="ui-state-active noborder">{{ user.email }}</span>
                         {% else %}
                             <span class="ui-state-active noborder">{% trans "user not found" %}</span>
                         {% endif %}
