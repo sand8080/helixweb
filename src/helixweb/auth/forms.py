@@ -7,14 +7,18 @@ from helixweb.core.widgets import ServicesSelectMultiple, ConstInput
 
 class LoginForm(HelixwebRequestForm):
     action = 'login'
-    environment_name = forms.CharField(label=_('environment'),
+    environment_name = forms.CharField(label=_("environment"),
         max_length=32)
-    email = forms.CharField(label=_('email'),
+    email = forms.CharField(label=_("email"),
         max_length=32)
-    password = forms.CharField(label=_('password'),
+    password = forms.CharField(label=_("password"),
         max_length=32, widget=forms.PasswordInput)
-    bind_to_ip = forms.BooleanField(label=_('bind session to ip'),
+    bind_to_ip = forms.BooleanField(label=_("bind session to ip"),
         required=False)
+    fixed_lifetime_minutes = forms.ChoiceField(label=_("session lifetime"),
+        choices=((None, ""), ('15', _("15 minutes")), ('60', _("1 hour")),
+            ('120', _("2 hours"))),
+        initial='', required=False)
 
     def __init__(self, *args, **kwargs):
         request = kwargs['request']
@@ -24,6 +28,8 @@ class LoginForm(HelixwebRequestForm):
     def as_helix_request(self):
         d = super(LoginForm, self).as_helix_request()
         d.pop('session_id', None)
+        self._strip_bool_param(d, 'bind_to_ip')
+        self._strip_int_param(d, 'fixed_lifetime_minutes')
         return d
 
 
