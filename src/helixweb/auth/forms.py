@@ -4,6 +4,8 @@ from django.utils.translation import ugettext_lazy as _
 from helixweb.core.forms import HelixwebRequestForm, _get_session_id
 from helixweb.core.widgets import ServicesSelectMultiple, ConstInput
 
+from helixweb.auth import settings
+
 
 class LoginForm(HelixwebRequestForm):
     action = 'login'
@@ -154,6 +156,8 @@ class AddUserForm(HelixwebRequestForm):
         max_length=32, widget=forms.PasswordInput)
     is_active = forms.BooleanField(label=_('is active'), initial=True,
         required=False)
+    lang = forms.ChoiceField(label=_('lang'), choices=(settings.LANGS),
+        initial=settings.DEFAULT_LANG)
 
     def __init__(self, *args, **kwargs):
         groups = kwargs.pop('groups', [])
@@ -182,6 +186,8 @@ class ModifyUserForm(HelixwebRequestForm):
         max_length=32, widget=forms.PasswordInput, required=False)
     new_is_active = forms.BooleanField(label=_('is active'), initial=True,
         required=False)
+    new_lang = forms.ChoiceField(label=_('lang'), choices=(settings.LANGS),
+        required=False)
 
     def __init__(self, *args, **kwargs):
         groups = kwargs.pop('groups', [])
@@ -198,6 +204,7 @@ class ModifyUserForm(HelixwebRequestForm):
         d['new_groups_ids'] = map(int, d['new_groups_ids'])
         self._strip_param(d, 'new_email')
         self._strip_param(d, 'new_password')
+        self._strip_param(d, 'new_lang')
         return d
 
     @staticmethod
@@ -218,9 +225,18 @@ class ModifyUserForm(HelixwebRequestForm):
 class ModifyUserSelfForm(HelixwebRequestForm):
     action ='modify_user_self'
     old_password = forms.CharField(label=_('old password'),
-        max_length=32, widget=forms.PasswordInput)
+        max_length=32, widget=forms.PasswordInput, required=False)
     new_password = forms.CharField(label=_('new password'),
-        max_length=32, widget=forms.PasswordInput)
+        max_length=32, widget=forms.PasswordInput, required=False)
+    new_lang = forms.ChoiceField(label=_('lang'), choices=(settings.LANGS),
+        required=False)
+
+    def as_helix_request(self):
+        d = super(ModifyUserSelfForm, self).as_helix_request()
+        self._strip_param(d, 'old_password')
+        self._strip_param(d, 'new_password')
+        self._strip_param(d, 'new_lang')
+        return d
 
 
 class GroupForm(HelixwebRequestForm):
