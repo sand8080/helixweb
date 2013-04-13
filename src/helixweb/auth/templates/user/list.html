@@ -80,6 +80,7 @@
                 <tr class="objects_fields">
                     <th>{% trans "id" %}</th>
                     <th>{% trans "email" %}</th>
+                    <th>{% trans "lang" %}</th>
                     <th>{% trans "is active" %}</th>
                     <th>{% trans "groups" %}</th>
                     <th>{% trans "rights" %}</th>
@@ -91,6 +92,7 @@
                         <td>
                             <a href="/{{ cur_lang }}/auth/user_info/{{ u.id }}/">{{ u.email }}</a>
                         </td>
+                        <td>{{ u.lang }}</td>
                         <td>
                             {% if u.is_active %}
                                 +
