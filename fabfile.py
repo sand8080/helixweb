@@ -7,6 +7,8 @@ from fabric.contrib.project import rsync_project
 from fabric.context_managers import prefix, settings, hide, show
 from fabric.utils import abort
 
+from helixcore.deploy import _fix_r_res, _check_r_res
+
 
 def _project_dir():
     return os.path.realpath(os.path.dirname(__file__))
@@ -71,27 +73,6 @@ def update_requirements():
         run('pip install --update -r %s/pip-requirements.txt' % env.proj_dir)
 
 
-def _check_rd(rd, o_exp, g_exp, p_exp):
-    print green("Checking directory %s owner, group, permissions. "
-        "Expected: %s, %s, %s" % (rd, o_exp, g_exp, p_exp))
-    if exists(rd):
-        res = run('stat -c %%U,%%G,%%a %s' % rd)
-        o_act, g_act, p_act = map(str.strip, res.split(','))
-        if o_act != o_exp or g_act != g_exp or p_act != p_exp:
-            abort(red("Directory %s params: %s. Expected: %s" % (
-                rd, (o_act, g_act, p_act), (o_exp, g_exp, p_exp))))
-        print green("Directory %s checking passed" % rd)
-    else:
-        abort(red("Directory %s is not exists" % env.proj_dir))
-
-
-def _fix_rd(rd, o, g, p):
-    print green("Setting project directory parameters")
-    run('chown %s:%s %s' % (o, g, rd))
-    run('chmod %s %s' % (p, rd))
-    print green("Checking project directory parameters")
-
-
 def collectstatic():
     print green("Collecting static files")
     with prefix(env.activate):
@@ -111,28 +92,28 @@ def gzip_static():
 
 def sync():
     print green("Files synchronization started")
-    _check_rd(env.proj_root_dir, env.proj_root_dir_owner,
+    _check_r_res(env.proj_root_dir, env.proj_root_dir_owner,
         env.proj_root_dir_group, env.proj_root_dir_perms)
 
     print green("Project files synchronization")
     rsync_project(env.proj_dir, local_dir='%s/' % _project_dir(),
         exclude=env.rsync_exclude, delete=True, extra_opts='-q -L')
     # project directory
-    _fix_rd(env.proj_dir, env.proj_dir_owner,
+    _fix_r_res(env.proj_dir, env.proj_dir_owner,
         env.proj_dir_group, env.proj_dir_perms)
-    _check_rd(env.proj_dir, env.proj_dir_owner,
+    _check_r_res(env.proj_dir, env.proj_dir_owner,
         env.proj_dir_group, env.proj_dir_perms)
     # run directory
     run('mkdir -p %s' % env.run_dir)
-    _fix_rd(env.run_dir, env.run_dir_owner,
+    _fix_r_res(env.run_dir, env.run_dir_owner,
         env.run_dir_group, env.run_dir_perms)
-    _check_rd(env.run_dir, env.run_dir_owner,
+    _check_r_res(env.run_dir, env.run_dir_owner,
         env.run_dir_group, env.run_dir_perms)
     # static directory
     run('mkdir -p %s' % env.static_dir)
-    _fix_rd(env.static_dir, env.static_dir_owner,
+    _fix_r_res(env.static_dir, env.static_dir_owner,
         env.static_dir_group, env.static_dir_perms)
-    _check_rd(env.static_dir, env.static_dir_owner,
+    _check_r_res(env.static_dir, env.static_dir_owner,
         env.static_dir_group, env.static_dir_perms)
     print green("Files synchronization complete")
 
