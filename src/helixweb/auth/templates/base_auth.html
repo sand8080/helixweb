@@ -91,6 +91,19 @@
         </tr>
     {% endif %}
 
+    {% if "/auth/get_notifications/"|is_any_of_urls_allowed:rights %}
+        <tr>
+            <td>
+                {% allowedurl %}
+                    /auth/get_notifications/
+                    {% trans "notifications" %}
+                    <br>
+                {% endallowedurl %}
+                <br>
+            </td>
+        </tr>
+    {% endif %}
+
     {% if "/auth/modify_user_self/,/auth/get_action_logs_self/"|is_any_of_urls_allowed:rights %}
         <tr>
             <td>

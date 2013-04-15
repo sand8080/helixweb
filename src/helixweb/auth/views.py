@@ -20,7 +20,7 @@ from helixweb.auth.forms import (LoginForm, AddServiceForm, ModifyServiceForm,
     ModifyUserForm, ApiSchemeForm, DeleteServiceForm)
 from helixweb.auth.forms_filters import (FilterServiceForm, FilterGroupForm,
     FilterUserForm, FilterUserActionLogsForm, FilterAllActionLogsForm,
-    FilterSelfActionLogsForm)
+    FilterSelfActionLogsForm, FilterNotificationForm)
 from helixweb.auth import settings
 
 
@@ -480,6 +480,27 @@ def modify_group(request, id): #@ReservedAssignment
             form.handle_errors(resp)
     c['form'] = form
     return render_to_response('group/modify.html', c,
+        context_instance=RequestContext(request))
+
+
+@login_redirector
+def notifications(request):
+    c = {}
+    if len(request.GET) == 0 or (len(request.GET) == 1 and 'pager_offset' in request.GET):
+        # setting default is_active value to True
+        form = FilterNotificationForm({'type': None}, request=request)
+    else:
+        form = FilterNotificationForm(request.GET, request=request)
+
+    if form.is_valid():
+        resp = helix_cli.request(form.as_helix_request(), request)
+        form.update_total(resp)
+        c.update(process_helix_response(resp, 'notifications', 'notifications_error'))
+        c['pager'] = form.pager
+
+    c['form'] = form
+
+    return render_to_response('notification/list.html', c,
         context_instance=RequestContext(request))
 
 

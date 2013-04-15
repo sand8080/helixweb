@@ -24,14 +24,10 @@ class FilterServiceForm(FilterAuthForm):
 
     def as_helix_request(self):
         d = super(FilterServiceForm, self).as_helix_request()
-        s_t = d['filter_params'].pop('type').strip()
-        if len(s_t):
-            d['filter_params']['type'] = s_t
-        if d['filter_params']['is_active'] == 'all':
-            d['filter_params'].pop('is_active')
-        else:
-            val = bool(int(d['filter_params']['is_active']))
-            d['filter_params']['is_active'] = val
+        self._strip_filter_param(d, 'type')
+        self._strip_choice_filter_param(d, 'is_active')
+        if 'is_active' in d['filter_params']:
+            d['filter_params']['is_active'] = bool(int(d['filter_params']['is_active']))
         return d
 
 
@@ -48,14 +44,10 @@ class FilterGroupForm(FilterAuthForm):
 
     def as_helix_request(self):
         d = super(FilterGroupForm, self).as_helix_request()
-        s_t = d['filter_params'].pop('name').strip()
-        if len(s_t):
-            d['filter_params']['name'] = s_t
-        if d['filter_params']['is_active'] == 'all':
-            d['filter_params'].pop('is_active')
-        else:
-            val = bool(int(d['filter_params']['is_active']))
-            d['filter_params']['is_active'] = val
+        self._strip_filter_param(d, 'name')
+        self._strip_choice_filter_param(d, 'is_active')
+        if 'is_active' in d['filter_params']:
+            d['filter_params']['is_active'] = bool(int(d['filter_params']['is_active']))
         return d
 
 
@@ -75,12 +67,27 @@ class FilterUserForm(FilterAuthForm):
         d = super(FilterUserForm, self).as_helix_request()
         self._strip_filter_param(d, 'email')
         self._strip_filter_param(d, 'id')
-        if (not d['filter_params']['is_active'] or
-            d['filter_params']['is_active'] == 'all'):
-            d['filter_params'].pop('is_active')
-        else:
-            val = bool(int(d['filter_params']['is_active']))
-            d['filter_params']['is_active'] = val
+        self._strip_choice_filter_param(d, 'is_active')
+        if 'is_active' in d['filter_params']:
+            d['filter_params']['is_active'] = bool(int(d['filter_params']['is_active']))
+        return d
+
+class FilterNotificationForm(FilterAuthForm):
+    event = forms.CharField(label=_('event'), max_length=32,
+        required=False)
+    type = forms.ChoiceField(label=_('type'), required=False, # @ReservedAssignment
+        widget=forms.widgets.Select(),
+        choices=(('all', _('all')), ('email', _('email')),),
+        initial='all')
+
+    def __init__(self, *args, **kwargs):
+        self.action = 'get_notifications'
+        super(FilterNotificationForm, self).__init__(*args, **kwargs)
+
+    def as_helix_request(self):
+        d = super(FilterNotificationForm, self).as_helix_request()
+        self._strip_filter_param(d, 'event')
+        self._strip_choice_filter_param(d, 'type')
         return d
 
 

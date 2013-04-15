@@ -1,0 +1,124 @@
+{% extends "base_auth.html" %}
+
+{% load i18n %}
+
+{% block title %}{% trans "notifications list" %}{% endblock %}
+
+{% block content %}
+
+<form action="" method="get">
+    <div class="bordered">
+        <table class="filter_object center">
+
+            <tr>
+                <th>
+                    <h2 class="menu_linked">{% trans "notifications" %}</h2>
+                </th>
+                <td></td>
+            </tr>
+
+            {{ form.as_table }}
+
+            <tr>
+                <td colspan="2" class="control">
+                    <input type="submit" value={% trans "filter" %} />
+                </td>
+            </tr>
+        </table>
+        <br>
+    </div>
+
+    <br>
+
+    {% load urlutils %}
+
+    <div>
+        {% trans "total notifications" %}: {{ pager.total }} &nbsp;
+    </div>
+
+    <br>
+
+    <table class="center wide bordered">
+
+        {% if notifications_error %}
+
+            <tr>
+                <td>
+                    <span class="errormessage">{% trans notifications_error %}</span>
+                </td>
+            </tr>
+
+        {% else %}
+
+            {% if notifications %}
+
+                {% load transform %}
+                {% load objectutils %}
+
+                <tr>
+                    <td colspan="4">
+                        {% include "pager.html" %}
+                    </td>
+                </tr>
+
+                <tr class="objects_fields">
+                    <th>{% trans "event" %}</th>
+                    <th>{% trans "type" %}</th>
+                    <th>{% trans "is active" %}</th>
+                    <th>{% trans "messages" %}</th>
+                </tr>
+
+                {% for notif in notifications %}
+                    <tr class="objects_data {% cycle 'row1' 'row2' %}">
+                        <td>
+                            {% allowedurl True %}
+                                /auth/modify_notification/{{ notif.id }}/
+                                {% trans notif.event %}
+                            {% endallowedurl %}
+                            <br>
+                        </td>
+                        <td>{{ notif.type }}</td>
+                        <td>
+                            {% if notif.is_active %}
+                                +
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
+                        <td>
+
+                            <table class="notification_messages wide center">
+
+                                {% for msg in notif.messages %}
+                                    <tr>
+                                        <td>msg</td>
+                                    </tr>
+                                {% endfor %}
+
+                            </table>
+
+                        </td>
+                    </tr>
+
+                {% endfor %}
+
+
+                <tr>
+                    <td colspan="4">
+                        {% include "pager.html" %}
+                    </td>
+                </tr>
+
+            {% else %}
+
+                <tr><th>{% trans "no notifications found" %}</th></tr>
+
+            {% endif %}
+
+        {% endif %}
+
+    </table>
+
+</form>
+
+{% endblock %}

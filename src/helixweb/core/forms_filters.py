@@ -42,6 +42,13 @@ class FilterForm(object):
     def _strip_filter_param(self, d, name, new_name=None):
         self._strip_param(d['filter_params'], name, new_name)
 
+    def _strip_choice_filter_param(self, d, name, new_name=None, none_value='all'):
+        self._strip_param(d['filter_params'], name, new_name)
+        if new_name is None:
+            new_name = name
+        if d['filter_params'].get(new_name) == none_value:
+            d['filter_params'].pop(new_name, None)
+
     def _strip_from_date_param(self, d, name):
         self._strip_filter_param(d, name)
         f_params = d['filter_params']
