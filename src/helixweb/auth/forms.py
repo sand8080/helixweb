@@ -228,7 +228,7 @@ class ModifyUserSelfForm(HelixwebRequestForm):
         max_length=32, widget=forms.PasswordInput, required=False)
     new_password = forms.CharField(label=_('new password'),
         max_length=32, widget=forms.PasswordInput, required=False)
-    new_lang = forms.ChoiceField(label=_('lang'), choices=(settings.LANGS),
+    new_lang = forms.ChoiceField(label=_('notifications lang'), choices=(settings.LANGS),
         required=False)
 
     def as_helix_request(self):
@@ -237,6 +237,10 @@ class ModifyUserSelfForm(HelixwebRequestForm):
         self._strip_param(d, 'new_password')
         self._strip_param(d, 'new_lang')
         return d
+
+    @staticmethod
+    def get_user_req(user_id, request):
+        return {'action': 'get_user_self', 'session_id': _get_session_id(request)}
 
 
 class GroupForm(HelixwebRequestForm):
