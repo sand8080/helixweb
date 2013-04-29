@@ -315,7 +315,10 @@ def modify_user_self(request):
             resp = helix_cli.request(form.as_helix_request(), request)
             form.handle_errors(resp)
     else:
-        form = ModifyUserSelfForm(request=request)
+        resp = helix_cli.request(ModifyUserSelfForm.get_user_req(request), request)
+        form = ModifyUserSelfForm.from_get_user_helix_resp(resp, request)
+        if form.is_valid():
+            form.handle_errors(resp)
     c['form'] = form
     return render_to_response('user/modify_user_self.html', c,
         context_instance=RequestContext(request))

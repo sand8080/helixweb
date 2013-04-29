@@ -228,8 +228,8 @@ class ModifyUserSelfForm(HelixwebRequestForm):
         max_length=32, widget=forms.PasswordInput, required=False)
     new_password = forms.CharField(label=_('new password'),
         max_length=32, widget=forms.PasswordInput, required=False)
-    new_lang = forms.ChoiceField(label=_('notifications lang'), choices=(settings.LANGS),
-        required=False)
+    new_lang = forms.ChoiceField(label=_('notifications lang'),
+        choices=settings.LANGS, required=False)
 
     def as_helix_request(self):
         d = super(ModifyUserSelfForm, self).as_helix_request()
@@ -239,8 +239,10 @@ class ModifyUserSelfForm(HelixwebRequestForm):
         return d
 
     @staticmethod
-    def get_user_req(user_id, request):
-        return {'action': 'get_user_self', 'session_id': _get_session_id(request)}
+    def from_get_user_helix_resp(helix_resp, request):
+        d = helix_resp.get('user', {})
+        d['new_lang'] = d.get('lang')
+        return ModifyUserSelfForm(d, request=request)
 
 
 class GroupForm(HelixwebRequestForm):
