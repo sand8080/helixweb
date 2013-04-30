@@ -156,7 +156,7 @@ class AddUserForm(HelixwebRequestForm):
         max_length=32, widget=forms.PasswordInput)
     is_active = forms.BooleanField(label=_('is active'), initial=True,
         required=False)
-    lang = forms.ChoiceField(label=_('lang'), choices=(settings.LANGS),
+    lang = forms.ChoiceField(label=_('notifications lang'), choices=(settings.LANGS),
         initial=settings.DEFAULT_LANG)
 
     def __init__(self, *args, **kwargs):
@@ -186,7 +186,7 @@ class ModifyUserForm(HelixwebRequestForm):
         max_length=32, widget=forms.PasswordInput, required=False)
     new_is_active = forms.BooleanField(label=_('is active'), initial=True,
         required=False)
-    new_lang = forms.ChoiceField(label=_('lang'), choices=(settings.LANGS),
+    new_lang = forms.ChoiceField(label=_('notifications lang'), choices=(settings.LANGS),
         required=False)
 
     def __init__(self, *args, **kwargs):
