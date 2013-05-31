@@ -85,14 +85,25 @@
                                 -
                             {% endif %}
                         </td>
-                        <td>
+                        <td width="60%">
 
                             <table class="notification_messages wide center">
 
                                 {% for msg in notif.messages %}
-                                    <tr>
-                                        <td>msg</td>
-                                    </tr>
+                                    {% if notif.type == "email" %}
+                                        <tr>
+                                            <th>{% trans "language" %}</th>
+                                            <td>{{ msg.lang }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>{% trans "subject" %}</th>
+                                            <td>{{ msg.email_subj }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>{% trans "message" %}</th>
+                                            <td>{{ msg.email_msg }}</td>
+                                        </tr>
+                                    {% endif %}
                                 {% endfor %}
 
                             </table>

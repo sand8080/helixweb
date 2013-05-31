@@ -31,6 +31,7 @@ table.object_form td {vertical-align:top;}
 table.object_form th {vertical-align:top;text-align:right;}
 table.object_form ul {list-style:none;padding-left:0px;}
 
+table.notification_messages {vertical-align:top;text-align:left;}
 
 tr.objects_fields {background:#EFF3FF;}
 tr.objects_data {vertical-align:text-top;text-align:center;}
