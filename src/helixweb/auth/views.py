@@ -514,7 +514,6 @@ def modify_notifications(request, id):
     if request.method == 'POST':
         form = ModifyNotificationForm(request.POST, request=request)
         if form.is_valid():
-            print "### req", form.as_helix_request()
             resp = helix_cli.request(form.as_helix_request(), request)
             form.handle_errors(resp)
             if resp['status'] == 'ok':
