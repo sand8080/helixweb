@@ -30,6 +30,7 @@ urlpatterns = patterns('',
     (r'^add_user/$', 'auth.views.add_user'),
 
     (r'^get_notifications/$', 'auth.views.notifications'),
+    (r'^modify_notifications/(?P<id>\d+)/$', 'auth.views.modify_notifications'),
 
     (r'^get_action_logs/$', 'auth.views.action_logs'),
 

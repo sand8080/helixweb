@@ -21,7 +21,7 @@
 
             <tr>
                 <td colspan="2" class="control">
-                    <input type="submit" value={% trans "filter" %} />
+                    <input type="submit" value='{% trans "filter" %}' />
                 </td>
             </tr>
         </table>
@@ -72,7 +72,7 @@
                     <tr class="objects_data {% cycle 'row1' 'row2' %}">
                         <td>
                             {% allowedurl True %}
-                                /auth/modify_notification/{{ notif.id }}/
+                                /auth/modify_notifications/{{ notif.id }}/
                                 {% trans notif.event %}
                             {% endallowedurl %}
                             <br>

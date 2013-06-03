@@ -1,0 +1,56 @@
+{% extends "base_auth.html" %}
+
+{% load i18n %}
+
+{% block title %}{% trans "modify notification" %}{% endblock %}
+
+{% block content %}
+
+{% load urlutils %}
+
+<form action="" method="post">{% csrf_token %}
+
+    <div class="bordered">
+
+        <table class="object_form center">
+            <tr>
+                <td colspan="2">
+                    <h2>
+                        {% allowedurl True %}
+                            /auth/get_notifications/
+                            {% trans "notifications" %}
+                        {% endallowedurl %}
+                        &rarr;
+                        <span class="menu_linked">{% trans "modify notification" %}</span>
+                    </h2>
+                </td>
+            </tr>
+
+            {% if services_error %}
+
+                <tr>
+                    <td colspan="2">
+                        <span class="errormessage">{% trans notifications_error %}</span>
+                    </td>
+                </tr>
+
+            {% else %}
+
+                {{ form.as_table }}
+
+                <tr class="control">
+                    <td colspan="2">
+                        <input type="submit" style="font-weight:bold;" value="{% trans "save" %}" />
+                        <input type="hidden" id="stay_here" name="stay_here" value=0 />
+                        <input type="submit" value="{% trans "save and continue editing" %}"
+                            onclick="var f = this.form; f.stay_here.value=1; f.submit()" />
+                    </td>
+                </tr>
+            {% endif %}
+        </table>
+        <br>
+    </div>
+
+</form>
+
+{% endblock %}

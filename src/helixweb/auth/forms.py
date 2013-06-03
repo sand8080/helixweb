@@ -319,3 +319,33 @@ class ModifyGroupForm(GroupForm):
 
 class ApiSchemeForm(HelixwebRequestForm):
     action = 'get_api_scheme'
+
+
+class ModifyNotificationForm(HelixwebRequestForm):
+    action = 'modify_notifications'
+    id = forms.IntegerField(widget=forms.widgets.HiddenInput)
+    new_is_active = forms.BooleanField(label=_('is active'), initial=True,
+        required=False)
+
+    @staticmethod
+    def get_by_id_req(id, request):
+        return {'action': 'get_notifications', 'session_id': _get_session_id(request),
+            'filter_params': {'ids': [int(id)]}, 'paging_params':{}}
+
+    @staticmethod
+    def from_get_notifications_helix_resp(helix_resp, request):
+        d = helix_resp.get('notifications', [{'id': 0}])[0]
+        res_d = {}
+        for k in d.keys():
+            if k not in ('id', ):
+                res_d['new_%s' % k] = d[k]
+            else:
+                res_d[k] = d[k]
+        return ModifyNotificationForm(res_d, request=request)
+
+    def as_helix_request(self):
+        d = super(ModifyNotificationForm, self).as_helix_request()
+        id = d.pop('id')
+        d['ids'] = [id]
+        return d
+

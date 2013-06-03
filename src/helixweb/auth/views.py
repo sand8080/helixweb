@@ -17,7 +17,8 @@ from helixweb.core.forms import HelixwebRequestForm
 from helixweb.auth.forms import (LoginForm, AddServiceForm, ModifyServiceForm,
     ModifyEnvironmentForm, AddGroupForm, DeleteGroupForm, ModifyGroupForm,
     ModifyUserSelfForm, AddUserForm, LogoutForm, AddEnvironmentForm,
-    ModifyUserForm, ApiSchemeForm, DeleteServiceForm)
+    ModifyUserForm, ApiSchemeForm, DeleteServiceForm,
+    ModifyNotificationForm)
 from helixweb.auth.forms_filters import (FilterServiceForm, FilterGroupForm,
     FilterUserForm, FilterUserActionLogsForm, FilterAllActionLogsForm,
     FilterSelfActionLogsForm, FilterNotificationForm)
@@ -504,6 +505,28 @@ def notifications(request):
     c['form'] = form
 
     return render_to_response('notification/list.html', c,
+        context_instance=RequestContext(request))
+
+
+@login_redirector
+def modify_notifications(request, id):
+    c = {}
+    if request.method == 'POST':
+        form = ModifyNotificationForm(request.POST, request=request)
+        if form.is_valid():
+            print "### req", form.as_helix_request()
+            resp = helix_cli.request(form.as_helix_request(), request)
+            form.handle_errors(resp)
+            if resp['status'] == 'ok':
+                if request.POST.get('stay_here', '0') != '1':
+                    return HttpResponseRedirect('/auth/get_notifications/')
+    else:
+        resp = helix_cli.request(ModifyNotificationForm.get_by_id_req(id, request), request)
+        form = ModifyNotificationForm.from_get_notifications_helix_resp(resp, request)
+        if form.is_valid():
+            form.handle_errors(resp)
+    c['form'] = form
+    return render_to_response('notification/modify.html', c,
         context_instance=RequestContext(request))
 
 
