@@ -323,18 +323,47 @@ class ApiSchemeForm(HelixwebRequestForm):
 
 class ModifyNotificationForm(HelixwebRequestForm):
     action = 'modify_notifications'
+    _message_field_prefix = 'message_'
 
     def __init__(self, *args, **kwargs):
         d = args[0]
-        # print '###', d
-        messages = d.get('messages', [])
         super(ModifyNotificationForm, self).__init__(*args, **kwargs)
         self.fields['id'] = forms.IntegerField(widget=forms.widgets.HiddenInput)
-        self.fields['new_is_active'] = forms.BooleanField(label=_('is active'),
+        self.fields['is_active'] = forms.BooleanField(label=_('is active'),
                         required=False)
-        for i, m in enumerate(messages):
-            self.fields['lang_%d' % i] = forms.CharField(label=_('language'),
-                            widget=ConstInput)
+        msg_f_names = filter(lambda x: x.startswith(self._message_field_prefix), d.keys())
+        self._generate_message_fields(msg_f_names)
+
+    def _generate_message_fields(self, msg_f_names):
+        idxs = dict()
+        for f_name in msg_f_names:
+            head = len(self._message_field_prefix)
+            tail = f_name.rfind('_')
+            f_n = f_name[head:tail]
+            try:
+                idx = int(f_name[tail + 1:])
+                print 'f_n'
+                if idx not in idxs:
+                    idxs[idx] = list()
+                idxs[idx].append(f_n)
+            except Exception:
+                pass
+        for k in sorted(idxs.keys()):
+            if 'lang' in idxs[k]:
+                self.fields[self._message_field_name('lang', k)] = forms.CharField(
+                            label=_('language'), widget=ConstInput, required=False)
+            if 'email_subj' in idxs[k]:
+                self.fields[self._message_field_name('email_subj', k)] = forms.CharField(
+                            label=_('subject'), required=False,
+                            widget=forms.TextInput(attrs={'size':'60', 'class':'inputText'}))
+            if 'email_msg' in idxs[k]:
+                self.fields[self._message_field_name('email_msg', k)] = forms.CharField(
+                            label=_('message'), required=False,
+                            widget=forms.Textarea(attrs={'cols': 60, 'rows': 10}))
+
+    @staticmethod
+    def _message_field_name(f_name, idx):
+        return '%s%s_%d' % (ModifyNotificationForm._message_field_prefix, f_name, idx)
 
     @staticmethod
     def get_by_id_req(id, request):
@@ -344,13 +373,10 @@ class ModifyNotificationForm(HelixwebRequestForm):
     @staticmethod
     def from_get_notifications_helix_resp(helix_resp, request):
         d = helix_resp.get('notifications', [{'id': 0}])[0]
-        res_d = {'id': d.get('id'), 'new_is_active': d.get('is_active')}
+        res_d = {'id': d.get('id'), 'is_active': d.get('is_active')}
         for i, m in enumerate(d.get('messages', [])):
-            res_d['lang_%d' % i] = m['lang']
-            if d.get('type') == 'email':
-                res_d['new_email_subj_%d' % i] = m.get('email_subj')
-                res_d['new_email_msg_%d' % i] = m.get('email_msg')
-
+            for k in m.keys():
+                res_d[ModifyNotificationForm._message_field_name(k, i)] = m.get(k)
         return ModifyNotificationForm(res_d, request=request)
 
     def as_helix_request(self):
