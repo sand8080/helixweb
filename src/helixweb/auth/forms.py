@@ -323,9 +323,18 @@ class ApiSchemeForm(HelixwebRequestForm):
 
 class ModifyNotificationForm(HelixwebRequestForm):
     action = 'modify_notifications'
-    id = forms.IntegerField(widget=forms.widgets.HiddenInput)
-    new_is_active = forms.BooleanField(label=_('is active'), initial=True,
-        required=False)
+
+    def __init__(self, *args, **kwargs):
+        d = args[0]
+        # print '###', d
+        messages = d.get('messages', [])
+        super(ModifyNotificationForm, self).__init__(*args, **kwargs)
+        self.fields['id'] = forms.IntegerField(widget=forms.widgets.HiddenInput)
+        self.fields['new_is_active'] = forms.BooleanField(label=_('is active'),
+                        required=False)
+        for i, m in enumerate(messages):
+            self.fields['lang_%d' % i] = forms.CharField(label=_('language'),
+                            widget=ConstInput)
 
     @staticmethod
     def get_by_id_req(id, request):
@@ -335,12 +344,13 @@ class ModifyNotificationForm(HelixwebRequestForm):
     @staticmethod
     def from_get_notifications_helix_resp(helix_resp, request):
         d = helix_resp.get('notifications', [{'id': 0}])[0]
-        res_d = {}
-        for k in d.keys():
-            if k not in ('id', ):
-                res_d['new_%s' % k] = d[k]
-            else:
-                res_d[k] = d[k]
+        res_d = {'id': d.get('id'), 'new_is_active': d.get('is_active')}
+        for i, m in enumerate(d.get('messages', [])):
+            res_d['lang_%d' % i] = m['lang']
+            if d.get('type') == 'email':
+                res_d['new_email_subj_%d' % i] = m.get('email_subj')
+                res_d['new_email_msg_%d' % i] = m.get('email_msg')
+
         return ModifyNotificationForm(res_d, request=request)
 
     def as_helix_request(self):
