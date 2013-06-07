@@ -331,23 +331,29 @@ class ModifyNotificationForm(HelixwebRequestForm):
         self.fields['id'] = forms.IntegerField(widget=forms.widgets.HiddenInput)
         self.fields['is_active'] = forms.BooleanField(label=_('is active'),
                         required=False)
-        msg_f_names = filter(lambda x: x.startswith(self._message_field_prefix), d.keys())
+        msg_f_names = self._filter_message_names(d)
         self._generate_message_fields(msg_f_names)
 
-    def _generate_message_fields(self, msg_f_names):
-        idxs = dict()
+    def _filter_message_names(self, d):
+        return filter(lambda x: x.startswith(self._message_field_prefix), d.keys())
+
+    def _group_message_field_names(self, msg_f_names):
+        grp_msgs = dict()
         for f_name in msg_f_names:
             head = len(self._message_field_prefix)
             tail = f_name.rfind('_')
             f_n = f_name[head:tail]
             try:
                 idx = int(f_name[tail + 1:])
-                print 'f_n'
-                if idx not in idxs:
-                    idxs[idx] = list()
-                idxs[idx].append(f_n)
+                if idx not in grp_msgs:
+                    grp_msgs[idx] = list()
+                grp_msgs[idx].append(f_n)
             except Exception:
                 pass
+        return grp_msgs
+
+    def _generate_message_fields(self, msg_f_names):
+        idxs = self._group_message_field_names(msg_f_names)
         for k in sorted(idxs.keys()):
             if 'lang' in idxs[k]:
                 self.fields[self._message_field_name('lang', k)] = forms.CharField(
@@ -383,5 +389,15 @@ class ModifyNotificationForm(HelixwebRequestForm):
         d = super(ModifyNotificationForm, self).as_helix_request()
         id = d.pop('id')
         d['ids'] = [id]
+        msg_f_names = self._filter_message_names(d)
+        messages = list()
+        idxs = self._generate_message_fields(msg_f_names)
+        for idx in sorted(idxs.keys()):
+            msg = dict()
+            for f_name in idxs[idx]:
+                form_f_name = self._message_field_name(f_name, idx)
+                msg[f_name] = d.pop(form_f_name)
+            print '### msg', msg
+        print '### req', d
         return d
 
