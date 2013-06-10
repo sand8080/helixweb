@@ -91,7 +91,7 @@ class HelixwebRequestForm(forms.Form):
                     p = None
             elif isinstance(p, Decimal):
                 p = '%s' % p
-            if p:
+            if p or isinstance(p, bool):
                 d[new_name] = p
 
     def _strip_bool_param(self, d, name, new_name=None):
