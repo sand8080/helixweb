@@ -389,15 +389,15 @@ class ModifyNotificationForm(HelixwebRequestForm):
         d = super(ModifyNotificationForm, self).as_helix_request()
         id = d.pop('id')
         d['ids'] = [id]
-        msg_f_names = self._filter_message_names(d)
-        messages = list()
-        idxs = self._generate_message_fields(msg_f_names)
-        for idx in sorted(idxs.keys()):
+        self._strip_bool_param(d, 'is_active', 'new_is_active')
+        new_messages = list()
+        msg_f_names_idx = self._group_message_field_names(d.keys())
+        for idx, f_names in msg_f_names_idx.items():
             msg = dict()
-            for f_name in idxs[idx]:
-                form_f_name = self._message_field_name(f_name, idx)
-                msg[f_name] = d.pop(form_f_name)
-            print '### msg', msg
-        print '### req', d
+            for f_name in f_names:
+                msg[f_name] = d.pop(self._message_field_name(f_name, idx))
+            new_messages.append(msg)
+        if len(new_messages) > 0:
+            d['new_messages'] = new_messages
         return d
 
