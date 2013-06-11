@@ -18,7 +18,7 @@ from helixweb.auth.forms import (LoginForm, AddServiceForm, ModifyServiceForm,
     ModifyEnvironmentForm, AddGroupForm, DeleteGroupForm, ModifyGroupForm,
     ModifyUserSelfForm, AddUserForm, LogoutForm, AddEnvironmentForm,
     ModifyUserForm, ApiSchemeForm, DeleteServiceForm,
-    ModifyNotificationForm)
+    ModifyNotificationForm, LoginEnvForm)
 from helixweb.auth.forms_filters import (FilterServiceForm, FilterGroupForm,
     FilterUserForm, FilterUserActionLogsForm, FilterAllActionLogsForm,
     FilterSelfActionLogsForm, FilterNotificationForm)
@@ -28,7 +28,7 @@ from helixweb.auth import settings
 helix_cli = Client(settings.AUTH_SERVICE_URL)
 
 
-def _make_login(form, request):
+def _make_login(form, request, login_with_env=""):
     if form.is_valid():
         resp = helix_cli.request(form.as_helix_request(), request, check_response=False)
         form.handle_errors(resp)
@@ -42,6 +42,7 @@ def _make_login(form, request):
             expires = datetime.strftime(datetime.utcnow() + timedelta(days=365), "%a, %d-%b-%Y %H:%M:%S GMT")
             response.set_cookie('session_id', value=s_id, expires=expires)
             response.set_cookie('user_id', value=user_id, expires=expires)
+            response.set_cookie('login_with_env', value=login_with_env, expires=expires)
             return response
     return None
 
@@ -62,12 +63,33 @@ def login(request):
         context_instance=RequestContext(request))
 
 
+def login_env(request, env_name):
+    c = {}
+    c.update(csrf(request))
+    c.update(cur_lang(request))
+    if request.method == 'POST':
+        form = LoginEnvForm(request.POST, request=request)
+        response = _make_login(form, request, login_with_env=env_name)
+        if response:
+            return response
+    else:
+        form = LoginEnvForm(env_name=env_name, request=request)
+    c['form'] = form
+    return render_to_response('login_env.html', c,
+        context_instance=RequestContext(request))
+
+
 @login_redirector
 def logout(request):
     form = LogoutForm({}, request=request)
     if form.is_valid():
         helix_cli.request(form.as_helix_request(), request)
-    resp = HttpResponseRedirect('/auth/login/')
+    env_name = request.COOKIES.get('login_with_env', None)
+    if env_name:
+        login_url = '/auth/login/%s/' % env_name
+    else:
+        login_url = '/auth/login/'
+    resp = HttpResponseRedirect(login_url)
     resp.delete_cookie('session_id')
     resp.delete_cookie('user_id')
     return resp

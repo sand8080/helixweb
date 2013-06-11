@@ -4,6 +4,8 @@ from django.conf.urls.defaults import patterns
 urlpatterns = patterns('',
     (r'^$', 'auth.views.description'),
 
+    (r'^login/(?P<env_name>[\w|\W]+)/$', 'auth.views.login_env'),
+
     (r'^login/', 'auth.views.login'),
     (r'^logout/', 'auth.views.logout'),
 

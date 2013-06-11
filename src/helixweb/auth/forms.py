@@ -25,6 +25,7 @@ class LoginForm(HelixwebRequestForm):
     def __init__(self, *args, **kwargs):
         request = kwargs['request']
         request.COOKIES['session_id'] = None
+        request.COOKIES['login_with_env'] = None
         super(LoginForm, self).__init__(*args, **kwargs)
 
     def as_helix_request(self):
@@ -33,6 +34,15 @@ class LoginForm(HelixwebRequestForm):
         self._strip_bool_param(d, 'bind_to_ip')
         self._strip_int_param(d, 'fixed_lifetime_minutes')
         return d
+
+
+class LoginEnvForm(LoginForm):
+    def __init__(self, *args, **kwargs):
+        env_name = kwargs.pop('env_name', None)
+        super(LoginEnvForm, self).__init__(*args, **kwargs)
+        request = kwargs['request']
+        self.fields['environment_name'] = forms.CharField(widget=forms.widgets.HiddenInput,
+                        initial=env_name)
 
 
 class LogoutForm(HelixwebRequestForm):

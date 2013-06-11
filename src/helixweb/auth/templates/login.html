@@ -1,51 +1,15 @@
-{% extends "base_auth.html" %}
+{% extends "login_env.html" %}
 
 {% load i18n %}
 
-{% block title %}{% trans "login" %}{% endblock %}
-
-{% block sidebar %}
-    <style type="text/css">
-        td.sidebar {width:0%;}
-    </style>
-{% endblock %}
-
-{% block content %}
-
-    <form action="" method="post">{% csrf_token %}
-
-        <div class="login">
-
-            <table class="object_form center">
-                <tr>
-                    <td colspan="2" style="text-align:center;">
-                        <h2>
-                            <span>{% trans "login" %}</span>
-                        </h2>
-                    </td>
-                </tr>
-
-                {{ form.as_table }}
-
-                <tr><td colspan="2"><br></td></tr>
-                <tr>
-                    <td colspan="2" class="control">
-                        <input type="submit" value={% trans "login" %} />
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2" style="text-align:center;">
-                        <br>
-                        {% blocktrans %}
-                            For beginning to use create <br>
-                            <a href="/auth/add_environment">new environmet</a>.
-                        {% endblocktrans %}
-                    </td>
-                </tr>
-            </table>
-
-        </div>
-
-    </form>
-
+{% block add_environment %}
+<tr>
+    <td colspan="2" style="text-align:center;">
+        <br>
+        {% blocktrans %}
+            For beginning to use create <br>
+            <a href="/auth/add_environment">new environmet</a>.
+        {% endblocktrans %}
+    </td>
+</tr>
 {% endblock %}

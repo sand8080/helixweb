@@ -1,0 +1,45 @@
+{% extends "base_auth.html" %}
+
+{% load i18n %}
+
+{% block title %}{% trans "login" %}{% endblock %}
+
+{% block sidebar %}
+    <style type="text/css">
+        td.sidebar {width:0%;}
+    </style>
+{% endblock %}
+
+{% block content %}
+
+    <form action="" method="post">{% csrf_token %}
+
+        <div class="login">
+
+            <table class="object_form center">
+                <tr>
+                    <td colspan="2" style="text-align:center;">
+                        <h2>
+                            <span>{% trans "login" %}</span>
+                        </h2>
+                    </td>
+                </tr>
+
+                {{ form.as_table }}
+
+                <tr><td colspan="2"><br></td></tr>
+                <tr>
+                    <td colspan="2" class="control">
+                        <input type="submit" value={% trans "login" %} />
+                    </td>
+                </tr>
+
+                {% block add_environment %}{% endblock %}
+
+            </table>
+
+        </div>
+
+    </form>
+
+{% endblock %}
