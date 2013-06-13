@@ -73,6 +73,7 @@
                 <tr class="objects_fields">
                     <th>{% trans "name" %}</th>
                     <th>{% trans "is active" %}</th>
+                    <th>{% trans "is default" %}</th>
                     <th>{% trans "rights" %}</th>
                 </tr>
 
@@ -91,13 +92,8 @@
                             {% endallowedurl %}
                             </span>
                         </td>
-                        <td>
-                            {% if grp.is_active %}
-                                +
-                            {% else %}
-                                -
-                            {% endif %}
-                        </td>
+                        <td>{% if grp.is_active %}+{% else %}-{% endif %}</td>
+                        <td>{% if grp.is_default %}+{% else %}-{% endif %}</td>
                         <td>
 
                             <table class="services_properties wide center">

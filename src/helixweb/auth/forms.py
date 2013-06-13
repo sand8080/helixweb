@@ -267,6 +267,8 @@ class AddGroupForm(GroupForm):
     name = forms.CharField(label=_('group name'), max_length=32)
     is_active = forms.BooleanField(label=_('is active'), initial=True,
         required=False)
+    is_default = forms.BooleanField(label=_('is default'), initial=False,
+        required=False)
 
     def __init__(self, *args, **kwargs):
         services = kwargs.pop('services', [])
@@ -300,6 +302,7 @@ class ModifyGroupForm(GroupForm):
     id = forms.IntegerField(widget=forms.widgets.HiddenInput) #@ReservedAssignment
     new_name = forms.CharField(label=_('group name'), max_length=32)
     new_is_active = forms.BooleanField(label=_('is active'), required=False)
+    new_is_default = forms.BooleanField(label=_('is default'), required=False)
 
     def __init__(self, *args, **kwargs):
         services = kwargs.pop('services', [])
