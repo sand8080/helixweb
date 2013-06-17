@@ -64,7 +64,7 @@ def login(request):
 
 
 def login_env(request, env_name):
-    c = {}
+    c = {'env_name': env_name}
     c.update(csrf(request))
     c.update(cur_lang(request))
     if request.method == 'POST':
