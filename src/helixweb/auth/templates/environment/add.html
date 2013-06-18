@@ -48,7 +48,7 @@
                 {% block register_user %}
                 <tr>
                     <td colspan="2" style="text-align:center;">
-                        <a href="/auth/register_user/{{ env_name }}/">{% trans "register new account" %}</a>
+                        <a href="/auth/register_user/{% if env_name %}{{ env_name }}/{% endif %}">{% trans "register new account" %}</a>
                     </td>
                 <tr>
                 {% endblock %}
@@ -56,7 +56,7 @@
                 {% block forgot_password %}
                 <tr>
                     <td colspan="2" style="text-align:center;">
-                        <a href="/auth/set_password_self/{{ env_name }}/">{% trans "forgot password" %}</a>
+                        <a href="/auth/set_password_self/{% if env_name %}{{ env_name }}/{% endif %}">{% trans "forgot password" %}</a>
                     </td>
                 </tr>
                 {% endblock %}

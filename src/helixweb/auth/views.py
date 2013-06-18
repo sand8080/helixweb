@@ -18,7 +18,7 @@ from helixweb.auth.forms import (LoginForm, AddServiceForm, ModifyServiceForm,
     ModifyEnvironmentForm, AddGroupForm, DeleteGroupForm, ModifyGroupForm,
     ModifyUserSelfForm, AddUserForm, LogoutForm, AddEnvironmentForm,
     ModifyUserForm, ApiSchemeForm, DeleteServiceForm,
-    ModifyNotificationForm, LoginEnvForm, RegisterUserForm)
+    ModifyNotificationForm, LoginEnvForm, RegisterUserForm, RegisterUserEnvForm)
 from helixweb.auth.forms_filters import (FilterServiceForm, FilterGroupForm,
     FilterUserForm, FilterUserActionLogsForm, FilterAllActionLogsForm,
     FilterSelfActionLogsForm, FilterNotificationForm)
@@ -64,6 +64,7 @@ def login(request):
 
 
 def login_env(request, env_name):
+    env_name = env_name.strip("/")
     c = {'env_name': env_name}
     c.update(csrf(request))
     c.update(cur_lang(request))
@@ -110,6 +111,21 @@ def register_user(request):
     return render_to_response('register_user.html', c,
         context_instance=RequestContext(request))
 
+
+def register_user_env(request, env_name):
+    c = {'env_name': env_name}
+    c.update(csrf(request))
+    c.update(cur_lang(request))
+    if request.method == 'POST':
+        form = RegisterUserEnvForm(request.POST, request=request)
+        response = _make_login(form, request, login_with_env=env_name)
+        if response:
+            return response
+    else:
+        form = RegisterUserEnvForm(env_name=env_name, request=request)
+    c['form'] = form
+    return render_to_response('register_user_env.html', c,
+        context_instance=RequestContext(request))
 
 
 @login_redirector

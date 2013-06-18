@@ -71,6 +71,14 @@ class RegisterUserForm(HelixwebRequestForm):
         return d
 
 
+class RegisterUserEnvForm(RegisterUserForm):
+    def __init__(self, *args, **kwargs):
+        env_name = kwargs.pop('env_name', None)
+        super(RegisterUserEnvForm, self).__init__(*args, **kwargs)
+        self.fields['environment_name'] = forms.CharField(widget=forms.widgets.HiddenInput,
+                        initial=env_name)
+
+
 class ServiceForm(HelixwebRequestForm):
     def _prepare_properties(self, s):
         def clean_prop(p):

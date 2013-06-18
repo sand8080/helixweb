@@ -4,13 +4,13 @@ from django.conf.urls import patterns
 urlpatterns = patterns('',
     (r'^$', 'auth.views.description'),
 
-    (r'^login/(?P<env_name>[\w|\W]+)/$', 'auth.views.login_env'),
-
+    (r'^login/(?P<env_name>[\w|\W]+)', 'auth.views.login_env'),
     (r'^login/', 'auth.views.login'),
+
     (r'^logout/', 'auth.views.logout'),
 
+    (r'^register_user/(?P<env_name>[\w|\W]+)', 'auth.views.register_user_env'),
     (r'^register_user/', 'auth.views.register_user'),
-    (r'^register_user/(?P<env_name>[\w|\W]+)/$', 'auth.views.register_user_env'),
 
     (r'^add_environment/$', 'auth.views.add_environment'),
     (r'^modify_environment/$', 'auth.views.modify_environment'),
