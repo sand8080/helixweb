@@ -40,13 +40,35 @@ class LoginEnvForm(LoginForm):
     def __init__(self, *args, **kwargs):
         env_name = kwargs.pop('env_name', None)
         super(LoginEnvForm, self).__init__(*args, **kwargs)
-        request = kwargs['request']
         self.fields['environment_name'] = forms.CharField(widget=forms.widgets.HiddenInput,
                         initial=env_name)
 
 
 class LogoutForm(HelixwebRequestForm):
     action = 'logout'
+
+
+class RegisterUserForm(HelixwebRequestForm):
+    action = 'register_user'
+    environment_name = forms.CharField(label=_("environment"),
+        max_length=32)
+    email = forms.CharField(label=_("email"),
+        max_length=32)
+    password = forms.CharField(label=_("password"),
+        max_length=32, widget=forms.PasswordInput)
+    lang = forms.ChoiceField(label=_('notifications lang'), choices=(settings.LANGS),
+        initial=settings.DEFAULT_LANG)
+
+    def __init__(self, *args, **kwargs):
+        request = kwargs['request']
+        request.COOKIES['session_id'] = None
+        request.COOKIES['login_with_env'] = None
+        super(RegisterUserForm, self).__init__(*args, **kwargs)
+
+    def as_helix_request(self):
+        d = super(RegisterUserForm, self).as_helix_request()
+        d.pop('session_id', None)
+        return d
 
 
 class ServiceForm(HelixwebRequestForm):

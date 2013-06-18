@@ -2,7 +2,7 @@
 
 {% load i18n %}
 
-{% block title %}{% trans "create new environment" %}{% endblock %}
+{% block title %}{% trans "user registration" %}{% endblock %}
 
 {% block sidebar %}
     <style type="text/css">
@@ -12,8 +12,6 @@
 
 {% block content %}
 
-    {% load urlutils %}
-
     <form action="" method="post">{% csrf_token %}
 
         <div class="login">
@@ -22,7 +20,7 @@
                 <tr>
                     <td colspan="2" style="text-align:center;">
                         <h2>
-                            <span>{% trans "create new environment" %}</span>
+                            <span>{% trans "user registration" %}</span>
                         </h2>
                     </td>
                 </tr>
@@ -32,23 +30,15 @@
                 <tr><td colspan="2"><br></td></tr>
                 <tr>
                     <td colspan="2" class="control">
-                        <input type="submit" value={% trans "create" %} />
+                        <input type="submit" value='{% trans "register" %}' />
+                        <br>
                     </td>
                 </tr>
-
-                {% block login %}
-                <tr>
-                    <td colspan="2" style="text-align:center;">
-                        <a href="/auth/login">{% trans "login" %}</a>
-
-                    </td>
-                </tr>
-                {% endblock %}
 
                 {% block register_user %}
                 <tr>
                     <td colspan="2" style="text-align:center;">
-                        <a href="/auth/register_user/{{ env_name }}/">{% trans "register new account" %}</a>
+                        <a href="/auth/login/{{ env_name }}/">{% trans "login" %}</a>
                     </td>
                 <tr>
                 {% endblock %}
@@ -61,11 +51,12 @@
                 </tr>
                 {% endblock %}
 
+                {% block add_environment %}{% endblock %}
+
             </table>
 
         </div>
 
     </form>
-
 
 {% endblock %}

@@ -105,6 +105,7 @@ class AbstractAuthFilterActionLogsForm(AbstractFilterActionLogsForm, FilterAuthF
             ('modify_group', _('modify group')),
             ('delete_group', _('delete group')),
             ('add_user', _('add user')),
+            ('register_user', _('register user')),
             ('modify_uses', _('modify users')),
             ('modify_user_self', _('modify user self')),
         )

@@ -1,4 +1,4 @@
-from django.conf.urls.defaults import patterns
+from django.conf.urls import patterns
 
 
 urlpatterns = patterns('',
@@ -8,6 +8,9 @@ urlpatterns = patterns('',
 
     (r'^login/', 'auth.views.login'),
     (r'^logout/', 'auth.views.logout'),
+
+    (r'^register_user/', 'auth.views.register_user'),
+    (r'^register_user/(?P<env_name>[\w|\W]+)/$', 'auth.views.register_user_env'),
 
     (r'^add_environment/$', 'auth.views.add_environment'),
     (r'^modify_environment/$', 'auth.views.modify_environment'),

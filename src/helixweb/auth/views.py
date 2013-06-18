@@ -18,7 +18,7 @@ from helixweb.auth.forms import (LoginForm, AddServiceForm, ModifyServiceForm,
     ModifyEnvironmentForm, AddGroupForm, DeleteGroupForm, ModifyGroupForm,
     ModifyUserSelfForm, AddUserForm, LogoutForm, AddEnvironmentForm,
     ModifyUserForm, ApiSchemeForm, DeleteServiceForm,
-    ModifyNotificationForm, LoginEnvForm)
+    ModifyNotificationForm, LoginEnvForm, RegisterUserForm)
 from helixweb.auth.forms_filters import (FilterServiceForm, FilterGroupForm,
     FilterUserForm, FilterUserActionLogsForm, FilterAllActionLogsForm,
     FilterSelfActionLogsForm, FilterNotificationForm)
@@ -34,7 +34,7 @@ def _make_login(form, request, login_with_env=""):
         form.handle_errors(resp)
         status = resp.get('status')
         s_id = resp.get('session_id')
-        user_id = resp.get('user_id')
+        user_id = resp.get('user_id') if 'user_id' in resp else resp.get('id')
         if status == 'ok' and s_id is not None:
             # TODO: set secure cookie
             b_url = get_backurl(request)
@@ -93,6 +93,23 @@ def logout(request):
     resp.delete_cookie('session_id')
     resp.delete_cookie('user_id')
     return resp
+
+
+def register_user(request):
+    c = {}
+    c.update(csrf(request))
+    c.update(cur_lang(request))
+    if request.method == 'POST':
+        form = RegisterUserForm(request.POST, request=request)
+        response = _make_login(form, request)
+        if response:
+            return response
+    else:
+        form = RegisterUserForm(request=request)
+    c['form'] = form
+    return render_to_response('register_user.html', c,
+        context_instance=RequestContext(request))
+
 
 
 @login_redirector
