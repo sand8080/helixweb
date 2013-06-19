@@ -34,6 +34,7 @@ def _make_login(form, request, login_with_env=""):
         form.handle_errors(resp)
         status = resp.get('status')
         s_id = resp.get('session_id')
+        # User registration case handled by getting id instead user_id
         user_id = resp.get('user_id') if 'user_id' in resp else resp.get('id')
         if status == 'ok' and s_id is not None:
             # TODO: set secure cookie
