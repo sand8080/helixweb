@@ -79,6 +79,25 @@ class RegisterUserEnvForm(RegisterUserForm):
                         initial=env_name)
 
 
+class RestorePasswordForm(HelixwebRequestForm):
+    action = 'restore_password'
+    environment_name = forms.CharField(label=_("environment"),
+        max_length=32)
+    email = forms.CharField(label=_("email"),
+        max_length=32)
+
+    def __init__(self, *args, **kwargs):
+        request = kwargs['request']
+        request.COOKIES['session_id'] = None
+        request.COOKIES['login_with_env'] = None
+        super(RestorePasswordForm, self).__init__(*args, **kwargs)
+
+    def as_helix_request(self):
+        d = super(RestorePasswordForm, self).as_helix_request()
+        d.pop('session_id', None)
+        return d
+
+
 class ServiceForm(HelixwebRequestForm):
     def _prepare_properties(self, s):
         def clean_prop(p):

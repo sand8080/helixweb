@@ -1,4 +1,3 @@
-#from functools import partial
 from datetime import datetime, timedelta
 
 from django.shortcuts import render_to_response
@@ -18,7 +17,7 @@ from helixweb.auth.forms import (LoginForm, AddServiceForm, ModifyServiceForm,
     ModifyEnvironmentForm, AddGroupForm, DeleteGroupForm, ModifyGroupForm,
     ModifyUserSelfForm, AddUserForm, LogoutForm, AddEnvironmentForm,
     ModifyUserForm, ApiSchemeForm, DeleteServiceForm,
-    ModifyNotificationForm, LoginEnvForm, RegisterUserForm, RegisterUserEnvForm)
+    ModifyNotificationForm, LoginEnvForm, RegisterUserForm, RegisterUserEnvForm, RestorePasswordForm)
 from helixweb.auth.forms_filters import (FilterServiceForm, FilterGroupForm,
     FilterUserForm, FilterUserActionLogsForm, FilterAllActionLogsForm,
     FilterSelfActionLogsForm, FilterNotificationForm)
@@ -126,6 +125,25 @@ def register_user_env(request, env_name):
         form = RegisterUserEnvForm(env_name=env_name, request=request)
     c['form'] = form
     return render_to_response('register_user_env.html', c,
+        context_instance=RequestContext(request))
+
+
+def restore_password(request):
+    c = {}
+    c.update(csrf(request))
+    c.update(cur_lang(request))
+    if request.method == 'POST':
+        form = RestorePasswordForm(request.POST, request=request)
+        if form.is_valid():
+            resp = helix_cli.request(form.as_helix_request(), request)
+            form.handle_errors(resp)
+            if resp['status'] == 'ok':
+                n_proc = resp.get('notification', {})
+                c['is_sent'] = n_proc.get('is_sent', False)
+    else:
+        form = RestorePasswordForm(request=request)
+    c['form'] = form
+    return render_to_response('restore_password.html', c,
         context_instance=RequestContext(request))
 
 
