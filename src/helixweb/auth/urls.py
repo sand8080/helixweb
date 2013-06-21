@@ -12,6 +12,9 @@ urlpatterns = patterns('',
     (r'^register_user/(?P<env_name>[\w|\W]+)', 'auth.views.register_user_env'),
     (r'^register_user/', 'auth.views.register_user'),
 
+    (r'^restore_password/(?P<env_name>[\w|\W]+)', 'auth.views.restore_password_env'),
+    (r'^restore_password/', 'auth.views.restore_password'),
+
     (r'^add_environment/$', 'auth.views.add_environment'),
     (r'^modify_environment/$', 'auth.views.modify_environment'),
 
