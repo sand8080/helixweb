@@ -139,7 +139,9 @@ def restore_password(request):
             form.handle_errors(resp)
             if resp['status'] == 'ok':
                 n_proc = resp.get('notification', {})
+                c['is_response'] = True
                 c['is_sent'] = n_proc.get('is_sent', False)
+                c['email'] = form.cleaned_data['email']
     else:
         form = RestorePasswordForm(request=request)
     c['form'] = form
