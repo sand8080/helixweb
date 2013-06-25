@@ -36,7 +36,7 @@ def _access_to_auth_user_info(c):
 def auth_access_info(request):
     c = {}
     if request.path_info.startswith(('/auth/add_environment',
-        '/auth/login')):
+        '/auth/login', '/auth/restore_password', '/auth/register_user')):
         c['logged_in'] = False
         c['rights'] = {}
         c['logged_user_id'] = None
