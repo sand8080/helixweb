@@ -69,3 +69,9 @@ td.sidebar {width:20%;}
 
 /*.marked {color:green;}*/
 .not_marked {color:red;}
+
+.api_call_request {background-color:#ECF6CE;}
+.api_call_response {background-color:#E0E6F8;}
+.api_any_of_separator {background-color:#CEF6CE;}
+.api_dict_optional {background-color:#D8D8D8;}
+
