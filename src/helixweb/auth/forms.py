@@ -391,6 +391,8 @@ class ModifyNotificationForm(HelixwebRequestForm):
         d = args[0]
         super(ModifyNotificationForm, self).__init__(*args, **kwargs)
         self.fields['id'] = forms.IntegerField(widget=forms.widgets.HiddenInput)
+        self.fields['event'] = forms.CharField(label=_('event'),
+            widget=ConstInput)
         self.fields['is_active'] = forms.BooleanField(label=_('is active'),
                         required=False)
         msg_f_names = self._filter_message_names(d)
@@ -441,7 +443,7 @@ class ModifyNotificationForm(HelixwebRequestForm):
     @staticmethod
     def from_get_notifications_helix_resp(helix_resp, request):
         d = helix_resp.get('notifications', [{'id': 0}])[0]
-        res_d = {'id': d.get('id'), 'is_active': d.get('is_active')}
+        res_d = {'id': d.get('id'), 'is_active': d.get('is_active'), 'event': d.get('event')}
         for i, m in enumerate(d.get('messages', [])):
             for k in m.keys():
                 res_d[ModifyNotificationForm._message_field_name(k, i)] = m.get(k)
@@ -451,6 +453,7 @@ class ModifyNotificationForm(HelixwebRequestForm):
         d = super(ModifyNotificationForm, self).as_helix_request()
         id = d.pop('id')
         d['ids'] = [id]
+        d.pop('event')
         self._strip_bool_param(d, 'is_active', 'new_is_active')
         new_messages = list()
         msg_f_names_idx = self._group_message_field_names(d.keys())
