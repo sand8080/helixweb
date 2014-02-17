@@ -4,7 +4,7 @@ from fabric.api import env, run, local
 from fabric.colors import green, red, yellow
 from fabric.contrib.files import exists
 from fabric.contrib.project import rsync_project
-from fabric.context_managers import prefix, settings, hide, show
+from fabric.context_managers import prefix, settings, hide, show, lcd
 from fabric.utils import abort
 
 from helixcore.deploy import _fix_r_res, _check_r_res
@@ -128,6 +128,21 @@ def restart_uwsgi():
     print green("Uwsgi restarted")
 
 
+def localize(apps=('core', 'auth', 'billing'), locales=('en', 'ru')):
+    print green("Localization started")
+    dst = os.path.join(_project_dir(), 'src', 'helixweb')
+    mngr = os.path.join(dst, 'manage.py')
+    venv = os.path.join(_project_dir(), '.env', 'bin', 'activate')
+    for app in apps:
+        print green("Making messages for application %s" % app)
+        with lcd(os.path.join(dst, app)):
+            with prefix('. %s' % venv):
+                for l in locales:
+                    local('python %s makemessages -l %s' % (mngr, l))
+                    local('python %s compilemessages -l %s' % (mngr, l))
+    print green("Localization complete")
+
+
 def deploy_helixcore():
     print green("Deploying helixcore")
     helixcore_fab = os.path.join(_project_dir(), '..', 'helixcore', 'fabfile.py')
@@ -141,6 +156,7 @@ def deploy():
         print yellow("Welcome back, commander!")
         print green("Deployment started")
         deploy_helixcore()
+        localize()
         sync()
         config_virt_env()
         install_requirements()
