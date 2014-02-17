@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-07-04 00:07+0400\n"
+"POT-Creation-Date: 2014-02-17 14:55+0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -39,191 +39,300 @@ msgstr "сессия не найдена"
 msgid "HELIXAUTH_SESSION_EXPIRED"
 msgstr "сессия просрочена"
 
-#: error_code.py:13
+#: error_code.py:11
+#, fuzzy
+msgid "HELIXAUTH_SESSION_IP_CHANGED"
+msgstr "сессия просрочена"
+
+#: error_code.py:12
+#, fuzzy
+msgid "HELIXAUTH_SESSION_TOO_LARGE_FIXED_LIFETIME"
+msgstr "сессия просрочена"
+
+#: error_code.py:15
 msgid "HELIXAUTH_ENVIRONMENT_NOT_FOUND"
 msgstr "окружение объект не найдено"
 
-#: error_code.py:16
+#: error_code.py:18
 msgid "HELIXAUTH_USER_INACTIVE"
 msgstr "пользователь отключен"
 
-#: error_code.py:17
+#: error_code.py:19
 msgid "HELIXAUTH_USER_AUTH_ERROR"
 msgstr "ошибка авторизации"
 
-#: error_code.py:18
+#: error_code.py:20
 #, fuzzy
 msgid "HELIXAUTH_USER_ACCESS_DENIED"
 msgstr "пользователь отключен"
 
-#: error_code.py:19
+#: error_code.py:21
 #, fuzzy
 msgid "HELIXAUTH_USER_WRONG_OLD_PASSWORD"
 msgstr "сессия не найдена"
 
-#: error_code.py:20
+#: error_code.py:22
+#, fuzzy
+msgid "HELIXAUTH_NEW_PASSWORD_NOT_SET"
+msgstr "сессия не найдена"
+
+#: error_code.py:23
 #, fuzzy
 msgid "HELIXAUTH_SUPERUSER_CREATION_DENIED"
 msgstr "сессия просрочена"
 
-#: error_code.py:21
+#: error_code.py:24
 #, fuzzy
 msgid "HELIXAUTH_SUPERUSER_MODIFICATION_DENIED"
 msgstr "сессия просрочена"
 
-#: error_code.py:24
+#: error_code.py:25
+#, fuzzy
+msgid "HELIXAUTH_USER_ALREADY_EXISTS"
+msgstr "объект уже создан"
+
+#: error_code.py:26
+#, fuzzy
+msgid "HELIXAUTH_USER_NOT_FOUND"
+msgstr "сессия не найдена"
+
+#: error_code.py:29
+#, fuzzy
+msgid "HELIXAUTH_SEVICE_NOT_FOUND"
+msgstr "сессия не найдена"
+
+#: error_code.py:30
 #, fuzzy
 msgid "HELIXAUTH_SERVICE_DEACTIVATION_ERROR"
 msgstr "ошибка авторизации"
 
-#: error_code.py:27
+#: error_code.py:31
+#, fuzzy
+msgid "HELIXAUTH_SERVICE_DELETION_ERROR"
+msgstr "ошибка авторизации"
+
+#: error_code.py:34
 #, fuzzy
 msgid "HELIXAUTH_GROUP_ALREADY_EXISTS"
 msgstr "объект уже создан"
 
-#: error_code.py:28
+#: error_code.py:35
 #, fuzzy
 msgid "HELIXAUTH_GROUP_NOT_FOUND"
 msgstr "объект не найден"
 
-#: forms.py:10 forms.py:93 templates/base_auth.html:73
-#: templates/environment/modify.html:5 templates/environment/modify.html:18
+#: error_code.py:38
+#, fuzzy
+msgid "HELIXAUTH_NOTIFICATION_NOT_FOUND"
+msgstr "объект не найден"
+
+#: forms.py:12 forms.py:53 forms.py:84 forms.py:182
+#: templates/base_auth.html:73 templates/environment/modify.html:5
+#: templates/environment/modify.html:18
 #, fuzzy
 msgid "environment"
 msgstr "область видимости"
 
-#: forms.py:12 forms.py:124 forms.py:151 forms_filters.py:63
-#: forms_filters.py:91 templates/login.html:5 templates/login.html.py:19
-#: templates/login.html:29 templates/user/list.html:82
-msgid "login"
-msgstr "вход"
+#: forms.py:14 forms.py:55 forms.py:86 forms.py:213 forms.py:242
+#: forms_filters.py:55 forms_filters.py:80 templates/user/list.html:82
+msgid "email"
+msgstr ""
 
-#: forms.py:14 forms.py:95 forms.py:125 forms.py:153
+#: forms.py:16 forms.py:57 forms.py:184 forms.py:214 forms.py:244
 msgid "password"
 msgstr "пароль"
 
-#: forms.py:44 forms.py:60 templates/service/list.html:67
+#: forms.py:18
+msgid "bind session to ip"
+msgstr ""
+
+#: forms.py:20
+msgid "session lifetime"
+msgstr ""
+
+#: forms.py:21
+msgid "15 minutes"
+msgstr ""
+
+#: forms.py:21
+msgid "1 hour"
+msgstr ""
+
+#: forms.py:22
+msgid "2 hours"
+msgstr ""
+
+#: forms.py:59 forms.py:218 forms.py:248 forms.py:290
+msgid "notifications lang"
+msgstr ""
+
+#: forms.py:118 forms.py:134 forms.py:149 templates/service/list.html:67
 msgid "service name"
 msgstr "название сервиса"
 
-#: forms.py:45 forms.py:61 forms_filters.py:15
+#: forms.py:119 forms.py:150 forms_filters.py:15
 msgid "service type"
 msgstr "тип сервиса"
 
-#: forms.py:46 forms.py:62
+#: forms.py:120 forms.py:151
 msgid "service functions"
 msgstr ""
 
-#: forms.py:48 forms.py:64 forms.py:127 forms.py:155 forms.py:208 forms.py:242
-#: forms_filters.py:17 forms_filters.py:41 forms_filters.py:66
-#: templates/group/list.html:75 templates/service/list.html:69
-#: templates/user/list.html:83
+#: forms.py:122 forms.py:153 forms.py:216 forms.py:246 forms.py:317
+#: forms.py:353 forms.py:396 forms_filters.py:17 forms_filters.py:37
+#: forms_filters.py:58 templates/group/list.html:75
+#: templates/notification/list.html:67 templates/service/list.html:69
+#: templates/user/list.html:84
 msgid "is active"
 msgstr ""
 
-#: forms.py:94
+#: forms.py:183
 #, fuzzy
-msgid "super user login"
+msgid "super user email"
 msgstr "логин пользователя"
 
-#: forms.py:106
+#: forms.py:195
 msgid "environment name"
 msgstr "область видимости"
 
-#: forms.py:134 forms.py:162 templates/base_auth.html:37
+#: forms.py:225 forms.py:255 templates/base_auth.html:37
 #: templates/group/add.html:19 templates/group/delete.html:22
 #: templates/group/list.html:15 templates/group/modify.html:21
-#: templates/user/list.html:84
+#: templates/user/list.html:85
 msgid "groups"
 msgstr ""
 
-#: forms.py:192
+#: forms.py:286
 #, fuzzy
 msgid "old password"
 msgstr "пароль"
 
-#: forms.py:194
+#: forms.py:288
 #, fuzzy
 msgid "new password"
 msgstr "пароль"
 
-#: forms.py:207 forms.py:226 forms.py:241 forms_filters.py:39
+#: forms.py:316 forms.py:337 forms.py:352 forms_filters.py:35
 msgid "group name"
 msgstr ""
 
-#: forms.py:214 forms.py:247
+#: forms.py:319 forms.py:354 templates/group/list.html:76
+msgid "is default"
+msgstr ""
+
+#: forms.py:325 forms.py:359
 msgid "group rights"
 msgstr ""
 
-#: forms_filters.py:18 forms_filters.py:42 forms_filters.py:67
+#: forms.py:394 forms_filters.py:76 templates/notification/list.html:65
+msgid "event"
+msgstr ""
+
+#: forms.py:424 templates/notification/list.html:95
+msgid "language"
+msgstr ""
+
+#: forms.py:427 templates/notification/list.html:99
+msgid "subject"
+msgstr ""
+
+#: forms.py:431 templates/notification/list.html:103
+msgid "message"
+msgstr ""
+
+#: forms_filters.py:18 forms_filters.py:38 forms_filters.py:59
+#: forms_filters.py:80
 msgid "all"
 msgstr ""
 
-#: forms_filters.py:18 forms_filters.py:42 forms_filters.py:67
+#: forms_filters.py:18 forms_filters.py:38 forms_filters.py:59
 msgid "active"
 msgstr ""
 
-#: forms_filters.py:18 forms_filters.py:42 forms_filters.py:67
+#: forms_filters.py:18 forms_filters.py:38 forms_filters.py:59
 msgid "inactive"
 msgstr ""
 
-#: forms_filters.py:65 templates/user/list.html:81
+#: forms_filters.py:57 templates/user/list.html:81
 msgid "id"
 msgstr ""
 
-#: forms_filters.py:91
+#: forms_filters.py:78 templates/notification/list.html:66
+#: templates/service/list.html:68
+msgid "type"
+msgstr ""
+
+#: forms_filters.py:98 templates/login_env.html:5
+#: templates/login_env.html.py:23 templates/login_env.html:33
+#: templates/register_user_env.html:41 templates/restore_password_env.html:63
+#: templates/environment/add.html:42
+msgid "login"
+msgstr "вход"
+
+#: forms_filters.py:98
 msgid "logout"
 msgstr ""
 
-#: forms_filters.py:92
+#: forms_filters.py:99
 #, fuzzy
 msgid "add environment"
 msgstr "создать окружение"
 
-#: forms_filters.py:93
+#: forms_filters.py:100
 #, fuzzy
 msgid "modify environment"
 msgstr "создать окружение"
 
-#: forms_filters.py:94 templates/base_auth.html:60
+#: forms_filters.py:101 templates/base_auth.html:60
 #: templates/service/add.html:5 templates/service/add.html.py:21
 #: templates/service/list.html:39
 msgid "add service"
 msgstr "создать сервис"
 
-#: forms_filters.py:95 templates/service/modify.html:5
+#: forms_filters.py:102 templates/service/modify.html:5
 #: templates/service/modify.html.py:24
 #, fuzzy
 msgid "modify service"
 msgstr "создать сервис"
 
-#: forms_filters.py:96 templates/base_auth.html:42 templates/group/add.html:5
+#: forms_filters.py:103 templates/service/delete.html:5
+#: templates/service/delete.html.py:25 templates/service/delete.html:44
+#: templates/service/list.html:86
+#, fuzzy
+msgid "delete service"
+msgstr "создать сервис"
+
+#: forms_filters.py:104 templates/base_auth.html:42 templates/group/add.html:5
 #: templates/group/add.html.py:21 templates/group/list.html:39
 msgid "add group"
 msgstr ""
 
-#: forms_filters.py:97 templates/group/modify.html:5
+#: forms_filters.py:105 templates/group/modify.html:5
 #: templates/group/modify.html.py:24
 msgid "modify group"
 msgstr ""
 
-#: forms_filters.py:98 templates/group/delete.html:5
+#: forms_filters.py:106 templates/group/delete.html:5
 #: templates/group/delete.html.py:25 templates/group/delete.html:44
-#: templates/group/list.html:90
+#: templates/group/list.html:91
 msgid "delete group"
 msgstr ""
 
-#: forms_filters.py:99 templates/base_auth.html:24 templates/user/add.html:5
+#: forms_filters.py:107 templates/base_auth.html:24 templates/user/add.html:5
 #: templates/user/add.html.py:25 templates/user/list.html:40
 #, fuzzy
 msgid "add user"
 msgstr "создать сервис"
 
-#: forms_filters.py:100
+#: forms_filters.py:108
+msgid "register user"
+msgstr ""
+
+#: forms_filters.py:109
 msgid "modify users"
 msgstr ""
 
-#: forms_filters.py:101
+#: forms_filters.py:110
 msgid "modify user self"
 msgstr ""
 
@@ -251,7 +360,8 @@ msgid "users"
 msgstr ""
 
 #: templates/base_auth.html:55 templates/service/add.html:19
-#: templates/service/list.html:15 templates/service/modify.html:21
+#: templates/service/delete.html:22 templates/service/list.html:15
+#: templates/service/modify.html:21
 msgid "services"
 msgstr "сервисы"
 
@@ -259,60 +369,92 @@ msgstr "сервисы"
 msgid "all action logs"
 msgstr ""
 
-#: templates/base_auth.html:99 templates/user/modify_user_self.html:5
-#: templates/user/modify_user_self.html:18
-#, fuzzy
-msgid "change password"
-msgstr "пароль"
+#: templates/base_auth.html:99 templates/notification/list.html:15
+#: templates/notification/modify.html:21
+msgid "notifications"
+msgstr ""
 
-#: templates/base_auth.html:104 templates/user/auth_sumbmenu.html:24
+#: templates/base_auth.html:112 templates/user/modify_user_self.html:18
+#, fuzzy
+msgid "user settings"
+msgstr "логин пользователя"
+
+#: templates/base_auth.html:117 templates/user/auth_sumbmenu.html:24
 #: templates/user/auth_sumbmenu.html:27
 msgid "action logs"
 msgstr ""
 
-#: templates/base_auth.html:117
+#: templates/base_auth.html:130
 msgid "api scheme"
 msgstr ""
 
-#: templates/login.html:35
+#: templates/login.html:8 templates/register_user.html:8
+#: templates/restore_password.html:8 templates/environment/add.html:5
+#: templates/environment/add.html.py:25
+#, fuzzy
+msgid "create new environment"
+msgstr "создать окружение"
+
+#: templates/login_env.html:41 templates/restore_password_env.html:71
+#: templates/environment/add.html:51
+msgid "register new account"
+msgstr ""
+
+#: templates/login_env.html:49 templates/register_user_env.html:49
+#: templates/environment/add.html:59
+#, fuzzy
+msgid "forgot password"
+msgstr "пароль"
+
+#: templates/register_user_env.html:5 templates/register_user_env.html:23
+#, fuzzy
+msgid "user registration"
+msgstr "логин пользователя"
+
+#: templates/register_user_env.html:33
+msgid "register"
+msgstr ""
+
+#: templates/restore_password_env.html:5
+#: templates/restore_password_env.html:23
+#, fuzzy
+msgid "restore password"
+msgstr "пароль"
+
+#: templates/restore_password_env.html:34
+#, python-format
 msgid ""
 "\n"
-"                            For beginning to use create\n"
-"                            <a href=\"/auth/add_environment\">new "
-"environmet</a>.\n"
+"                        Restoring password email is sent to %(email)s\n"
 "                        "
+msgstr ""
+
+#: templates/restore_password_env.html:40
+msgid "Restoring password email is not sent. Try again later please."
+msgstr ""
+
+#: templates/restore_password_env.html:53
+msgid "restore"
 msgstr ""
 
 #: templates/action_logs/auth_list.html:6
 msgid "action logs list"
 msgstr ""
 
-#: templates/environment/add.html:5 templates/environment/add.html.py:21
-#, fuzzy
-msgid "create new environment"
-msgstr "создать окружение"
-
-#: templates/environment/add.html:31 templates/group/add.html:40
+#: templates/environment/add.html:35 templates/group/add.html:40
 #: templates/service/add.html:30 templates/user/add.html:44
 msgid "create"
 msgstr ""
 
-#: templates/environment/add.html:37
-msgid ""
-"\n"
-"                            Back to\n"
-"                            <a href=\"/auth/login\">login page</a>.\n"
-"                        "
-msgstr ""
-
 #: templates/environment/modify.html:27 templates/group/modify.html:43
-#: templates/service/modify.html:33 templates/user/modify_user.html:54
-#: templates/user/modify_user_self.html:27
+#: templates/notification/modify.html:43 templates/service/modify.html:33
+#: templates/user/modify_user.html:54 templates/user/modify_user_self.html:27
 msgid "save"
 msgstr ""
 
 #: templates/environment/modify.html:29 templates/group/modify.html:45
-#: templates/service/modify.html:35 templates/user/modify_user.html:56
+#: templates/notification/modify.html:45 templates/service/modify.html:35
+#: templates/user/modify_user.html:56
 msgid "save and continue editing"
 msgstr ""
 
@@ -325,8 +467,9 @@ msgstr ""
 msgid "groups list"
 msgstr ""
 
-#: templates/group/list.html:24 templates/service/list.html:24
-#: templates/user/list.html:25 templates/user/user_action_logs.html:39
+#: templates/group/list.html:24 templates/notification/list.html:24
+#: templates/service/list.html:24 templates/user/list.html:25
+#: templates/user/user_action_logs.html:39
 msgid "filter"
 msgstr ""
 
@@ -338,12 +481,33 @@ msgstr ""
 msgid "name"
 msgstr ""
 
-#: templates/group/list.html:76 templates/user/list.html:85
+#: templates/group/list.html:77 templates/user/list.html:86
 msgid "rights"
 msgstr ""
 
-#: templates/group/list.html:129
+#: templates/group/list.html:125
 msgid "no groups found"
+msgstr ""
+
+#: templates/notification/list.html:5
+msgid "notifications list"
+msgstr ""
+
+#: templates/notification/list.html:36
+msgid "total notifications"
+msgstr ""
+
+#: templates/notification/list.html:68
+msgid "messages"
+msgstr ""
+
+#: templates/notification/list.html:125
+#, fuzzy
+msgid "no notifications found"
+msgstr "новый сервис"
+
+#: templates/notification/modify.html:5 templates/notification/modify.html:24
+msgid "modify notification"
 msgstr ""
 
 #: templates/service/list.html:5
@@ -354,15 +518,11 @@ msgstr ""
 msgid "total services"
 msgstr ""
 
-#: templates/service/list.html:68
-msgid "type"
-msgstr ""
-
 #: templates/service/list.html:70
 msgid "functions"
 msgstr ""
 
-#: templates/service/list.html:106
+#: templates/service/list.html:116
 #, fuzzy
 msgid "no services found"
 msgstr "новый сервис"
@@ -387,25 +547,34 @@ msgstr "логин пользователя"
 msgid "total users"
 msgstr ""
 
-#: templates/user/list.html:104
+#: templates/user/list.html:83
+msgid "lang"
+msgstr ""
+
+#: templates/user/list.html:106
 msgid "Super User"
 msgstr ""
 
-#: templates/user/list.html:114
+#: templates/user/list.html:116
 msgid "rights details"
 msgstr ""
 
-#: templates/user/list.html:134
+#: templates/user/list.html:136
 msgid "all rights granted"
 msgstr ""
 
-#: templates/user/list.html:137
+#: templates/user/list.html:139
 msgid "no rights"
 msgstr ""
 
-#: templates/user/list.html:165
+#: templates/user/list.html:167
 msgid "no users found"
 msgstr ""
+
+#: templates/user/modify_user_self.html:5
+#, fuzzy
+msgid "change password"
+msgstr "пароль"
 
 #: templates/user/user_action_logs.html:5
 #: templates/user/user_action_logs.html:30 templates/user/user_info.html:59

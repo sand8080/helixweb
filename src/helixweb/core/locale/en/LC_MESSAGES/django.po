@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-07-04 00:06+0400\n"
+"POT-Creation-Date: 2014-02-17 14:55+0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -61,23 +61,23 @@ msgstr ""
 msgid "HELIX_OBJECT_NOT_FOUND"
 msgstr ""
 
-#: forms_filters.py:71
+#: forms_filters.py:78
 msgid "action name"
 msgstr ""
 
-#: forms_filters.py:73
+#: forms_filters.py:80
 msgid "user id"
 msgstr ""
 
-#: forms_filters.py:74
+#: forms_filters.py:81
 msgid "session"
 msgstr ""
 
-#: forms_filters.py:76
+#: forms_filters.py:83
 msgid "from"
 msgstr ""
 
-#: forms_filters.py:77
+#: forms_filters.py:84
 msgid "to"
 msgstr ""
 
@@ -85,12 +85,12 @@ msgstr ""
 msgid "select all"
 msgstr ""
 
-#: templates/base.html:49
+#: templates/base.html:58
 #, python-format
-msgid "logged in as user id #%(logged_user_id)s"
+msgid "user id #%(logged_user_id)s"
 msgstr ""
 
-#: templates/lang_switcher.html:21
+#: templates/lang_switcher.html:35
 msgid "logout"
 msgstr ""
 
